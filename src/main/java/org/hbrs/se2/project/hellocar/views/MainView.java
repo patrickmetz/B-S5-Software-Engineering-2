@@ -2,6 +2,8 @@ package org.hbrs.se2.project.hellocar.views;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -11,6 +13,7 @@ import org.hbrs.se2.project.hellocar.control.LoginControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
+import org.hbrs.se2.project.hellocar.views.account.RegistrationView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -27,6 +30,12 @@ public class MainView extends VerticalLayout {
     public MainView() {
         setSizeFull();
         LoginForm component = new LoginForm();
+
+        Button registerButton = new Button("Create Account");
+        registerButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+        registerButton.getElement().getStyle().set("margin-top", "40px");
+        registerButton.getElement().getStyle().set("cursor", "pointer");
+        registerButton.addClickListener((event)-> UI.getCurrent().navigate(RegistrationView.class));
 
         component.addLoginListener(e -> {
 
@@ -52,6 +61,7 @@ public class MainView extends VerticalLayout {
         });
 
         add(component);
+        add(registerButton);
         this.setAlignItems( Alignment.CENTER );
     }
 
