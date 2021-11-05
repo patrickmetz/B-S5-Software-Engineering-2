@@ -21,10 +21,12 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.UsersController;
 import org.hbrs.se2.project.hellocar.entities.Company;
+import org.hbrs.se2.project.hellocar.entities.Rolle;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.MainView;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 @Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
@@ -38,13 +40,11 @@ public class RegistrationCompanyView extends VerticalLayout {
 
     private H3 title;
 
-    private TextField firstNameContactPerson;
+    private TextField firstName;
 
-    private TextField lastNameContactPerson;
+    private TextField lastName;
 
-    private Select<String> genderContactPerson;
-
-    private TextField userType;
+    private Select<String> gender;
 
     private EmailField email;
 
@@ -57,31 +57,30 @@ public class RegistrationCompanyView extends VerticalLayout {
     private TextField streetNumber;
 
     // Company
-    private TextField nameContactPerson;
+    private TextField companyName;
 
     private Button submitButton;
 
     public RegistrationCompanyView(UsersController usersController) {
         title = new H3("Sign Up");
 
-        firstNameContactPerson = new TextField("First name (Contact Person)");
-        lastNameContactPerson = new TextField("Last name (Contact Person)");
+        firstName = new TextField("First name (Contact Person)");
+        lastName = new TextField("Last name (Contact Person)");
 
-        genderContactPerson = new Select<>("Male", "Female");
-        genderContactPerson.setLabel("Gender (Contact Person)");
+        gender = new Select<>("Male", "Female");
+        gender.setLabel("Gender (Contact Person)");
 
         email = new EmailField("Email");
 
         password = new PasswordField("Password");
         passwordConfirm = new PasswordField("Confirm Password");
 
-
         street = new TextField("Street");
         streetNumber = new TextField("Street Number");
         zipCode = new TextField("ZIP Code");
         city = new TextField("City");
 
-        nameContactPerson = new TextField("Company Name");
+        companyName = new TextField("Company Name");
 
         companyBinder.bindInstanceFields(this);
 
@@ -90,7 +89,7 @@ public class RegistrationCompanyView extends VerticalLayout {
             if (validateInput()) {
 
                 Company c = new Company();
-                c.setUserType("Company");
+
                 try {
                     companyBinder.writeBean(c);
                     System.out.println(c);
@@ -116,24 +115,24 @@ public class RegistrationCompanyView extends VerticalLayout {
         add(companyForm);
 
         setHorizontalComponentAlignment(Alignment.CENTER, companyForm);
-        setRequiredIndicatorVisible(firstNameContactPerson, lastNameContactPerson, email, password, passwordConfirm);
+        setRequiredIndicatorVisible(firstName, lastName, email, password, passwordConfirm);
     }
 
     public FormLayout createCompanyForm() {
         FormLayout formLayout = new FormLayout();
         formLayout.add(
                 title,
-                firstNameContactPerson,
-                lastNameContactPerson,
+                companyName,
+                firstName,
+                lastName,
                 email,
-                genderContactPerson,
+                gender,
                 password,
                 passwordConfirm,
                 street,
                 zipCode,
                 city,
                 streetNumber,
-                nameContactPerson,
                 submitButton
         );
 
@@ -147,7 +146,7 @@ public class RegistrationCompanyView extends VerticalLayout {
     }
 
     private boolean validateInput() {
-        return Utils.validateFrontendInput(firstNameContactPerson, lastNameContactPerson, email, password, passwordConfirm);
+        return Utils.validateFrontendInput(firstName, lastName, email, password, passwordConfirm);
     }
 }
 

@@ -23,11 +23,13 @@ import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.UsersController;
+import org.hbrs.se2.project.hellocar.entities.Rolle;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.MainView;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
@@ -45,8 +47,9 @@ public class RegistrationStudentView extends VerticalLayout {
 
     private TextField lastName;
 
-    private final String[] genderList = {"Male", "Female"};
-    private Select<String> gender = new Select<>();
+    private TextField userid;
+
+    private Select<String> gender;
 
     private TextField role;
 
@@ -62,9 +65,6 @@ public class RegistrationStudentView extends VerticalLayout {
 
     // Student
     private DatePicker dateOfBirth = new DatePicker();
-    private TextField studyCourse;
-    private IntegerField semester;
-    private TextField specialization;
 
     private Button submitButton;
 
@@ -74,14 +74,15 @@ public class RegistrationStudentView extends VerticalLayout {
         firstName = new TextField("First name");
         lastName = new TextField("Last name");
 
-        gender.setItems(genderList);
-        gender.setLabel("Gender");
+        userid = new TextField("Username");
 
         email = new EmailField("Email");
 
         password = new PasswordField("Password");
         passwordConfirm = new PasswordField("Confirm Password");
 
+        gender = new Select<>("Male", "Female");
+        gender.setLabel("Gender");
 
         street = new TextField("Street");
         streetNumber = new TextField("Street Number");
@@ -90,19 +91,16 @@ public class RegistrationStudentView extends VerticalLayout {
 
         dateOfBirth.setLabel("Date Of Birth");
 
-        studyCourse = new TextField("Course of Study");
-        semester = new IntegerField("Semester");
-        specialization = new TextField("Specialization");
-
         studentBinder.bindInstanceFields(this);
 
         submitButton = new Button("Join Us");
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickListener((event) -> {
             if (validateInput()) {
+                /* todo add role as util funtion */
 
                 Student s = new Student();
-                s.setUserType("Student");
+
                 try {
                     studentBinder.writeBean(s);
                     System.out.println(s);
@@ -135,6 +133,7 @@ public class RegistrationStudentView extends VerticalLayout {
                 title,
                 firstName,
                 lastName,
+                userid,
                 email,
                 gender,
                 password,

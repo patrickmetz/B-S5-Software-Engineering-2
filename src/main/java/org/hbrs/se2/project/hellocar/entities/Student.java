@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@DiscriminatorValue("1")
-public class Student extends Users{
+@DiscriminatorValue("student")
+public class Student extends JobPortalUser {
     @Basic
     @Column(name = "first_name")
     private String firstName;
