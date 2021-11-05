@@ -19,14 +19,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import org.hbrs.se2.project.hellocar.control.UsersController;
+import org.hbrs.se2.project.hellocar.control.JobPortalUsersController;
+import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.entities.Company;
-import org.hbrs.se2.project.hellocar.entities.Rolle;
+import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.MainView;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 @Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
@@ -43,6 +43,8 @@ public class RegistrationCompanyView extends VerticalLayout {
     private TextField firstName;
 
     private TextField lastName;
+
+    private TextField userid;
 
     private Select<String> gender;
 
@@ -61,11 +63,13 @@ public class RegistrationCompanyView extends VerticalLayout {
 
     private Button submitButton;
 
-    public RegistrationCompanyView(UsersController usersController) {
+    public RegistrationCompanyView(JobPortalUsersController usersController) {
         title = new H3("Sign Up");
 
         firstName = new TextField("First name (Contact Person)");
         lastName = new TextField("Last name (Contact Person)");
+
+        userid = new TextField("Username");
 
         gender = new Select<>("Male", "Female");
         gender.setLabel("Gender (Contact Person)");
@@ -89,13 +93,15 @@ public class RegistrationCompanyView extends VerticalLayout {
             if (validateInput()) {
 
                 Company c = new Company();
+                RolleDAO rolleDAO = new RolleDAO();
 
                 try {
                     companyBinder.writeBean(c);
-                    System.out.println(c);
-                    usersController.createStudent(c);
-                } catch (ValidationException e) {
-                    System.out.println("Something went wrong!");
+                    Company result = usersController.createPortalUser(c);
+                    rolleDAO.setRoleToUser(c.getId(), "user");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
                 Notification notification = new Notification(
@@ -123,6 +129,7 @@ public class RegistrationCompanyView extends VerticalLayout {
         formLayout.add(
                 title,
                 companyName,
+                userid,
                 firstName,
                 lastName,
                 email,

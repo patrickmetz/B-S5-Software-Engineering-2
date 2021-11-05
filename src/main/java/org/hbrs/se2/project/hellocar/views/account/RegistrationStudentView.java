@@ -13,23 +13,20 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
-import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import org.hbrs.se2.project.hellocar.control.UsersController;
-import org.hbrs.se2.project.hellocar.entities.Rolle;
+import org.hbrs.se2.project.hellocar.control.JobPortalUsersController;
+import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.MainView;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
@@ -68,7 +65,7 @@ public class RegistrationStudentView extends VerticalLayout {
 
     private Button submitButton;
 
-    public RegistrationStudentView(UsersController usersController) {
+    public RegistrationStudentView(JobPortalUsersController usersController) {
         title = new H3("Sign Up");
 
         firstName = new TextField("First name");
@@ -97,26 +94,30 @@ public class RegistrationStudentView extends VerticalLayout {
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickListener((event) -> {
             if (validateInput()) {
-                /* todo add role as util funtion */
 
                 Student s = new Student();
+                RolleDAO rolleDAO = new RolleDAO();
 
                 try {
                     studentBinder.writeBean(s);
-                    System.out.println(s);
-                    usersController.createStudent(s);
-                } catch (ValidationException e) {
-                    System.out.println("Something went wrong!");
+
+                    Student result = usersController.createPortalUser(s);
+
+                    rolleDAO.setRoleToUser(result.getId(), "user");
+
+                    Notification notification = new Notification("Registration succeeded");
+                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    notification.setDuration(5000);
+                    notification.setPosition(Notification.Position.BOTTOM_CENTER);
+                    notification.open();
+                    studentBinder.getFields().forEach(HasValue::clear);
+
+                    UI.getCurrent().navigate(MainView.class);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-                Notification notification = new Notification("Registration succeeded");
-                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                notification.setDuration(5000);
-                notification.setPosition(Notification.Position.BOTTOM_CENTER);
-                notification.open();
-                studentBinder.getFields().forEach(HasValue::clear);
-
-                UI.getCurrent().navigate(MainView.class);
             }
         });
 

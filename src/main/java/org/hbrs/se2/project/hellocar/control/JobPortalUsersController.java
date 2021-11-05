@@ -6,14 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UsersController {
+public class JobPortalUsersController {
 
     @Autowired
     private UsersRepository usersRepository;
 
-    public <T extends JobPortalUser> void  createStudent(T user) {
-        usersRepository.save(user);
-        System.out.println("xxxx");
+    public <T extends JobPortalUser> T createPortalUser(T portalUser) {
+        return usersRepository.save(portalUser);
     }
 
 }

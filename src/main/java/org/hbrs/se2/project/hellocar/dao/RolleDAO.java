@@ -6,6 +6,7 @@ import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,10 +16,9 @@ import java.util.List;
 /**
  * Bereitstellung einer Schnittstelle für den Zugriff auf Rollen in der Datenbank
  * Realisierung einer CRUD-Schnittstelle (hier: nur Read (get...)) --> SE-2
- *
  */
 public class RolleDAO {
-    public List<RolleDTO> getRolesOfUser(UserDTO userDTO ) throws DatabaseLayerException {
+    public List<RolleDTO> getRolesOfUser(UserDTO userDTO) throws DatabaseLayerException {
         ResultSet set = null;
 
         try {
@@ -31,25 +31,25 @@ public class RolleDAO {
 
             set = statement.executeQuery(
                     "SELECT * "
-                       + "FROM carlook.user_to_rolle "
-                       + "WHERE carlook.user_to_rolle.userid = \'" + userDTO.getId() + "\'" );
+                            + "FROM carlook.user_to_rolle "
+                            + "WHERE carlook.user_to_rolle.userid = \'" + userDTO.getId() + "\'");
 
         } catch (SQLException ex) {
 
             throw new DatabaseLayerException("Fehler im SQL-Befehl! Bitte den Programmier benachrichtigen!");
         }
 
-        if ( set == null ) return null;
+        if (set == null) return null;
 
         List<RolleDTO> liste = new ArrayList<RolleDTO>();
         RolleDTOImpl role = null;
 
         try {
-            while (set.next() ){
+            while (set.next()) {
 
                 role = new RolleDTOImpl();
                 // Object Relation Mapping (ORM)
-                role.setBezeichnung(set.getString(2) );
+                role.setBezeichnung(set.getString(2));
                 liste.add(role);
 
             }
@@ -58,5 +58,27 @@ public class RolleDAO {
         }
         return liste;
 
+    }
+
+    public void setRoleToUser(int id, String role) throws DatabaseLayerException {
+
+        String query = "INSERT INTO carlook.user_to_rolle VALUES (?, ?)";
+
+        try {
+            PreparedStatement ps = null;
+            try {
+                ps = JDBCConnection.getInstance().getPreparedStatement(query);
+                ps.setInt(1, id);
+                ps.setString(2, role);
+            } catch (DatabaseLayerException e) {
+                e.printStackTrace();
+            }
+            assert ps != null;
+            System.out.println("ps ist not null");
+            ps.executeUpdate();
+            System.out.println("ps wurde ausgeführt");
+        } catch (SQLException ex) {
+            throw new DatabaseLayerException("Fehler im SQL-Befehl! Bitte den Programmier benachrichtigen!");
+        }
     }
 }
