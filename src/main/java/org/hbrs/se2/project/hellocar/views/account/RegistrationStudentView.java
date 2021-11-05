@@ -101,9 +101,9 @@ public class RegistrationStudentView extends VerticalLayout {
                 try {
                     studentBinder.writeBean(s);
 
-                    Student result = usersController.createPortalUser(s);
+                    usersController.createPortalUser(s);
 
-                    rolleDAO.setRoleToUser(result.getId(), "user");
+                    rolleDAO.setRoleToUser(s.getId(), "user");
 
                     Notification notification = new Notification("Registration succeeded");
                     notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
@@ -159,6 +159,5 @@ public class RegistrationStudentView extends VerticalLayout {
     private boolean validateInput() {
         return Utils.validateFrontendInput(firstName, lastName, email, password, passwordConfirm);
     }
-
 
 }

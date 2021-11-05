@@ -97,7 +97,7 @@ public class RegistrationCompanyView extends VerticalLayout {
 
                 try {
                     companyBinder.writeBean(c);
-                    Company result = usersController.createPortalUser(c);
+                    usersController.createPortalUser(c);
                     rolleDAO.setRoleToUser(c.getId(), "user");
 
                 } catch (Exception e) {
