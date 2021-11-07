@@ -147,7 +147,7 @@ public class RegistrationStudentView extends VerticalLayout {
                 submitButton
         );
 
-        Utils.configureForm(formLayout, title, submitButton);
+        Utils.configureRegistrationForm(formLayout, title, submitButton);
 
         return formLayout;
     }
@@ -157,7 +157,7 @@ public class RegistrationStudentView extends VerticalLayout {
     }
 
     private boolean validateInput() {
-        return Utils.validateFrontendInput(firstName, lastName, email, password, passwordConfirm);
+        return Utils.validateRegistrationFrontendInput(firstName, lastName, email, password, passwordConfirm);
     }
 
 }

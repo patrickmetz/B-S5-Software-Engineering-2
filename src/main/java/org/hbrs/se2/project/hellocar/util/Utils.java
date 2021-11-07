@@ -34,7 +34,7 @@ public class Utils {
 
     }
 
-    public static void configureForm(FormLayout formLayout, H3 title, Button submitButton) {
+    public static void configureRegistrationForm(FormLayout formLayout, H3 title, Button submitButton) {
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.getElement().getStyle().set("margin-top", "20px");
         submitButton.getElement().getStyle().set("cursor", "pointer");
@@ -51,7 +51,7 @@ public class Utils {
     }
 
 
-    public static boolean validateFrontendInput(
+    public static boolean validateRegistrationFrontendInput(
             TextField firstName,
             TextField lastName,
             EmailField email,
