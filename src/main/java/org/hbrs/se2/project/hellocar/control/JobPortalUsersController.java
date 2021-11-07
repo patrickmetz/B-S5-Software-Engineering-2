@@ -1,7 +1,6 @@
 package org.hbrs.se2.project.hellocar.control;
 
-import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
-import org.hbrs.se2.project.hellocar.repository.account.UsersRepository;
+import org.hbrs.se2.project.hellocar.repository.account.JobPortalUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,10 +8,10 @@ import org.springframework.stereotype.Component;
 public class JobPortalUsersController {
 
     @Autowired
-    private UsersRepository usersRepository;
+    private JobPortalUserRepository jobPortalUserRepository;
 
-    public <T extends JobPortalUser> T createPortalUser(T portalUser) {
-        return usersRepository.save(portalUser);
+    public <T extends org.hbrs.se2.project.hellocar.entities.JobPortalUser> T createPortalUser(T portalUser) {
+        return jobPortalUserRepository.save(portalUser);
     }
 
 }
