@@ -50,27 +50,27 @@ class HellocarApplicationTests {
 
     @Test
     void testUserDTOByAttribute() {
-        UserDTO personDTO = userRepository.getUserByOccupation("Professor").get(0);
+        UserDTO personDTO = userRepository.getUserByOccupation("devaccount").get(0);
         System.out.println(personDTO.getFirstName());
-        assertEquals("Sascha", personDTO.getFirstName());
-        assertEquals(1 , personDTO.getId());
+        assertEquals("Team", personDTO.getFirstName());
+        assertEquals(2 , personDTO.getId());
     }
 
     @Test
     void testUserDTOByPassword() {
-        UserDTO userDTO = userRepository.findUserByUseridAndPassword("sascha" , "abc");
+        UserDTO userDTO = userRepository.findUserByUseridAndPassword("teamx" , "123");
         System.out.println(userDTO.getFirstName());
-        assertEquals("Sascha", userDTO.getFirstName());
+        assertEquals("Team", userDTO.getFirstName());
     }
 
     @Test
     void testUserDTOAndItsRoles() {
-        UserDTO userDTO = userRepository.findUserByUseridAndPassword("sascha" , "abc");
+        UserDTO userDTO = userRepository.findUserByUseridAndPassword("teamx" , "123");
         System.out.println(userDTO.getFirstName());
-        assertEquals("Sascha", userDTO.getFirstName());
+        assertEquals("Team", userDTO.getFirstName());
         List<RolleDTO> list = userDTO.getRoles();
         System.out.println(list.size());
-        assertEquals(2 , list.size());
+        assertEquals(1 , list.size());
     }
 
     @Test
