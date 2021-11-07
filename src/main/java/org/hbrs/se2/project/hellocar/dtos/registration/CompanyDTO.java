@@ -5,3 +5,4 @@ public interface CompanyDTO extends JobPortalUserDTO {
     public String getCompanyName();
 
 }
+

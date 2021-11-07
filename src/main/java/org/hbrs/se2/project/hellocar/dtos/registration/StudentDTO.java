@@ -7,3 +7,4 @@ public interface StudentDTO extends JobPortalUserDTO {
     public LocalDate getDateOfBirth();
 
 }
+

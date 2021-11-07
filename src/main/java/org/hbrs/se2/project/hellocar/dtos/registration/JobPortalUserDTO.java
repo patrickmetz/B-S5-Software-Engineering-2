@@ -1,8 +1,8 @@
 package org.hbrs.se2.project.hellocar.dtos.registration;
 
-import java.time.LocalDate;
+import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 
-public interface JobPortalUserDTO {
+public interface JobPortalUserDTO extends UserDTO {
     public String getGender();
 
     public String getStreet();
@@ -13,3 +13,4 @@ public interface JobPortalUserDTO {
 
     public String getCity();
 }
+
