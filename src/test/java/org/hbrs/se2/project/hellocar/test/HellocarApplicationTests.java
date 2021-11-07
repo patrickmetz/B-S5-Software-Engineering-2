@@ -4,24 +4,24 @@ import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.CarDTO;
 import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.registration.StudentDTO;
 import org.hbrs.se2.project.hellocar.entities.Rolle;
+import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.entities.User;
 import org.hbrs.se2.project.hellocar.repository.CarRepository;
 import org.hbrs.se2.project.hellocar.repository.RolleRepository;
 import org.hbrs.se2.project.hellocar.repository.UserRepository;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Utils;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 @SpringBootTest
 class HellocarApplicationTests {
@@ -34,6 +34,79 @@ class HellocarApplicationTests {
 
     @Autowired
     private CarRepository carRepository;
+
+    private User testUser;
+    private Student testStudent;
+
+    @BeforeEach
+    private void setUp() {
+        testUser = new User();
+        testUser.setUserid("TestID");
+        testUser.setEmail("test@test.de");
+        testUser.setPassword("TestPasswort");
+        testUser.setFirstName("TestVorname");
+        testUser.setLastName("TestNachname");
+        userRepository.save(testUser);
+
+        testStudent = new Student();
+        testStudent.setUserid("TestStudentID");
+        testStudent.setEmail("test2@test.de");
+        testStudent.setPassword("TestStudentPasswort");
+        testStudent.setFirstName("TestStudentVorname");
+        testStudent.setLastName("TestStudentNachname");
+        userRepository.save(testStudent);
+    }
+
+    @AfterEach
+    private void cleanupTest() {
+        if( testUser != null ){
+            userRepository.delete(testUser);
+            testUser = null;
+        }
+    }
+
+    @Test
+    void testUserDTOfindUserByUseridAndPassword() {
+        assertNotNull(testUser);
+        UserDTO userDTO = userRepository.findUserByUseridAndPassword(testUser.getUserid() , testUser.getPassword());
+        assertNotNull(userDTO);
+        assertEquals(testUser.getFirstName(), userDTO.getFirstName());
+        assertEquals(testUser.getLastName(), userDTO.getLastName());
+    }
+
+    @Test
+    void testFindUserWithJDBC() {
+        UserDAO userDAO = new UserDAO();
+        try {
+            UserDTO userDTO = userDAO.findUserByUseridAndPassword(testUser.getUserid() , testUser.getPassword());
+            assertNotNull(userDTO);
+            assertEquals(testUser.getFirstName(), userDTO.getFirstName());
+            assertEquals(testUser.getLastName(), userDTO.getLastName());
+        } catch (DatabaseLayerException e) {
+            e.printStackTrace();
+            assert(false);
+        }
+    }
+
+    @Test
+    void testFindStudents() {
+        List<Student> studentList = userRepository.findStudents();
+        Student foundStudent = null;
+        for( Student s : studentList )
+        {
+            if( s.getId() == testStudent.getId() )
+            {
+                System.out.println("Found");
+                if( foundStudent == null )
+                    foundStudent = s;
+                else
+                    assert(false); // Mehr als 1 objekt gefunden
+            }
+        }
+        assertNotNull(foundStudent);
+        assertEquals(testStudent.getFirstName(), foundStudent.getFirstName());
+        assertEquals(testStudent.getLastName(), foundStudent.getLastName());
+    }
 
     @Test
     void testRolesOfUser() {
@@ -54,13 +127,6 @@ class HellocarApplicationTests {
         System.out.println(personDTO.getFirstName());
         assertEquals("Team", personDTO.getFirstName());
         assertEquals(2 , personDTO.getId());
-    }
-
-    @Test
-    void testUserDTOByPassword() {
-        UserDTO userDTO = userRepository.findUserByUseridAndPassword("teamx" , "123");
-        System.out.println(userDTO.getFirstName());
-        assertEquals("Team", userDTO.getFirstName());
     }
 
     @Test
@@ -119,19 +185,4 @@ class HellocarApplicationTests {
         }
         // Todo: Definition von passenden Assertions
     }
-
-    @Test
-    void testFindUserWithJDBC() {
-        UserDAO userDAO = new UserDAO();
-        try {
-            UserDTO userDTO = userDAO.findUserByUseridAndPassword("sascha" , "abc");
-            System.out.println(userDTO.toString());
-
-            assertEquals("Sascha", userDTO.getFirstName());
-        } catch (DatabaseLayerException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 }
