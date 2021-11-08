@@ -35,4 +35,22 @@ public class RegistrationTests {
 
 
     }
+
+    @Test
+    void uniqueUserIdTest() {
+        StudentDTOImpl studentDTO = new StudentDTOImpl();
+        studentDTO.setUserid("patrick");
+        try {
+            userService.createUser(studentDTO, new String[]{"user", "student"});
+
+            assertThrows(Exception.class, () -> {
+                userService.createUser(studentDTO,
+                        new String[]{"user", "student"});
+            });
+        } catch (DatabaseUserException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 }
