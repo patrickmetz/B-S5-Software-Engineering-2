@@ -21,7 +21,7 @@ public class ManageUserControl {
     private UserRepository userRepository;
 
     public void createUser(JobPortalUserDTO jobPortalUserDTO, String[] roles) throws DatabaseUserException {
-        validatelUser(jobPortalUserDTO);
+        validateUser(jobPortalUserDTO);
 
         User userEntity = UserFactory.createUser(jobPortalUserDTO);
         this.userRepository.save(userEntity);
@@ -58,7 +58,7 @@ public class ManageUserControl {
         //todo: implement this.repositoty.blaBla(...);
     }
 
-    private void validatelUser(JobPortalUserDTO jobPortalUserDTO) {
+    private void validateUser(JobPortalUserDTO jobPortalUserDTO) {
         // todo: implement server side validation here
     }
 

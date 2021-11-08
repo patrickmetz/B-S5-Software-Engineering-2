@@ -18,7 +18,7 @@ public class LoginControl {
 
     private UserDTO userDTO = null;
 
-    public boolean authentificate(String username, String password ) throws DatabaseUserException {
+    public boolean authenticate(String username, String password ) throws DatabaseUserException {
         // Standard: User wird mit Spring JPA ausgelesen (Was sind die Vorteile?)
         UserDTO tmpUser = this.getUserWithJPA( username , password );
 

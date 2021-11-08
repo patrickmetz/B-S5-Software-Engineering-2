@@ -16,6 +16,8 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.Theme;
@@ -23,21 +25,21 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.JobPortalUsersController;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
+import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.registration.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.registration.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
-import org.hbrs.se2.project.hellocar.views.MainView;
 
 import java.util.stream.Stream;
 
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
 @RouteAlias("registerstudent")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
-public class RegistrationStudentView extends VerticalLayout {
+public class RegistrationStudentView extends VerticalLayout implements BeforeEnterObserver {
 
-    /* ToDo navigate to MainView if logged in / Redirection to login after timeout */
+    /* ToDo Redirection to login after timeout */
 
     Binder<StudentDTOImpl> binder = new Binder(StudentDTOImpl.class);
 
@@ -69,7 +71,7 @@ public class RegistrationStudentView extends VerticalLayout {
     private Button submitButton;
 
     public RegistrationStudentView(ManageUserControl userService) {
-        title = new H3("Sign Up");
+        title = new H3("Sign up");
 
         firstName = new TextField("First name");
         lastName = new TextField("Last name");
@@ -93,7 +95,7 @@ public class RegistrationStudentView extends VerticalLayout {
 
         binder.bindInstanceFields(this);
 
-        submitButton = new Button("Join Us");
+        submitButton = new Button("Join us");
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickListener((event) -> {
             if (validateInput()) {
@@ -108,7 +110,7 @@ public class RegistrationStudentView extends VerticalLayout {
                     Utils.displayNotification(true, "Registration succeeded");
                     binder.getFields().forEach(HasValue::clear);
 
-                    UI.getCurrent().navigate(MainView.class);
+                    UI.getCurrent().navigate(LoginView.class);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -122,6 +124,18 @@ public class RegistrationStudentView extends VerticalLayout {
 
         setHorizontalComponentAlignment(Alignment.CENTER, studentForm);
         setRequiredIndicatorVisible(firstName, lastName, email, password, passwordConfirm);
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        if(getCurrentUser() != null) {
+            event.forwardTo(Globals.Pages.SHOW_CARS);
+            return;
+        }
+    }
+
+    private UserDTO getCurrentUser() {
+        return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     }
 
     public FormLayout createStudentForm() {

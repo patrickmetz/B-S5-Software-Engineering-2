@@ -8,19 +8,19 @@ import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
+import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
 
 @Route(value = Globals.Pages.REGISTER_VIEW)
 @RouteAlias("register")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
-public class RegistrationView extends VerticalLayout {
-
-    /* ToDo navigate to MainView if logged in */
-
+public class RegistrationView extends VerticalLayout implements BeforeEnterObserver {
 
     H3 title = new H3("Register as a...");
     Select<String> role = new Select<>("Student", "Company");
@@ -47,5 +47,16 @@ public class RegistrationView extends VerticalLayout {
         setHorizontalComponentAlignment(Alignment.CENTER, layout);
     }
 
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        if(getCurrentUser() != null) {
+            event.forwardTo(Globals.Pages.SHOW_CARS);
+            return;
+        }
+    }
+
+    private UserDTO getCurrentUser() {
+        return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+    }
 
 }
