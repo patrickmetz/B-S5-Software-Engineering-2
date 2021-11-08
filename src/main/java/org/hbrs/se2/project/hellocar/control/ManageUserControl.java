@@ -5,10 +5,13 @@ import org.hbrs.se2.project.hellocar.control.factories.UserFactory;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.registration.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.registration.JobPortalUserDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.registration.StudentDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.registration.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.registration.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.registration.StudentDTO;
+import org.hbrs.se2.project.hellocar.entities.Company;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.entities.User;
 import org.hbrs.se2.project.hellocar.repository.UserRepository;
@@ -79,6 +82,41 @@ public class ManageUserControl {
         // has nothing
 
         return studentDTO;
+    }
+
+    public CompanyDTO readCompanyById(int id) {
+        Optional<User> userOptional = this.userRepository.findById(id);
+
+        Company companyEntity = null;
+        CompanyDTOImpl companyDTO = null;
+
+        if (userOptional.isPresent()) {
+            companyEntity = (Company) userOptional.get();
+
+            companyDTO = new CompanyDTOImpl();
+
+            // User
+            companyDTO.setId(companyEntity.getId());
+            companyDTO.setFirstName(companyEntity.getFirstName());
+            companyDTO.setLastName(companyEntity.getLastName());
+            companyDTO.setEmail(companyEntity.getEmail());
+            companyDTO.setPassword(companyEntity.getPassword());
+            companyDTO.setPhone(companyEntity.getPhone());
+            companyDTO.setUserid(companyEntity.getUserid());
+            companyDTO.setDateOfBirth(companyEntity.getDateOfBirth());
+
+            // JobPortalUser
+            companyDTO.setGender(companyEntity.getGender());
+            companyDTO.setCity(companyEntity.getCity());
+            companyDTO.setStreet(companyEntity.getStreet());
+            companyDTO.setStreetNumber(companyEntity.getStreetNumber());
+            companyDTO.setZipCode(companyEntity.getZipCode());
+        }
+
+        // Company
+        companyDTO.setCompanyName(companyEntity.getCompanyName());
+
+        return companyDTO;
     }
 
     public List<UserDTO> readAllUsers() {
