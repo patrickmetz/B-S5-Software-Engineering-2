@@ -4,6 +4,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.Route;
@@ -19,35 +21,29 @@ public class RegistrationView extends VerticalLayout {
 
     /* ToDo navigate to MainView if logged in */
 
-    H3 title = new H3("Register as");
+
+    H3 title = new H3("Register as a...");
     Select<String> role = new Select<>("Student", "Company");
-    Button button = new Button("continue");
+    Button studentButton = new Button("Student");
+    Button companyButton = new Button("Company");
 
     public RegistrationView() {
 
-        button.setEnabled(false);
-        button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        button.getElement().getStyle().set("margin-top", "20px");
-        button.getElement().getStyle().set("cursor", "pointer");
+        studentButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        studentButton.getElement().getStyle().set("height", "3rem").set("width", "100%");
+        companyButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+        companyButton.getElement().getStyle().set("height", "3rem").set("width", "100%");
 
-        role.addValueChangeListener((event) -> button.setEnabled(true));
+        studentButton.addClickListener((event) -> UI.getCurrent().navigate(RegistrationStudentView.class));
+        companyButton.addClickListener((event) -> UI.getCurrent().navigate(RegistrationCompanyView.class));
 
-        button.addClickListener((event) -> {
-            switch (role.getValue()) {
-                case "Student":
-                    UI.getCurrent().navigate(RegistrationStudentView.class);
-                    break;
-                case "Company":
-                    UI.getCurrent().navigate(RegistrationCompanyView.class);
-                    break;
-                default:
-                    button.setEnabled(false);
-            }
-        });
+        HorizontalLayout buttonsLayout = new HorizontalLayout(studentButton, companyButton);
+        buttonsLayout.setWidth("400px");
 
-        VerticalLayout layout = new VerticalLayout(title, role, button);
+        VerticalLayout layout = new VerticalLayout(title, buttonsLayout);
         layout.setWidth("400px");
         add(layout);
+
         setHorizontalComponentAlignment(Alignment.CENTER, layout);
     }
 

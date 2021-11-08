@@ -1,5 +1,7 @@
 package org.hbrs.se2.project.hellocar.util;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -50,6 +52,17 @@ public class Utils {
         formLayout.setColspan(submitButton, 2);
     }
 
+    public static void displayNotification(boolean success, String message) {
+        displayNotification(success, new Text(message));
+    }
+
+    public static void displayNotification(boolean success, Component component) {
+        Notification notification = new Notification(component);
+        notification.addThemeVariants(success ? NotificationVariant.LUMO_SUCCESS : NotificationVariant.LUMO_ERROR);
+        notification.setDuration(5000);
+        notification.setPosition(Notification.Position.BOTTOM_CENTER);
+        notification.open();
+    }
 
     public static boolean validateRegistrationInput(
             TextField firstName,

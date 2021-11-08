@@ -105,11 +105,7 @@ public class RegistrationStudentView extends VerticalLayout {
                     // put student user and its roles into db
                     userService.createUser(studentDTO, new String[]{"user", "student"});
 
-                    Notification notification = new Notification("Registration succeeded");
-                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                    notification.setDuration(5000);
-                    notification.setPosition(Notification.Position.BOTTOM_CENTER);
-                    notification.open();
+                    Utils.displayNotification(true, "Registration succeeded");
                     binder.getFields().forEach(HasValue::clear);
 
                     UI.getCurrent().navigate(MainView.class);

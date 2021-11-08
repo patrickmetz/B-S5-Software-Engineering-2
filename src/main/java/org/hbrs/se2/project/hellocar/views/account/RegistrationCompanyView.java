@@ -99,13 +99,7 @@ public class RegistrationCompanyView extends VerticalLayout {
                     e.printStackTrace();
                 }
 
-                Notification notification = new Notification(
-                        "Registration succeeded"
-                );
-                notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                notification.setDuration(5000);
-                notification.setPosition(Notification.Position.BOTTOM_CENTER);
-                notification.open();
+                Utils.displayNotification(true, "Registration succeeded");
                 binder.getFields().forEach(HasValue::clear);
 
                 UI.getCurrent().navigate(MainView.class);
