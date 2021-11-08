@@ -17,11 +17,13 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.sound.midi.SysexMessage;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 @SpringBootTest
 class HellocarApplicationTests {
@@ -40,6 +42,7 @@ class HellocarApplicationTests {
 
     @BeforeEach
     private void setUp() {
+        // User
         testUser = new User();
         testUser.setUserid("TestID");
         testUser.setEmail("test@test.de");
@@ -48,6 +51,7 @@ class HellocarApplicationTests {
         testUser.setLastName("TestNachname");
         userRepository.save(testUser);
 
+        // Student
         testStudent = new Student();
         testStudent.setUserid("TestStudentID");
         testStudent.setEmail("test2@test.de");
@@ -59,9 +63,15 @@ class HellocarApplicationTests {
 
     @AfterEach
     private void cleanupTest() {
+        // User
         if( testUser != null ){
             userRepository.delete(testUser);
             testUser = null;
+        }
+        // Student
+        if( testStudent != null ){
+            userRepository.delete(testStudent);
+            testStudent = null;
         }
     }
 
@@ -109,13 +119,34 @@ class HellocarApplicationTests {
     }
 
     @Test
+    void testUserListIntegrity() {
+        List<UserDTO> userList = userRepository.getUsers();
+        List<String> emailList = new ArrayList<String>();
+        List<String> userIdList = new ArrayList<String>();
+
+        for( UserDTO u : userList )
+        {
+            assertFalse("UserId ist leer", u.getUserid() != null && u.getUserid().isEmpty());
+            assertFalse("E-Mail ist leer",u.getEmail() != null && u.getEmail().isEmpty());
+
+            // Prüfe auf mehrfache emails
+            assertFalse("E-Mail '"+u.getEmail()+"' kommt mehrfach vor", emailList.contains(u.getEmail()) );
+            emailList.add( u.getEmail() );
+
+            // Prüfe auf mehrfache userids
+            assertFalse("UserId '"+u.getUserid()+"' kommt mehrfach vor", userIdList.contains(u.getUserid()) );
+            userIdList.add( u.getUserid() );
+        }
+    }
+
+    @Test
     void testRolesOfUser() {
         Optional<User> wrapper = userRepository.findById(1);
         if ( wrapper.isPresent() ) {
             User user = wrapper.get();
             System.out.println("User: " + user.getLastName());
             List<Rolle> list = user.getRoles();
-            assertEquals(2 , list.size() , "Anzahl der Rollen");
+            assertEquals("Anzahl der Rollen", 2 , list.size() );
             Rolle rolle1 = list.get(0);
             assertEquals("admin" , rolle1.getBezeichhnung() );
         }
@@ -151,7 +182,7 @@ class HellocarApplicationTests {
     @Test
     void testRoleRepository() {
         List<Rolle> list = roleRepository.findAll();
-        String[] soll = { "admin" , "user" };
+        String[] soll = { "admin" , "user", "student", "company" };
         String[] ist = {};
 
         for (Rolle r : list) {

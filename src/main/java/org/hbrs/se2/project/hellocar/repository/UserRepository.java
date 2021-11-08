@@ -36,4 +36,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             nativeQuery = true
     )
     List<Student> findStudents();
+
+    @Query(
+            value = "SELECT * FROM carlook.user",
+            nativeQuery = true
+    )
+    List<UserDTO> getUsers();
+
 }
