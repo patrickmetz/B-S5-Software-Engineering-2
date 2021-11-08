@@ -14,15 +14,12 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import org.hbrs.se2.project.hellocar.control.JobPortalUsersController;
-import org.hbrs.se2.project.hellocar.dao.RolleDAO;
-import org.hbrs.se2.project.hellocar.entities.Company;
-import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
+import org.hbrs.se2.project.hellocar.control.ManageUserControl;
+import org.hbrs.se2.project.hellocar.dtos.impl.registration.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.MainView;
@@ -36,7 +33,7 @@ public class RegistrationCompanyView extends VerticalLayout {
 
     /* ToDo navigate to MainView if logged in */
 
-    Binder<Company> companyBinder = new Binder<>(Company.class);
+    Binder<CompanyDTOImpl> binder = new Binder(CompanyDTOImpl.class);
 
     private H3 title;
 
@@ -63,7 +60,7 @@ public class RegistrationCompanyView extends VerticalLayout {
 
     private Button submitButton;
 
-    public RegistrationCompanyView(JobPortalUsersController usersController) {
+    public RegistrationCompanyView(ManageUserControl userService) {
         title = new H3("Sign Up");
 
         firstName = new TextField("First name (Contact Person)");
@@ -86,20 +83,18 @@ public class RegistrationCompanyView extends VerticalLayout {
 
         companyName = new TextField("Company Name");
 
-        companyBinder.bindInstanceFields(this);
+        binder.bindInstanceFields(this);
 
         submitButton = new Button("Join Us");
         submitButton.addClickListener((event) -> {
             if (validateInput()) {
-
-                Company c = new Company();
-                RolleDAO rolleDAO = new RolleDAO();
-
                 try {
-                    companyBinder.writeBean(c);
-                    usersController.createPortalUser(c);
-                    rolleDAO.setRoleToUser(c.getId(), "user");
+                    // put form values into company dto
+                    CompanyDTOImpl companyDTO = new CompanyDTOImpl();
+                    binder.writeBean(companyDTO);
 
+                    // put company user and its roles into db
+                    userService.createUser(companyDTO, new String[]{"user", "company"});
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -111,7 +106,7 @@ public class RegistrationCompanyView extends VerticalLayout {
                 notification.setDuration(5000);
                 notification.setPosition(Notification.Position.BOTTOM_CENTER);
                 notification.open();
-                companyBinder.getFields().forEach(HasValue::clear);
+                binder.getFields().forEach(HasValue::clear);
 
                 UI.getCurrent().navigate(MainView.class);
             }
@@ -153,7 +148,7 @@ public class RegistrationCompanyView extends VerticalLayout {
     }
 
     private boolean validateInput() {
-        return Utils.validateRegistrationFrontendInput(firstName, lastName, email, password, passwordConfirm);
+        return Utils.validateRegistrationInput(firstName, lastName, email, password, passwordConfirm);
     }
 }
 

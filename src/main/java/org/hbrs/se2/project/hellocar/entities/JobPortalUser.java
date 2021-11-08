@@ -8,7 +8,7 @@ public class JobPortalUser extends User {
 
     @Basic
     @Column(name = "gender")
-    private String genderContactPerson;
+    protected String gender;
 
     @Basic
     @Column(name = "street")
@@ -58,4 +58,7 @@ public class JobPortalUser extends User {
         this.city = city;
     }
 
+    public String getGender() {return gender;}
+
+    public void setGender(String gender) {this.gender = gender;}
 }

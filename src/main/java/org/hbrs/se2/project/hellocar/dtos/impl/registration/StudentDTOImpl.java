@@ -8,13 +8,5 @@ import java.util.List;
 
 public class StudentDTOImpl extends JobPortalUserDTOImpl implements StudentDTO {
 
-    LocalDate dateOfBirth;
-
-    public void setDateOfBirth(LocalDate date){ dateOfBirth = date; }
-
-    @Override
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
 }
 

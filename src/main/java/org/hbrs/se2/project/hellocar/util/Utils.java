@@ -51,7 +51,7 @@ public class Utils {
     }
 
 
-    public static boolean validateRegistrationFrontendInput(
+    public static boolean validateRegistrationInput(
             TextField firstName,
             TextField lastName,
             EmailField email,

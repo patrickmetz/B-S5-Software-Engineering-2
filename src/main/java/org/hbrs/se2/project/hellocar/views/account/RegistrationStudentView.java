@@ -21,7 +21,10 @@ import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.JobPortalUsersController;
+import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
+import org.hbrs.se2.project.hellocar.dtos.impl.registration.CompanyDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.registration.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
@@ -36,7 +39,7 @@ public class RegistrationStudentView extends VerticalLayout {
 
     /* ToDo navigate to MainView if logged in / Redirection to login after timeout */
 
-    Binder<Student> studentBinder = new Binder<>(Student.class);
+    Binder<StudentDTOImpl> binder = new Binder(StudentDTOImpl.class);
 
     private H3 title;
 
@@ -65,7 +68,7 @@ public class RegistrationStudentView extends VerticalLayout {
 
     private Button submitButton;
 
-    public RegistrationStudentView(JobPortalUsersController usersController) {
+    public RegistrationStudentView(ManageUserControl userService) {
         title = new H3("Sign Up");
 
         firstName = new TextField("First name");
@@ -88,29 +91,26 @@ public class RegistrationStudentView extends VerticalLayout {
 
         dateOfBirth.setLabel("Date Of Birth");
 
-        studentBinder.bindInstanceFields(this);
+        binder.bindInstanceFields(this);
 
         submitButton = new Button("Join Us");
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickListener((event) -> {
             if (validateInput()) {
-
-                Student s = new Student();
-                RolleDAO rolleDAO = new RolleDAO();
-
                 try {
-                    studentBinder.writeBean(s);
+                    // put form values into student dto
+                    StudentDTOImpl studentDTO = new StudentDTOImpl();
+                    binder.writeBean(studentDTO);
 
-                    usersController.createPortalUser(s);
-
-                    rolleDAO.setRoleToUser(s.getId(), "user");
+                    // put student user and its roles into db
+                    userService.createUser(studentDTO, new String[]{"user", "student"});
 
                     Notification notification = new Notification("Registration succeeded");
                     notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                     notification.setDuration(5000);
                     notification.setPosition(Notification.Position.BOTTOM_CENTER);
                     notification.open();
-                    studentBinder.getFields().forEach(HasValue::clear);
+                    binder.getFields().forEach(HasValue::clear);
 
                     UI.getCurrent().navigate(MainView.class);
 
@@ -157,7 +157,7 @@ public class RegistrationStudentView extends VerticalLayout {
     }
 
     private boolean validateInput() {
-        return Utils.validateRegistrationFrontendInput(firstName, lastName, email, password, passwordConfirm);
+        return Utils.validateRegistrationInput(firstName, lastName, email, password, passwordConfirm);
     }
 
 }

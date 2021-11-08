@@ -61,8 +61,8 @@ public class UserDAO {
 
                 user = new UserDTOImpl();
                 user.setId( set.getInt(1));
-                user.setFirstname( set.getString(4) );
-                user.setLastname(set.getString(5));
+                user.setFirstName( set.getString(4) );
+                user.setLastName(set.getString(5));
 
                 // Beziehe die Rollen eines Users:
                 RolleDAO rolleDAO = new RolleDAO();
