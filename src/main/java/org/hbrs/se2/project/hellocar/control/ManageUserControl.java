@@ -47,7 +47,7 @@ public class ManageUserControl {
     }
 
     public StudentDTO readStudentById(int id) {
-        Optional<User> userOptional = this.userRepository.findById(Integer.parseInt(id + ""));
+        Optional<User> userOptional = this.userRepository.findById(id);
 
         Student user = null;
         StudentDTOImpl studentDTO = null;
@@ -58,6 +58,7 @@ public class ManageUserControl {
             studentDTO = new StudentDTOImpl();
 
             // User
+            studentDTO.setId(user.getId());
             studentDTO.setFirstName(user.getFirstName());
             studentDTO.setLastName(user.getLastName());
             studentDTO.setEmail(user.getEmail());

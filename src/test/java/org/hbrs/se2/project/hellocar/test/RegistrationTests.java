@@ -6,6 +6,8 @@ import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.registration.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.registration.StudentDTO;
 import org.hbrs.se2.project.hellocar.repository.UserRepository;
+import org.hbrs.se2.project.hellocar.util.Globals;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,11 +25,11 @@ public class RegistrationTests {
         StudentDTOImpl studentDTO = new StudentDTOImpl();
         studentDTO.setEmail("vince.br@gmail.com");
         try {
-            userService.createUser(studentDTO, new String[]{"user", "student"});
+            userService.createUser(studentDTO, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
 
             assertThrows(Exception.class, () -> {
                 userService.createUser(studentDTO,
-                        new String[]{"user", "student"});
+                        new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
             });
         } catch (DatabaseUserException e) {
             e.printStackTrace();
@@ -41,16 +43,31 @@ public class RegistrationTests {
         StudentDTOImpl studentDTO = new StudentDTOImpl();
         studentDTO.setUserid("patrick");
         try {
-            userService.createUser(studentDTO, new String[]{"user", "student"});
+            userService.createUser(studentDTO, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
 
             assertThrows(Exception.class, () -> {
                 userService.createUser(studentDTO,
-                        new String[]{"user", "student"});
+                        new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
             });
         } catch (DatabaseUserException e) {
             e.printStackTrace();
         }
 
 
+    }
+
+    @Test
+    void createStudentTest() {
+        StudentDTOImpl studentDTOImpl = new StudentDTOImpl();
+        studentDTOImpl.setUserid("testID");
+        StudentDTO studentDTO;
+        int id;
+        try {
+            id = userService.createUser(studentDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+            studentDTO = userService.readStudentById(id);
+            assertEquals(studentDTO.getId(), id);
+        } catch (DatabaseUserException e) {
+            e.printStackTrace();
+        }
     }
 }
