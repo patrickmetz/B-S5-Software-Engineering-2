@@ -7,4 +7,5 @@ import java.time.LocalDate;
 @DiscriminatorValue("student")
 public class Student extends JobPortalUser {
 
+
 }
