@@ -20,8 +20,8 @@ public class ManageUserControl {
     @Autowired
     private UserRepository userRepository;
 
-    public void createUser(JobPortalUserDTO jobPortalUserDTO, String[] roles) throws DatabaseUserException {
-        validateUser(jobPortalUserDTO);
+    public int createUser(JobPortalUserDTO jobPortalUserDTO, String[] roles) throws DatabaseUserException {
+        validatelUser(jobPortalUserDTO);
 
         User userEntity = UserFactory.createUser(jobPortalUserDTO);
         this.userRepository.save(userEntity);
@@ -36,6 +36,8 @@ public class ManageUserControl {
                 handleDbException(e);
             }
         }
+
+        return newPrimaryKey;
     }
 
     public UserDTO readUser(String id) {
@@ -58,7 +60,7 @@ public class ManageUserControl {
         //todo: implement this.repositoty.blaBla(...);
     }
 
-    private void validateUser(JobPortalUserDTO jobPortalUserDTO) {
+    private void validatelUser(JobPortalUserDTO jobPortalUserDTO) {
         // todo: implement server side validation here
     }
 
