@@ -46,8 +46,8 @@ public class ManageUserControl {
         return newPrimaryKey;
     }
 
-    public StudentDTO readStudentById(String id) {
-        Optional<User> userOptional = this.userRepository.findById(Integer.parseInt(id));
+    public StudentDTO readStudentById(int id) {
+        Optional<User> userOptional = this.userRepository.findById(Integer.parseInt(id + ""));
 
         Student user = null;
         StudentDTOImpl studentDTO = null;
