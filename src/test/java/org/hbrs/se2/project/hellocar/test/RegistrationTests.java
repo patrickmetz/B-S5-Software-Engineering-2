@@ -6,6 +6,7 @@ import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.registration.CompanyDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.registration.JobPortalUserDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.registration.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.registration.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.registration.StudentDTO;
@@ -32,19 +33,24 @@ public class RegistrationTests {
 
     StudentDTOImpl studentDTOImpl;
     CompanyDTOImpl companyDTOImpl;
+    JobPortalUserDTOImpl jobPortalUserDTOImpl;
     UserDTOImpl userDTOImpl;
+
 
     @BeforeEach
     void set() {
         studentDTOImpl = new StudentDTOImpl();
         companyDTOImpl = new CompanyDTOImpl();
+        jobPortalUserDTOImpl = new JobPortalUserDTOImpl();
         userDTOImpl = new UserDTOImpl();
+
     }
 
     @AfterEach
     void reset() {
         studentDTOImpl = null;
         companyDTOImpl = null;
+        jobPortalUserDTOImpl = null;
         userDTOImpl = null;
     }
 
@@ -182,11 +188,34 @@ public class RegistrationTests {
     }
 
     @Test
-    void emailTest(){
+    void emailTest() {
         Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE); // https://stackoverflow.com/questions/8204680/java-regex-email
         Matcher m = p.matcher(userDTOImpl.getEmail());
         assertTrue(m.matches());
     }
+
+    @Test
+    void passwordTest() {
+        Pattern p = Pattern.compile("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}"); // https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
+        Matcher m = p.matcher(userDTOImpl.getPassword());
+        assertTrue(m.matches());
+}
+
+    @Test
+    void cityTest(){
+        Pattern p = Pattern.compile("/^[a-zA-Z\\u0080-\\u024F]+(?:([\\ \\-\\']|(\\.\\ ))[a-zA-Z\\u0080-\\u024F]+)*$/"); // https://stackoverflow.com/questions/11757013/regular-expressions-for-city-name
+        Matcher m = p.matcher(jobPortalUserDTOImpl.getCity());
+        assertTrue(m.matches());
+    }
+
+    @Test
+    void dateOfBirthTest(){
+        Pattern p = Pattern.compile( "^(0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])[-/.](19|20)\\d\\d$"); // https://stackoverflow.com/questions/22160079/date-of-birth-validation-by-using-regular-expression
+        Matcher m = p.matcher("04/08/21998"); // can we chance public LocalDate getDateOfBirth() to public String getDateOfBirth()?
+        assertTrue(m.matches());
+    }
+
+
 
 
 

@@ -88,7 +88,7 @@ public class UserDTOImpl implements UserDTO {
     }
 
     @Override
-    public LocalDate getDateOfBirth() {
+    public LocalDate getDateOfBirth() { // can i change this to a String matches better with regular expressions
         return dateOfBirth;
     }
 
