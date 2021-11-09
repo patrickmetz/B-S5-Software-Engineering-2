@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.hellocar.dtos.registration;
+package org.hbrs.se2.project.hellocar.dtos.account;
 
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 

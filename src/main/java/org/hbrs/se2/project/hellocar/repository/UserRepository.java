@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.hellocar.repository;
 
-import org.hbrs.se2.project.hellocar.dtos.registration.StudentDTO;
 import org.hbrs.se2.project.hellocar.entities.*;
 import org.hbrs.se2.project.hellocar.dtos.*;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 /**
@@ -20,6 +20,9 @@ import java.util.List;
  *
  */
 public interface UserRepository extends JpaRepository<User, Integer> {
+
+    Optional<User> findUserByUserid(String userid);
+    Optional<User> findUserByEmail(String email);
 
     // SELECT firstname, lastname, id
     // FROM User p

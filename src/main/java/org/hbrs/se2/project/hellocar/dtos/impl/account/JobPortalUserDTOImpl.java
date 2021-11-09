@@ -1,7 +1,7 @@
-package org.hbrs.se2.project.hellocar.dtos.impl.registration;
+package org.hbrs.se2.project.hellocar.dtos.impl.account;
 
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.registration.JobPortalUserDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 
 public class JobPortalUserDTOImpl extends UserDTOImpl implements JobPortalUserDTO {
 

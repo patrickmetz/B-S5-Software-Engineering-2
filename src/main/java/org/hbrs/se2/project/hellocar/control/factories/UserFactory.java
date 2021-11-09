@@ -1,9 +1,11 @@
 package org.hbrs.se2.project.hellocar.control.factories;
 
-import org.hbrs.se2.project.hellocar.dtos.registration.JobPortalUserDTO;
-import org.hbrs.se2.project.hellocar.dtos.registration.CompanyDTO;
-import org.hbrs.se2.project.hellocar.dtos.registration.StudentDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
 
+import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.entities.*;
 
 public class UserFactory {
@@ -42,5 +44,30 @@ public class UserFactory {
         user.setDateOfBirth(userDTO.getDateOfBirth());
 
         return user;
+    }
+
+    public static StudentDTOImpl generateStudentDto() {
+        StudentDTOImpl studentDTO = new StudentDTOImpl();
+
+        studentDTO.setFirstName("generatedStudent");
+        studentDTO.setLastName("generatedStudent");
+        studentDTO.setUserid("generatedStudent");
+        studentDTO.setEmail("generated@student.de");
+        studentDTO.setPassword("generatedStudent");
+
+        return studentDTO;
+    }
+
+    public static CompanyDTOImpl generateCompanyDto() {
+        CompanyDTOImpl companyDTO = new CompanyDTOImpl();
+
+        companyDTO.setCompanyName("generatedCompany");
+        companyDTO.setFirstName("generatedCompany");
+        companyDTO.setLastName("generatedCompany");
+        companyDTO.setUserid("generatedCompany");
+        companyDTO.setEmail("generated@company.de");
+        companyDTO.setPassword("generatedCompany");
+
+        return companyDTO;
     }
 }

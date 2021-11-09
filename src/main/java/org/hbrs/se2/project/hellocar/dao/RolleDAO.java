@@ -74,9 +74,7 @@ public class RolleDAO {
                 e.printStackTrace();
             }
             assert ps != null;
-            System.out.println("ps ist not null");
             ps.executeUpdate();
-            System.out.println("ps wurde ausgeführt");
         } catch (SQLException ex) {
             throw new DatabaseLayerException("Fehler im SQL-Befehl! Bitte den Programmier benachrichtigen!");
         }

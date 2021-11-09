@@ -4,13 +4,11 @@ import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.UserFactory;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
-import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.registration.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.registration.JobPortalUserDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.registration.StudentDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.registration.CompanyDTO;
-import org.hbrs.se2.project.hellocar.dtos.registration.JobPortalUserDTO;
-import org.hbrs.se2.project.hellocar.dtos.registration.StudentDTO;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
 import org.hbrs.se2.project.hellocar.entities.Company;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.entities.User;
@@ -47,6 +45,16 @@ public class ManageUserControl {
         }
 
         return newPrimaryKey;
+    }
+
+    public User findUserByUserId(String userid) {
+        Optional<User> userOptional = this.userRepository.findUserByUserid(userid);
+        return userOptional.orElse(null);
+    }
+
+    public User findUserByEmail(String email) {
+        Optional<User> userOptional = this.userRepository.findUserByEmail(email);
+        return userOptional.orElse(null);
     }
 
     public StudentDTO readStudentById(int id) {
@@ -111,10 +119,10 @@ public class ManageUserControl {
             companyDTO.setStreet(companyEntity.getStreet());
             companyDTO.setStreetNumber(companyEntity.getStreetNumber());
             companyDTO.setZipCode(companyEntity.getZipCode());
-        }
 
-        // Company
-        companyDTO.setCompanyName(companyEntity.getCompanyName());
+            //Company
+            companyDTO.setCompanyName(companyEntity.getCompanyName());
+        }
 
         return companyDTO;
     }

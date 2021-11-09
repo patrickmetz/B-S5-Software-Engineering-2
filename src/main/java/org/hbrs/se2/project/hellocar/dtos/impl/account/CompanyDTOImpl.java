@@ -1,10 +1,6 @@
-package org.hbrs.se2.project.hellocar.dtos.impl.registration;
+package org.hbrs.se2.project.hellocar.dtos.impl.account;
 
-import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
-import org.hbrs.se2.project.hellocar.dtos.registration.CompanyDTO;
-
-import java.time.LocalDate;
-import java.util.List;
+import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 
 public class CompanyDTOImpl extends JobPortalUserDTOImpl implements CompanyDTO   {
 

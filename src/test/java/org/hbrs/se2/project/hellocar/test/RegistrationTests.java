@@ -1,27 +1,20 @@
 package org.hbrs.se2.project.hellocar.test;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.control.factories.UserFactory;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.registration.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.registration.JobPortalUserDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.registration.StudentDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.registration.CompanyDTO;
-import org.hbrs.se2.project.hellocar.dtos.registration.StudentDTO;
-import org.hbrs.se2.project.hellocar.repository.UserRepository;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.net.SocketOption;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
@@ -73,9 +66,12 @@ public class RegistrationTests {
 
     @Test
     void uniqueUserIdTest() {
-        studentDTOImpl.setUserid("patrick");
+        StudentDTOImpl studentDTO = UserFactory.generateStudentDto();
+
+        // just to make sure that the username is being compared and not the email
+        studentDTO.setEmail("changed@company.de");
         try {
-            userService.createUser(studentDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+            userService.createUser(studentDTO, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
 
             assertThrows(Exception.class, () -> {
                 userService.createUser(studentDTOImpl,
@@ -84,7 +80,6 @@ public class RegistrationTests {
         } catch (DatabaseUserException e) {
             e.printStackTrace();
         }
-
 
     }
 

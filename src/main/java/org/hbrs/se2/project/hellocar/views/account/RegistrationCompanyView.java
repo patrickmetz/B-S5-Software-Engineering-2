@@ -6,14 +6,13 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
@@ -22,9 +21,10 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
-import org.hbrs.se2.project.hellocar.dtos.impl.registration.CompanyDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
+import org.hbrs.se2.project.hellocar.util.account.AccountValidation;
 
 import java.util.stream.Stream;
 
@@ -110,7 +110,63 @@ public class RegistrationCompanyView extends VerticalLayout implements BeforeEnt
         add(companyForm);
 
         setHorizontalComponentAlignment(Alignment.CENTER, companyForm);
-        setRequiredIndicatorVisible(firstName, lastName, email, password, passwordConfirm);
+        setRequiredIndicatorVisible(firstName, lastName, userid, email, password, passwordConfirm, companyName);
+
+        // validation
+
+        binder.forField(firstName)
+                .withValidator(
+                        AccountValidation::firstnameValidator,
+                        AccountValidation.FIRST_NAME_ERROR_MESSAGE
+                )
+                .bind(CompanyDTOImpl::getFirstName, CompanyDTOImpl::setFirstName);
+
+        binder.forField(lastName)
+                .withValidator(
+                        AccountValidation::lastnameValidator,
+                        AccountValidation.LAST_NAME_ERROR_MESSAGE
+                )
+                .bind(CompanyDTOImpl::getLastName, CompanyDTOImpl::setLastName);
+
+        binder.forField(userid)
+                .withValidator(
+                        AccountValidation::usernameValidator,
+                        AccountValidation.USERNAME_ERROR_MESSAGE
+                )
+                .withValidator(
+                        username -> AccountValidation.usernameAvailableValidator(username, userService),
+                        AccountValidation.USERNAME_IN_USE_ERROR_MESSAGE
+                )
+                .bind(CompanyDTOImpl::getUserid, CompanyDTOImpl::setUserid);
+
+        binder.forField(password)
+                .withValidator(
+                        AccountValidation::passwordValidator,
+                        AccountValidation.PASSWORD_ERROR_MESSAGE
+                )
+                .bind(CompanyDTOImpl::getPassword, CompanyDTOImpl::setPassword);
+
+        binder.forField(passwordConfirm)
+                .withValidator(
+                        pw -> AccountValidation.confirmPassowrdValidator(pw, password.getValue()),
+                        AccountValidation.CONFIRM_PASSWORD_ERROR_MESSAGE
+                )
+                .bind(CompanyDTOImpl::getPassword, CompanyDTOImpl::setPassword);
+
+        binder.forField(email)
+                .withValidator(new EmailValidator(AccountValidation.EMAIL_ERROR_MESSAGE))
+                .withValidator(
+                        email -> AccountValidation.emailAvailableValidator(email, userService),
+                        AccountValidation.EMAIL_IN_USE_ERROR_MESSAGE
+                )
+                .bind(CompanyDTOImpl::getEmail, CompanyDTOImpl::setEmail);
+
+        binder.forField(companyName)
+                .withValidator(
+                        AccountValidation::companyNameValidator,
+                        AccountValidation.COMPANY_NAME_ERROR_MESSAGE
+                )
+                .bind(CompanyDTOImpl::getCompanyName, CompanyDTOImpl::setCompanyName);
     }
 
     @Override
