@@ -162,18 +162,31 @@ public class RegistrationTests {
 
     @Test
     void firstNameTest() {
-        Pattern p = Pattern.compile("^[a-zA-Z\\s]+");
-        Matcher m= p.matcher(userDTOImpl.getFirstName());
+        Pattern p = Pattern.compile("^[a-zA-Z\\s]+"); //https://stackoverflow.com/questions/7362567/java-regex-for-full-name
+        Matcher m = p.matcher(userDTOImpl.getFirstName());
         assertTrue(m.matches());
     }
 
     @Test
     void lastNameTest() {
-        Pattern p = Pattern.compile("^[a-zA-Z\\s]+");
-        Matcher m= p.matcher(userDTOImpl.getLastName());
+        Pattern p = Pattern.compile("^[a-zA-Z\\s]+"); //https://stackoverflow.com/questions/7362567/java-regex-for-full-name
+        Matcher m = p.matcher(userDTOImpl.getLastName());
         assertTrue(m.matches());
     }
 
+    @Test
+    void userIdTest() { //userId is equal to userName
+        Pattern p = Pattern.compile("^([a-zA-Z])+([\\w]{2,})+$"); // https://javadeveloperzone.com/java-8/java-regular-expression-for-username/
+        Matcher m = p.matcher(userDTOImpl.getUserid());
+        assertTrue(m.matches());
+    }
+
+    @Test
+    void emailTest(){
+        Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE); // https://stackoverflow.com/questions/8204680/java-regex-email
+        Matcher m = p.matcher(userDTOImpl.getEmail());
+        assertTrue(m.matches());
+    }
 
 
 
