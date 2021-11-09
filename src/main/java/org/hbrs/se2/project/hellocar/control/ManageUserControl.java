@@ -124,12 +124,22 @@ public class ManageUserControl {
         return null;
     }
 
-    public void updateUser(String id) {
+    public void updateUser(int id) { //one update methode for student and company?
         // not the userid!! it really is THE id (primary key)
         //todo: implement this.repositoty.blaBla(...);
     }
 
-    public void deleteUser(String id) {
+    public void updateStudent(int id) {
+        // not the userid!! it really is THE id (primary key)
+        //todo: implement this.repositoty.blaBla(...);
+    }
+
+    public void updateCompany(int id) {
+        // not the userid!! it really is THE id (primary key)
+        //todo: implement this.repositoty.blaBla(...);
+    }
+
+    public void deleteUser(int id) {
         // not the userid!! it really is THE id (primary key)
         //todo: implement this.repositoty.blaBla(...);
     }

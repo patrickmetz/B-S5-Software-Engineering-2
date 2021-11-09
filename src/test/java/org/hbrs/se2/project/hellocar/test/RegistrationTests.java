@@ -1,18 +1,26 @@
 package org.hbrs.se2.project.hellocar.test;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.registration.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.registration.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.registration.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.registration.StudentDTO;
 import org.hbrs.se2.project.hellocar.repository.UserRepository;
 import org.hbrs.se2.project.hellocar.util.Globals;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.net.SocketOption;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
@@ -22,15 +30,32 @@ public class RegistrationTests {
     @Autowired
     private ManageUserControl userService;
 
+    StudentDTOImpl studentDTOImpl;
+    CompanyDTOImpl companyDTOImpl;
+    UserDTOImpl userDTOImpl;
+
+    @BeforeEach
+    void set() {
+        studentDTOImpl = new StudentDTOImpl();
+        companyDTOImpl = new CompanyDTOImpl();
+        userDTOImpl = new UserDTOImpl();
+    }
+
+    @AfterEach
+    void reset() {
+        studentDTOImpl = null;
+        companyDTOImpl = null;
+        userDTOImpl = null;
+    }
+
     @Test
     void uniqueEmailTest() {
-        StudentDTOImpl studentDTO = new StudentDTOImpl();
-        studentDTO.setEmail("vince.br@gmail.com");
+        studentDTOImpl.setEmail("test@gmail.com");
         try {
-            userService.createUser(studentDTO, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+            userService.createUser(studentDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
 
             assertThrows(Exception.class, () -> {
-                userService.createUser(studentDTO,
+                userService.createUser(studentDTOImpl,
                         new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
             });
         } catch (DatabaseUserException e) {
@@ -42,13 +67,12 @@ public class RegistrationTests {
 
     @Test
     void uniqueUserIdTest() {
-        StudentDTOImpl studentDTO = new StudentDTOImpl();
-        studentDTO.setUserid("patrick");
+        studentDTOImpl.setUserid("patrick");
         try {
-            userService.createUser(studentDTO, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+            userService.createUser(studentDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
 
             assertThrows(Exception.class, () -> {
-                userService.createUser(studentDTO,
+                userService.createUser(studentDTOImpl,
                         new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
             });
         } catch (DatabaseUserException e) {
@@ -60,7 +84,6 @@ public class RegistrationTests {
 
     @Test
     void createStudentTest() {
-        StudentDTOImpl studentDTOImpl = new StudentDTOImpl();
         studentDTOImpl.setUserid("testID");
         StudentDTO studentDTO;
         int id;
@@ -75,7 +98,6 @@ public class RegistrationTests {
 
     @Test
     void createCompanyTest() {
-        CompanyDTOImpl companyDTOImpl = new CompanyDTOImpl();
         companyDTOImpl.setUserid("testID");
         CompanyDTO companyDTO;
         int id;
@@ -87,4 +109,73 @@ public class RegistrationTests {
             e.printStackTrace();
         }
     }
+
+    @Test
+    void updateStudentTest() {
+        studentDTOImpl.setFirstName("Bob");
+        int id;
+        try {
+            id = userService.createUser(studentDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+            userService.updateStudent(id);
+            assertEquals(studentDTOImpl.getFirstName(), "Alex");
+        } catch (DatabaseUserException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Test
+    void updateCompanyTest() {
+        companyDTOImpl.setFirstName("Bob");
+        int id;
+        try {
+            id = userService.createUser(companyDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+            userService.updateCompany(id);
+            assertEquals(companyDTOImpl.getFirstName(), "Alex");
+        } catch (DatabaseUserException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    void deleteStudentByIdTest() {
+
+
+    }
+
+    @Test
+    void deleteCompanyByIdTest() {
+
+
+    }
+
+    @Test
+    void mandatoryFieldTest() {
+        assertNotNull(studentDTOImpl.getFirstName());
+        assertNotNull(studentDTOImpl.getLastName());
+        assertNotNull(studentDTOImpl.getUserid());
+        assertNotNull(studentDTOImpl.getEmail());
+        assertNotNull(studentDTOImpl.getPassword());
+    }
+
+    @Test
+    void firstNameTest() {
+        Pattern p = Pattern.compile("^[a-zA-Z\\s]+");
+        Matcher m= p.matcher(userDTOImpl.getFirstName());
+        assertTrue(m.matches());
+    }
+
+    @Test
+    void lastNameTest() {
+        Pattern p = Pattern.compile("^[a-zA-Z\\s]+");
+        Matcher m= p.matcher(userDTOImpl.getLastName());
+        assertTrue(m.matches());
+    }
+
+
+
+
+
 }
