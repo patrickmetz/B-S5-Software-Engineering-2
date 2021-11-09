@@ -158,15 +158,6 @@ public class RegistrationTests {
     }
 
     @Test
-    void mandatoryFieldTest() {
-        assertNotNull(studentDTOImpl.getFirstName());
-        assertNotNull(studentDTOImpl.getLastName());
-        assertNotNull(studentDTOImpl.getUserid());
-        assertNotNull(studentDTOImpl.getEmail());
-        assertNotNull(studentDTOImpl.getPassword());
-    }
-
-    @Test
     void firstNameTest() {
         Pattern p = Pattern.compile("^[a-zA-Z\\s]+"); //https://stackoverflow.com/questions/7362567/java-regex-for-full-name
         Matcher m = p.matcher(userDTOImpl.getFirstName());
@@ -199,25 +190,44 @@ public class RegistrationTests {
         Pattern p = Pattern.compile("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}"); // https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
         Matcher m = p.matcher(userDTOImpl.getPassword());
         assertTrue(m.matches());
-}
+    }
 
     @Test
-    void cityTest(){
+    void cityTest() {
         Pattern p = Pattern.compile("/^[a-zA-Z\\u0080-\\u024F]+(?:([\\ \\-\\']|(\\.\\ ))[a-zA-Z\\u0080-\\u024F]+)*$/"); // https://stackoverflow.com/questions/11757013/regular-expressions-for-city-name
         Matcher m = p.matcher(jobPortalUserDTOImpl.getCity());
         assertTrue(m.matches());
     }
 
     @Test
-    void dateOfBirthTest(){
-        Pattern p = Pattern.compile( "^(0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])[-/.](19|20)\\d\\d$"); // https://stackoverflow.com/questions/22160079/date-of-birth-validation-by-using-regular-expression
+    void dateOfBirthTest() {
+        Pattern p = Pattern.compile("^(0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])[-/.](19|20)\\d\\d$"); // https://stackoverflow.com/questions/22160079/date-of-birth-validation-by-using-regular-expression
         Matcher m = p.matcher("04/08/21998"); // can we chance public LocalDate getDateOfBirth() to public String getDateOfBirth()?
         assertTrue(m.matches());
     }
 
+    @Test
+    void zipCodeTest() {
+        Pattern p = Pattern.compile("^\\d{5}");
+        Matcher m = p.matcher(jobPortalUserDTOImpl.getZipCode());
+        assertTrue(m.matches());
+    }
 
+    @Test
+    void streetNumberTest() {
+        Pattern p = Pattern.compile("^\\d{1,4}[a-z]?");
+        Matcher m = p.matcher(jobPortalUserDTOImpl.getStreetNumber());
+        assertTrue(m.matches());
+    }
 
+    @Test
+    void streetNameTest() {
 
+    }
 
+    @Test
+    void companyNameTest(){
+
+    }
 
 }
