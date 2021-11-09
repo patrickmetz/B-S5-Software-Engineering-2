@@ -5,23 +5,23 @@ import org.hbrs.se2.project.hellocar.dtos.CarDTO;
 import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.entities.Rolle;
+import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.entities.User;
 import org.hbrs.se2.project.hellocar.repository.CarRepository;
 import org.hbrs.se2.project.hellocar.repository.RolleRepository;
 import org.hbrs.se2.project.hellocar.repository.UserRepository;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Utils;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
+//import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 @SpringBootTest
 class HellocarApplicationTests {
@@ -35,6 +35,108 @@ class HellocarApplicationTests {
     @Autowired
     private CarRepository carRepository;
 
+    private User testUser;
+    private Student testStudent;
+
+    @BeforeEach
+    private void setUp() {
+        // User
+        testUser = new User();
+        testUser.setUserid("TestID");
+        testUser.setEmail("test@test.de");
+        testUser.setPassword("TestPasswort");
+        testUser.setFirstName("TestVorname");
+        testUser.setLastName("TestNachname");
+        userRepository.save(testUser);
+
+        // Student
+        testStudent = new Student();
+        testStudent.setUserid("TestStudentID");
+        testStudent.setEmail("test2@test.de");
+        testStudent.setPassword("TestStudentPasswort");
+        testStudent.setFirstName("TestStudentVorname");
+        testStudent.setLastName("TestStudentNachname");
+        userRepository.save(testStudent);
+    }
+
+    @AfterEach
+    private void cleanupTest() {
+        // User
+        if( testUser != null ){
+            userRepository.delete(testUser);
+            testUser = null;
+        }
+        // Student
+        if( testStudent != null ){
+            userRepository.delete(testStudent);
+            testStudent = null;
+        }
+    }
+
+    @Test
+    void testUserDTOfindUserByUseridAndPassword() {
+        assertNotNull(testUser);
+        UserDTO userDTO = userRepository.findUserByUseridAndPassword(testUser.getUserid() , testUser.getPassword());
+        assertNotNull(userDTO);
+        assertEquals(testUser.getFirstName(), userDTO.getFirstName());
+        assertEquals(testUser.getLastName(), userDTO.getLastName());
+    }
+
+    @Test
+    void testFindUserWithJDBC() {
+        UserDAO userDAO = new UserDAO();
+        try {
+            UserDTO userDTO = userDAO.findUserByUseridAndPassword(testUser.getUserid() , testUser.getPassword());
+            assertNotNull(userDTO);
+            assertEquals(testUser.getFirstName(), userDTO.getFirstName());
+            assertEquals(testUser.getLastName(), userDTO.getLastName());
+        } catch (DatabaseLayerException e) {
+            e.printStackTrace();
+            assert(false);
+        }
+    }
+
+    @Test
+    void testFindStudents() {
+        List<Student> studentList = userRepository.findStudents();
+        Student foundStudent = null;
+        for( Student s : studentList )
+        {
+            if( s.getId() == testStudent.getId() )
+            {
+                System.out.println("Found");
+                if( foundStudent == null )
+                    foundStudent = s;
+                else
+                    assert(false); // Mehr als 1 objekt gefunden
+            }
+        }
+        assertNotNull(foundStudent);
+        assertEquals(testStudent.getFirstName(), foundStudent.getFirstName());
+        assertEquals(testStudent.getLastName(), foundStudent.getLastName());
+    }
+
+    @Test
+    void testUserListIntegrity() {
+        List<UserDTO> userList = userRepository.getUsers();
+        List<String> emailList = new ArrayList<String>();
+        List<String> userIdList = new ArrayList<String>();
+
+        for( UserDTO u : userList )
+        {
+            assertFalse("UserId ist leer", u.getUserid() != null && u.getUserid().isEmpty());
+            assertFalse("E-Mail ist leer",u.getEmail() != null && u.getEmail().isEmpty());
+
+            // Prüfe auf mehrfache emails
+            assertFalse("E-Mail '"+u.getEmail()+"' kommt mehrfach vor", emailList.contains(u.getEmail()) );
+            emailList.add( u.getEmail() );
+
+            // Prüfe auf mehrfache userids
+            assertFalse("UserId '"+u.getUserid()+"' kommt mehrfach vor", userIdList.contains(u.getUserid()) );
+            userIdList.add( u.getUserid() );
+        }
+    }
+
     @Test
     void testRolesOfUser() {
         Optional<User> wrapper = userRepository.findById(1);
@@ -42,7 +144,7 @@ class HellocarApplicationTests {
             User user = wrapper.get();
             System.out.println("User: " + user.getLastName());
             List<Rolle> list = user.getRoles();
-            assertEquals(2 , list.size() , "Anzahl der Rollen");
+            assertEquals("Anzahl der Rollen", 2 , list.size() );
             Rolle rolle1 = list.get(0);
             assertEquals("admin" , rolle1.getBezeichhnung() );
         }
@@ -50,27 +152,20 @@ class HellocarApplicationTests {
 
     @Test
     void testUserDTOByAttribute() {
-        UserDTO personDTO = userRepository.getUserByOccupation("Professor").get(0);
+        UserDTO personDTO = userRepository.getUserByOccupation("devaccount").get(0);
         System.out.println(personDTO.getFirstName());
-        assertEquals("Sascha", personDTO.getFirstName());
-        assertEquals(1 , personDTO.getId());
-    }
-
-    @Test
-    void testUserDTOByPassword() {
-        UserDTO userDTO = userRepository.findUserByUseridAndPassword("sascha" , "abc");
-        System.out.println(userDTO.getFirstName());
-        assertEquals("Sascha", userDTO.getFirstName());
+        assertEquals("Team", personDTO.getFirstName());
+        assertEquals(2 , personDTO.getId());
     }
 
     @Test
     void testUserDTOAndItsRoles() {
-        UserDTO userDTO = userRepository.findUserByUseridAndPassword("sascha" , "abc");
+        UserDTO userDTO = userRepository.findUserByUseridAndPassword("teamx" , "123");
         System.out.println(userDTO.getFirstName());
-        assertEquals("Sascha", userDTO.getFirstName());
+        assertEquals("Team", userDTO.getFirstName());
         List<RolleDTO> list = userDTO.getRoles();
         System.out.println(list.size());
-        assertEquals(2 , list.size());
+        assertEquals(1 , list.size());
     }
 
     @Test
@@ -85,7 +180,7 @@ class HellocarApplicationTests {
     @Test
     void testRoleRepository() {
         List<Rolle> list = roleRepository.findAll();
-        String[] soll = { "admin" , "user" };
+        String[] soll = { "admin" , "user", "student", "company" };
         String[] ist = {};
 
         for (Rolle r : list) {
@@ -119,19 +214,4 @@ class HellocarApplicationTests {
         }
         // Todo: Definition von passenden Assertions
     }
-
-    @Test
-    void testFindUserWithJDBC() {
-        UserDAO userDAO = new UserDAO();
-        try {
-            UserDTO userDTO = userDAO.findUserByUseridAndPassword("sascha" , "abc");
-            System.out.println(userDTO.toString());
-
-            assertEquals("Sascha", userDTO.getFirstName());
-        } catch (DatabaseLayerException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 }
