@@ -271,6 +271,7 @@ public class RegistrationTests {
 
             RolleDAO rolleDAO = new RolleDAO();
             List<RolleDTO> roles = rolleDAO.getRolesOfUser( studentDTOImpl1);
+            assertEquals(roles.size(), setRoles.length);
             for( int i = 0; i <roles.size(); i++ )
             {
                 RolleDTO r1 = roles.get(i);
