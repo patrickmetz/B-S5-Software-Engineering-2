@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 
 public class RegistrationTests {
     @Autowired
-    private ManageUserControl userService;
+    private ManageUserControl userService; // !
 
     @Test
     void uniqueEmailTest() {
