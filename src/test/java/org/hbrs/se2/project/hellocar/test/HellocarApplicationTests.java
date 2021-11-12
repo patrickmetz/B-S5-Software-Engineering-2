@@ -4,6 +4,7 @@ import org.hbrs.se2.project.hellocar.dao.UserDAO;
 import org.hbrs.se2.project.hellocar.dtos.CarDTO;
 import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.entities.Company;
 import org.hbrs.se2.project.hellocar.entities.Rolle;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.entities.User;
@@ -16,12 +17,15 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 //import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 @SpringBootTest
 class HellocarApplicationTests {
@@ -32,11 +36,9 @@ class HellocarApplicationTests {
     @Autowired
     private RolleRepository roleRepository;
 
-    @Autowired
-    private CarRepository carRepository;
-
     private User testUser;
     private Student testStudent;
+    private Company testCompany;
 
     @BeforeEach
     private void setUp() {
@@ -47,6 +49,7 @@ class HellocarApplicationTests {
         testUser.setPassword("TestPasswort");
         testUser.setFirstName("TestVorname");
         testUser.setLastName("TestNachname");
+        testUser.setOccupation("TestOccupation");
         userRepository.save(testUser);
 
         // Student
@@ -56,7 +59,19 @@ class HellocarApplicationTests {
         testStudent.setPassword("TestStudentPasswort");
         testStudent.setFirstName("TestStudentVorname");
         testStudent.setLastName("TestStudentNachname");
+        testStudent.setDateOfBirth(LocalDate.now());
         userRepository.save(testStudent);
+
+        // Company
+        testCompany = new Company();
+        testCompany.setUserid("TestCompanyID");
+        testCompany.setEmail("test3@test.de");
+        testCompany.setPassword("TestCompanyPasswort");
+        testCompany.setFirstName("TestCompanyVorname");
+        testCompany.setLastName("TestCompanyNachname");
+        testCompany.setCompanyName("TestCompany");
+        testCompany.setDateOfBirth(LocalDate.now());
+        userRepository.save(testCompany);
     }
 
     @AfterEach
@@ -71,6 +86,11 @@ class HellocarApplicationTests {
             userRepository.delete(testStudent);
             testStudent = null;
         }
+        // Company
+        if( testCompany != null ){
+            userRepository.delete(testCompany);
+            testCompany = null;
+        }
     }
 
     @Test
@@ -80,10 +100,22 @@ class HellocarApplicationTests {
         assertNotNull(userDTO);
         assertEquals(testUser.getFirstName(), userDTO.getFirstName());
         assertEquals(testUser.getLastName(), userDTO.getLastName());
+        assertEquals(testUser.getDateOfBirth(), userDTO.getDateOfBirth());
+    }
+
+    @Test
+    void testUserDTOgetUserByOccupation() {
+        List<UserDTO> userDTOList = userRepository.getUserByOccupation(testUser.getOccupation());
+        assertEquals(userDTOList.size(), 1);
+        UserDTO userDTO = userDTOList.get(0);
+        assertEquals(testUser.getFirstName(), userDTO.getFirstName());
+        assertEquals(testUser.getLastName(), userDTO.getLastName());
+        assertEquals(testUser.getDateOfBirth(), userDTO.getDateOfBirth());
     }
 
     @Test
     void testFindUserWithJDBC() {
+        assertNotNull(testUser);
         UserDAO userDAO = new UserDAO();
         try {
             UserDTO userDTO = userDAO.findUserByUseridAndPassword(testUser.getUserid() , testUser.getPassword());
@@ -97,33 +129,15 @@ class HellocarApplicationTests {
     }
 
     @Test
-    void testFindStudents() {
-        List<Student> studentList = userRepository.findStudents();
-        Student foundStudent = null;
-        for( Student s : studentList )
-        {
-            if( s.getId() == testStudent.getId() )
-            {
-                System.out.println("Found");
-                if( foundStudent == null )
-                    foundStudent = s;
-                else
-                    assert(false); // Mehr als 1 objekt gefunden
-            }
-        }
-        assertNotNull(foundStudent);
-        assertEquals(testStudent.getFirstName(), foundStudent.getFirstName());
-        assertEquals(testStudent.getLastName(), foundStudent.getLastName());
-    }
-
-    @Test
-    void testUserListIntegrity() {
+    void testUserDatabaseIntegrity() {
         List<UserDTO> userList = userRepository.getUsers();
         List<String> emailList = new ArrayList<String>();
         List<String> userIdList = new ArrayList<String>();
 
         for( UserDTO u : userList )
         {
+            assertNotNull(u);
+
             assertFalse("UserId ist leer", u.getUserid() != null && u.getUserid().isEmpty());
             assertFalse("E-Mail ist leer",u.getEmail() != null && u.getEmail().isEmpty());
 
@@ -134,6 +148,12 @@ class HellocarApplicationTests {
             // Prüfe auf mehrfache userids
             assertFalse("UserId '"+u.getUserid()+"' kommt mehrfach vor", userIdList.contains(u.getUserid()) );
             userIdList.add( u.getUserid() );
+
+            // Nicht null
+            assertNotNull(u.getPassword());
+
+            assertNotNull(u.getFirstName()); // Throws?
+            assertNotNull(u.getLastName()); // Throws?
         }
     }
 
@@ -151,33 +171,6 @@ class HellocarApplicationTests {
     }
 
     @Test
-    void testUserDTOByAttribute() {
-        UserDTO personDTO = userRepository.getUserByOccupation("devaccount").get(0);
-        System.out.println(personDTO.getFirstName());
-        assertEquals("Team", personDTO.getFirstName());
-        assertEquals(2 , personDTO.getId());
-    }
-
-    @Test
-    void testUserDTOAndItsRoles() {
-        UserDTO userDTO = userRepository.findUserByUseridAndPassword("teamx" , "123");
-        System.out.println(userDTO.getFirstName());
-        assertEquals("Team", userDTO.getFirstName());
-        List<RolleDTO> list = userDTO.getRoles();
-        System.out.println(list.size());
-        assertEquals(1 , list.size());
-    }
-
-    @Test
-    void testPersonLoad() {
-        Optional<User> wrapper = userRepository.findById(1);
-        if ( wrapper.isPresent() ) {
-            User user = wrapper.get();
-            assertEquals("Alda" , user.getLastName());
-        }
-    }
-
-    @Test
     void testRoleRepository() {
         List<Rolle> list = roleRepository.findAll();
         String[] soll = { "admin" , "user", "student", "company" };
@@ -188,30 +181,5 @@ class HellocarApplicationTests {
             ist = Utils.append( ist , r.getBezeichhnung() );
         }
         assertArrayEquals( soll , ist );
-    }
-
-    @Test
-    void testFindCarsAndTheirUsers() {
-        List<Object[]> list = this.carRepository.findAllCarsAndTheirUsers();
-        for (Object[] item: list) {
-            System.out.println("Brand: " + item[0] );
-            System.out.println("Model: " + item[1] );
-            System.out.println("Price: " + item[2] );
-            System.out.println("First Name: " + item[3] );
-            System.out.println("Last Name: " + item[4] );
-        }
-        // Todo: Definition von passenden Assertions
-    }
-
-    @Test
-    void testFindCarsWithMostImportantValues() {
-        List<CarDTO> list = this.carRepository.findCarsByDateIsNotNull();
-        for (CarDTO item: list) {
-            System.out.println("Brand: " + item.getBrand() );
-            System.out.println("Model: " + item.getModel() );
-            System.out.println("Price: " + item.getPrice() );
-            System.out.println("Phone: " + item.getPhone() );
-        }
-        // Todo: Definition von passenden Assertions
     }
 }
