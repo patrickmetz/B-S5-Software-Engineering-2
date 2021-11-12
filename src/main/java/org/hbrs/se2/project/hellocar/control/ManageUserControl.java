@@ -132,17 +132,12 @@ public class ManageUserControl {
         return null;
     }
 
-    public void updateUser(int id) { //one update methode for student and company?
+    public void updateStudent(int id, StudentDTO studentDTO) {
         // not the userid!! it really is THE id (primary key)
         //todo: implement this.repositoty.blaBla(...);
     }
 
-    public void updateStudent(int id) {
-        // not the userid!! it really is THE id (primary key)
-        //todo: implement this.repositoty.blaBla(...);
-    }
-
-    public void updateCompany(int id) {
+    public void updateCompany(int id, CompanyDTO companyDTO) {
         // not the userid!! it really is THE id (primary key)
         //todo: implement this.repositoty.blaBla(...);
     }
@@ -151,6 +146,7 @@ public class ManageUserControl {
         // not the userid!! it really is THE id (primary key)
         //todo: implement this.repositoty.blaBla(...);
     }
+
 
     private void validatelUser(JobPortalUserDTO jobPortalUserDTO) {
         // todo: implement server side validation here
@@ -172,4 +168,6 @@ public class ManageUserControl {
                 throw new DatabaseUserException("A failure occured while...shit was done");
         }
     }
+
+
 }
