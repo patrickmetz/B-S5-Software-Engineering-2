@@ -3,12 +3,15 @@ package org.hbrs.se2.project.hellocar.test;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.UserFactory;
+import org.hbrs.se2.project.hellocar.dao.RolleDAO;
+import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
+import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.platform.engine.support.hierarchical.ThrowableCollector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -111,7 +116,7 @@ public class RegistrationTests {
             studentDTOImpl.setStreetNumber(studentDTOImpl.getStreetNumber()+"x");
             studentDTOImpl.setStreet(studentDTOImpl.getStreet()+"x");
             studentDTOImpl.setPassword(studentDTOImpl.getPassword()+"x");
-            studentDTOImpl.setDateOfBirth(studentDTOImpl.getDateOfBirth()+1);
+            studentDTOImpl.setDateOfBirth(studentDTOImpl.getDateOfBirth().plusDays(1));
 
             userService.updateStudent(id, studentDTOImpl);
             StudentDTO updateStudent = userService.readStudentById(id);
@@ -126,7 +131,7 @@ public class RegistrationTests {
             assertEquals(studentDTOImpl.getStreetNumber()+"x", updateStudent.getStreetNumber());
             assertEquals(studentDTOImpl.getStreet()+"x", updateStudent.getStreet());
             assertEquals(studentDTOImpl.getPassword()+"x", updateStudent.getPassword());
-            assertEquals(studentDTOImpl.getDateOfBirth()+1, updateStudent.getDateOfBirth());
+            assertEquals(studentDTOImpl.getDateOfBirth().plusDays(1), updateStudent.getDateOfBirth());
 
             userService.deleteUser(id);
         } catch (DatabaseUserException e) {
@@ -255,4 +260,26 @@ public class RegistrationTests {
             userService.createUser(studentDTOImpl2, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
         });
     }
+
+    @Test
+    void roleTest() {
+        StudentDTOImpl studentDTOImpl1 = UserFactory.generateStudentDto();
+
+        String[] setRoles = new String[]{Globals.Roles.USER, Globals.Roles.STUDENT};
+        try {
+            int id = userService.createUser(studentDTOImpl1, setRoles);
+
+            RolleDAO rolleDAO = new RolleDAO();
+            List<RolleDTO> roles = rolleDAO.getRolesOfUser( studentDTOImpl1);
+            for( int i = 0; i <roles.size(); i++ )
+            {
+                RolleDTO r1 = roles.get(i);
+                assertEquals( r1.getBezeichhnung(), setRoles[i]);
+            }
+            userService.deleteUser(id);
+        } catch (DatabaseUserException | DatabaseLayerException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
