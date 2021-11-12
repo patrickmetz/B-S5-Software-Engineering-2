@@ -106,31 +106,31 @@ public class RegistrationTests {
         try {
             id = userService.createUser(studentDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
 
-            studentDTOImpl.setFirstName(studentDTOImpl.getFirstName()+"x");
-            studentDTOImpl.setLastName(studentDTOImpl.getLastName()+"x");
-            studentDTOImpl.setEmail(studentDTOImpl.getEmail()+"x");
-            studentDTOImpl.setUserid(studentDTOImpl.getUserid()+"x");
-            studentDTOImpl.setGender(studentDTOImpl.getGender()+"x");
-            studentDTOImpl.setCity(studentDTOImpl.getCity()+"x");
-            studentDTOImpl.setZipCode(studentDTOImpl.getZipCode()+"x");
-            studentDTOImpl.setStreetNumber(studentDTOImpl.getStreetNumber()+"x");
-            studentDTOImpl.setStreet(studentDTOImpl.getStreet()+"x");
-            studentDTOImpl.setPassword(studentDTOImpl.getPassword()+"x");
+            studentDTOImpl.setFirstName(studentDTOImpl.getFirstName() + "x");
+            studentDTOImpl.setLastName(studentDTOImpl.getLastName() + "x");
+            studentDTOImpl.setEmail(studentDTOImpl.getEmail() + "x");
+            studentDTOImpl.setUserid(studentDTOImpl.getUserid() + "x");
+            studentDTOImpl.setGender(studentDTOImpl.getGender() + "x");
+            studentDTOImpl.setCity(studentDTOImpl.getCity() + "x");
+            studentDTOImpl.setZipCode(studentDTOImpl.getZipCode() + "x");
+            studentDTOImpl.setStreetNumber(studentDTOImpl.getStreetNumber() + "x");
+            studentDTOImpl.setStreet(studentDTOImpl.getStreet() + "x");
+            studentDTOImpl.setPassword(studentDTOImpl.getPassword() + "x");
             studentDTOImpl.setDateOfBirth(studentDTOImpl.getDateOfBirth().plusDays(1));
 
             userService.updateStudent(id, studentDTOImpl);
             StudentDTO updateStudent = userService.readStudentById(id);
 
-            assertEquals(studentDTOImpl.getFirstName()+"x", updateStudent.getFirstName());
-            assertEquals(studentDTOImpl.getLastName()+"x", updateStudent.getLastName());
-            assertEquals(studentDTOImpl.getEmail()+"x", updateStudent.getEmail());
-            assertEquals(studentDTOImpl.getUserid()+"x", updateStudent.getUserid());
-            assertEquals(studentDTOImpl.getGender()+"x", updateStudent.getGender());
-            assertEquals(studentDTOImpl.getCity()+"x", updateStudent.getCity());
-            assertEquals(studentDTOImpl.getZipCode()+"x", updateStudent.getZipCode());
-            assertEquals(studentDTOImpl.getStreetNumber()+"x", updateStudent.getStreetNumber());
-            assertEquals(studentDTOImpl.getStreet()+"x", updateStudent.getStreet());
-            assertEquals(studentDTOImpl.getPassword()+"x", updateStudent.getPassword());
+            assertEquals(studentDTOImpl.getFirstName() + "x", updateStudent.getFirstName());
+            assertEquals(studentDTOImpl.getLastName() + "x", updateStudent.getLastName());
+            assertEquals(studentDTOImpl.getEmail() + "x", updateStudent.getEmail());
+            assertEquals(studentDTOImpl.getUserid() + "x", updateStudent.getUserid());
+            assertEquals(studentDTOImpl.getGender() + "x", updateStudent.getGender());
+            assertEquals(studentDTOImpl.getCity() + "x", updateStudent.getCity());
+            assertEquals(studentDTOImpl.getZipCode() + "x", updateStudent.getZipCode());
+            assertEquals(studentDTOImpl.getStreetNumber() + "x", updateStudent.getStreetNumber());
+            assertEquals(studentDTOImpl.getStreet() + "x", updateStudent.getStreet());
+            assertEquals(studentDTOImpl.getPassword() + "x", updateStudent.getPassword());
             assertEquals(studentDTOImpl.getDateOfBirth().plusDays(1), updateStudent.getDateOfBirth());
 
             userService.deleteUser(id);
@@ -147,10 +147,34 @@ public class RegistrationTests {
         int id;
         try {
             id = userService.createUser(companyDTOImpl1, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
-            companyDTOImpl1.setFirstName(companyDTOImpl1.getFirstName()+"x"); // update other attributes
+
+            companyDTOImpl1.setFirstName(companyDTOImpl1.getFirstName() + "x");
+            companyDTOImpl1.setLastName(companyDTOImpl1.getLastName() + "x");
+            companyDTOImpl1.setUserid(companyDTOImpl1.getUserid() + "x");
+            companyDTOImpl1.setCompanyName(companyDTOImpl1.getCompanyName() + "x");
+            companyDTOImpl1.setEmail(companyDTOImpl1.getEmail() + "x");
+            companyDTOImpl1.setGender(companyDTOImpl1.getGender() + "x");
+            companyDTOImpl1.setPassword(companyDTOImpl1.getPassword() + "x");
+            companyDTOImpl1.setStreet(companyDTOImpl1.getStreet() + "x");
+            companyDTOImpl1.setStreetNumber(companyDTOImpl1.getStreetNumber() + "x");
+            companyDTOImpl1.setZipCode(companyDTOImpl1.getZipCode() + "x");
+            companyDTOImpl1.setCity(companyDTOImpl1.getCity() + "x");
+
             userService.updateCompany(id, companyDTOImpl1);
             CompanyDTO updatedCompany = userService.readCompanyById(id);
-            assertEquals(companyDTOImpl1.getFirstName()+"x", updatedCompany.getFirstName());
+
+            assertEquals(companyDTOImpl1.getFirstName() + "x", updatedCompany.getFirstName());
+            assertEquals(companyDTOImpl1.getLastName() + "x", updatedCompany.getLastName());
+            assertEquals(companyDTOImpl1.getUserid() + "x", updatedCompany.getUserid());
+            assertEquals(companyDTOImpl1.getCompanyName() + "x", updatedCompany.getCompanyName());
+            assertEquals(companyDTOImpl1.getEmail() + "x", updatedCompany.getEmail());
+            assertEquals(companyDTOImpl1.getGender() + "x", updatedCompany.getGender());
+            assertEquals(companyDTOImpl1.getPassword() + "x", updatedCompany.getPassword());
+            assertEquals(companyDTOImpl1.getStreet() + "x", updatedCompany.getStreet());
+            assertEquals(companyDTOImpl1.getStreetNumber() + "x", updatedCompany.getStreetNumber());
+            assertEquals(companyDTOImpl1.getZipCode() + "x", updatedCompany.getZipCode());
+            assertEquals(companyDTOImpl1.getCity() + "x", updatedCompany.getCity());
+
             userService.deleteUser(id);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
@@ -210,6 +234,7 @@ public class RegistrationTests {
         studentDTOImpl.setLastName(null);
         assertThrows(Exception.class, () -> {
             int id = userService.createUser(studentDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+            userService.deleteUser(id);
         });
     }
 
@@ -270,12 +295,11 @@ public class RegistrationTests {
             int id = userService.createUser(studentDTOImpl1, setRoles);
 
             RolleDAO rolleDAO = new RolleDAO();
-            List<RolleDTO> roles = rolleDAO.getRolesOfUser( studentDTOImpl1);
+            List<RolleDTO> roles = rolleDAO.getRolesOfUser(studentDTOImpl1);
             assertEquals(roles.size(), setRoles.length);
-            for( int i = 0; i <roles.size(); i++ )
-            {
+            for (int i = 0; i < roles.size(); i++) {
                 RolleDTO r1 = roles.get(i);
-                assertEquals( r1.getBezeichhnung(), setRoles[i]);
+                assertEquals(r1.getBezeichhnung(), setRoles[i]);
             }
             userService.deleteUser(id);
         } catch (DatabaseUserException | DatabaseLayerException e) {
