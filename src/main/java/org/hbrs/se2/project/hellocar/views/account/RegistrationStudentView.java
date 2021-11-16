@@ -102,7 +102,10 @@ public class RegistrationStudentView extends VerticalLayout implements BeforeEnt
                     binder.writeBean(studentDTO);
 
                     // put student user and its roles into db
-                    userService.createUser(studentDTO, new String[]{"user", "student"});
+                    userService.createUser(
+                            studentDTO,
+                            new String[]{Globals.Roles.STUDENT, Globals.Roles.USER}
+                    );
 
                     Utils.displayNotification(true, "Registration succeeded");
                     binder.getFields().forEach(HasValue::clear);
