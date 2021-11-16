@@ -2,21 +2,24 @@ package org.hbrs.se2.project.hellocar.test;
 
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.hellocar.control.factories.UserFactory;
-import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
+import org.hbrs.se2.project.hellocar.control.factories.UserEntityFactory;
+import org.hbrs.se2.project.hellocar.dao.RolleDAO;
+import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
+import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 
@@ -24,323 +27,338 @@ public class RegistrationTests {
     @Autowired
     private ManageUserControl userService;
 
-    StudentDTOImpl studentDTOImpl;
-    CompanyDTOImpl companyDTOImpl;
-    JobPortalUserDTOImpl jobPortalUserDTOImpl;
-    UserDTOImpl userDTOImpl;
+    private static final String[] STUDENT_ROLES
+            = new String[]{Globals.Roles.USER, Globals.Roles.STUDENT};
 
-
-    @BeforeEach
-    void set() {
-        studentDTOImpl = new StudentDTOImpl();
-        companyDTOImpl = new CompanyDTOImpl();
-        jobPortalUserDTOImpl = new JobPortalUserDTOImpl();
-        userDTOImpl = new UserDTOImpl();
-
-    }
-
-    @AfterEach
-    void reset() {
-        studentDTOImpl = null;
-        companyDTOImpl = null;
-        jobPortalUserDTOImpl = null;
-        userDTOImpl = null;
-    }
+    private static final String[] COMPANY_ROLES
+            = new String[]{Globals.Roles.USER, Globals.Roles.COMPANY};
 
     @Test
-    void uniqueEmailTest() {
-        studentDTOImpl.setEmail("test@gmail.com");
+    void emailsAreUnique() {
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+
         try {
-            userService.createUser(studentDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+            int id = userService.createUser(dto, STUDENT_ROLES);
 
             assertThrows(Exception.class, () -> {
-                userService.createUser(studentDTOImpl,
-                        new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+                userService.createUser(dto, STUDENT_ROLES);
             });
+
+            userService.deleteUser(id);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Test
-    void uniqueUserIdTest() {
-        StudentDTOImpl studentDTO = UserFactory.generateStudentDto();
+    void userIdsAreUnique() {
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
 
         // just to make sure that the username is being compared and not the email
-        studentDTO.setEmail("changed@company.de");
+        dto.setEmail("changed@company.de");
+
         try {
-            userService.createUser(studentDTO, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+            int id = userService.createUser(dto, STUDENT_ROLES);
 
             assertThrows(Exception.class, () -> {
-                userService.createUser(studentDTOImpl,
-                        new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
+                userService.createUser(dto, STUDENT_ROLES);
             });
+
+            userService.deleteUser(id);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
         }
-
     }
 
     @Test
-    void createStudentTest() {
-        studentDTOImpl.setUserid("testID");
-        StudentDTO studentDTO;
-        int id;
+    void studentsAreCreated() {
+        StudentDTOImpl dtoA = UserEntityFactory.createTestStudentDTOImpl();
+        StudentDTO dtoB;
+        int idA;
+
         try {
-            id = userService.createUser(studentDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
-            studentDTO = userService.readStudentById(id);
-            assertEquals(studentDTO.getId(), id);
+            idA = userService.createUser(dtoA, STUDENT_ROLES);
+            dtoB = userService.readStudent(idA);
+
+            assertEquals(dtoB.getId(), idA);
+
+            userService.deleteUser(idA);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    void createCompanyTest() {
-        companyDTOImpl.setUserid("testID");
-        CompanyDTO companyDTO;
-        int id;
+    void companiesAreCreated() {
+        CompanyDTOImpl dtoA = UserEntityFactory.createTestCompanyDTOimpl();
+        CompanyDTO dtoB;
+        int idA;
+
         try {
-            id = userService.createUser(companyDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
-            companyDTO = userService.readCompanyById(id);
-            assertEquals(companyDTO.getId(), id);
+            idA = userService.createUser(dtoA, COMPANY_ROLES);
+            dtoB = userService.readCompany(idA);
+
+            assertEquals(dtoB.getId(), idA);
+
+            userService.deleteUser(idA);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    void updateStudentTest() {
-        studentDTOImpl.setFirstName("Bob");
+    void studentsAreUpdated() {
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
         int id;
+
         try {
-            id = userService.createUser(studentDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
-            userService.updateStudent(id);
-            assertEquals(studentDTOImpl.getFirstName(), "Alex");
+            id = userService.createUser(dto, STUDENT_ROLES);
+
+            String update = "update";
+
+            // attach update to original
+            dto.setFirstName(dto.getFirstName() + update);
+            dto.setLastName(dto.getLastName() + update);
+            dto.setEmail(dto.getEmail() + update);
+            dto.setUserid(dto.getUserid() + update);
+            dto.setGender(dto.getGender() + update);
+            dto.setCity(dto.getCity() + update);
+            dto.setZipCode(dto.getZipCode() + update);
+            dto.setStreetNumber(dto.getStreetNumber() + update);
+            dto.setStreet(dto.getStreet() + update);
+            dto.setPassword(dto.getPassword() + update);
+
+            //todo @vincent das klappt nicht, weil in getDateOfBirth noch kein Datum ist
+            //todo du musst hier selbst ein passendes objekt erzeugen für den setter
+            //dto.setDateOfBirth(dto.getDateOfBirth().plusDays(1));
+
+            userService.updateStudent(id, dto);
+
+            StudentDTO updated = userService.readStudent(id);
+
+            // compare updated original with its updated data in the database
+            assertEquals(dto.getFirstName(), updated.getFirstName());
+            assertEquals(dto.getLastName(), updated.getLastName());
+            assertEquals(dto.getEmail(), updated.getEmail());
+            assertEquals(dto.getUserid(), updated.getUserid());
+            assertEquals(dto.getGender(), updated.getGender());
+            assertEquals(dto.getCity(), updated.getCity());
+            assertEquals(dto.getZipCode(), updated.getZipCode());
+            assertEquals(dto.getStreetNumber(), updated.getStreetNumber());
+            assertEquals(dto.getStreet(), updated.getStreet());
+            assertEquals(dto.getPassword(), updated.getPassword());
+
+            //todo @vincent das klappt wieder nicht, sie todo weiter oben
+            //assertEquals(dto.getDateOfBirth().plusDays(1), updated.getDateOfBirth());
+
+            userService.deleteUser(id);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Test
-    void updateCompanyTest() {
-        companyDTOImpl.setFirstName("Bob");
+    void companiesAreUpdated() {
+        CompanyDTOImpl dto = UserEntityFactory.createTestCompanyDTOimpl();
         int id;
+
         try {
-            id = userService.createUser(companyDTOImpl, new String[]{Globals.Roles.USER, Globals.Roles.STUDENT});
-            userService.updateCompany(id);
-            assertEquals(companyDTOImpl.getFirstName(), "Alex");
+            id = userService.createUser(dto, COMPANY_ROLES);
+
+            String update = "update";
+
+            // attach update to original
+            dto.setFirstName(dto.getFirstName() + update);
+            dto.setLastName(dto.getLastName() + update);
+            dto.setEmail(dto.getEmail() + update);
+            dto.setUserid(dto.getUserid() + update);
+            dto.setGender(dto.getGender() + update);
+            dto.setCity(dto.getCity() + update);
+            dto.setZipCode(dto.getZipCode() + update);
+            dto.setStreetNumber(dto.getStreetNumber() + update);
+            dto.setStreet(dto.getStreet() + update);
+            dto.setPassword(dto.getPassword() + update);
+
+            dto.setCompanyName(dto.getCompanyName() + update);
+
+            //todo @vincent das klappt nicht, weil in getDateOfBirth noch kein Datum ist
+            //todo du musst hier selbst ein passendes objekt erzeugen für den setter
+            //dto.setDateOfBirth(dto.getDateOfBirth().plusDays(1));
+
+            userService.updateCompany(id, dto);
+
+            CompanyDTO updated = userService.readCompany(id);
+
+            // compare updated original with its updated data in the database
+            assertEquals(dto.getFirstName(), updated.getFirstName());
+            assertEquals(dto.getLastName(), updated.getLastName());
+            assertEquals(dto.getEmail(), updated.getEmail());
+            assertEquals(dto.getUserid(), updated.getUserid());
+            assertEquals(dto.getGender(), updated.getGender());
+            assertEquals(dto.getCity(), updated.getCity());
+            assertEquals(dto.getZipCode(), updated.getZipCode());
+            assertEquals(dto.getStreetNumber(), updated.getStreetNumber());
+            assertEquals(dto.getStreet(), updated.getStreet());
+            assertEquals(dto.getPassword(), updated.getPassword());
+
+            //todo @vincent das klappt wieder nicht, sie todo weiter oben
+            //assertEquals(dto.getDateOfBirth().plusDays(1), updated.getDateOfBirth());
+
+            userService.deleteUser(id);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
         }
-
     }
 
     @Test
-    void deleteStudentByIdTest() {
+    void studentsAreDeleted() {
+        StudentDTOImpl dtoA = UserEntityFactory.createTestStudentDTOImpl();
+        StudentDTO dtoB;
 
+        int idA;
 
+        try {
+            idA = userService.createUser(dtoA, STUDENT_ROLES);
+            userService.deleteUser(idA);
+
+            dtoB = userService.readStudent(idA);
+            assertNull(dtoB);
+        } catch (DatabaseUserException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    void deleteCompanyByIdTest() {
+    void companiesAreDeleted() {
+        CompanyDTOImpl dtoA = UserEntityFactory.createTestCompanyDTOimpl();
+        CompanyDTO dtoB;
 
+        int idA;
 
+        try {
+            idA = userService.createUser(dtoA, COMPANY_ROLES);
+            userService.deleteUser(idA);
+
+            dtoB = userService.readCompany(idA);
+            assertNull(dtoB);
+        } catch (DatabaseUserException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    void firstNameTest() {
-        /*Pattern p = Pattern.compile("^[a-zA-Z\\s]+"); //https://stackoverflow.com/questions/7362567/java-regex-for-full-name
-        Matcher m = p.matcher(userDTOImpl.getFirstName());
-        assertTrue(m.matches());*/
-        userDTOImpl.setFirstName("");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getFirstName();
-        });
-        userDTOImpl.setFirstName("!?=)(/&%$§12344567890:_only_digits_are_allowed");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getFirstName();
-        });
-        userDTOImpl.setFirstName("aB:_upper_cases_only_at_first_place");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getFirstName();
-        });
-        userDTOImpl.setFirstName("a:_first_place_must_be_an_upper_case");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getFirstName();
-        });
-        userDTOImpl.setFirstName(" :_no_whitespaces");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getFirstName();
-        });
+    void firstNameCantBeNull() {
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        dto.setFirstName(null);
 
-    }
-
-    @Test
-    void lastNameTest() {
-        /*Pattern p = Pattern.compile("^[a-zA-Z\\s]+"); //https://stackoverflow.com/questions/7362567/java-regex-for-full-name
-        Matcher m = p.matcher(userDTOImpl.getLastName());
-        assertTrue(m.matches());*/
-        userDTOImpl.setLastName("");
         assertThrows(Exception.class, () -> {
-            userDTOImpl.getLastName();
-        });
-        userDTOImpl.setLastName("!?=)(/&%$§12344567890:_only_digits_are_allowed");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getLastName();
-        });
-        userDTOImpl.setLastName("aB:_upper_cases_only_at_first_place");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getLastName();
-        });
-        userDTOImpl.setLastName("a:_first_place_must_be_an_upper_case");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getLastName();
-        });
-        userDTOImpl.setLastName(" :_no_whitespaces");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getLastName();
+            int id = userService.createUser(dto, STUDENT_ROLES);
+            userService.deleteUser(id);
         });
     }
 
     @Test
-    void userIdTest() { //userId is equal to userName
-        /*Pattern p = Pattern.compile("^([a-zA-Z])+([\\w]{2,})+$"); // https://javadeveloperzone.com/java-8/java-regular-expression-for-username/
-        Matcher m = p.matcher(userDTOImpl.getUserid());
-        assertTrue(m.matches());*/
-        userDTOImpl.setUserid("");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getUserid();
-        });
-        userDTOImpl.setUserid(" :_whitespaces_are_not_allowed");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getUserid();
-        });
+    void lastNameCantBeNull() {
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        dto.setLastName(null);
 
-    }
-
-    @Test
-    void emailTest() {
-       /* Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE); // https://stackoverflow.com/questions/8204680/java-regex-email
-        Matcher m = p.matcher(userDTOImpl.getEmail());
-        assertTrue(m.matches());*/
-        userDTOImpl.setEmail("");
         assertThrows(Exception.class, () -> {
-            userDTOImpl.getEmail();
-        });
-        userDTOImpl.setEmail(" :_whitespaces_are_not_allowed");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getEmail();
+            int id = userService.createUser(dto, STUDENT_ROLES);
+            userService.deleteUser(id);
         });
     }
 
     @Test
-    void passwordTest() {
-        /*Pattern p = Pattern.compile("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}"); // https://stackoverflow.com/questions/3802192/regexp-java-for-password-validation
-        Matcher m = p.matcher(userDTOImpl.getPassword());
-        assertTrue(m.matches());*/
-        userDTOImpl.setPassword("");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getPassword();
-        });
-        userDTOImpl.setPassword(" :_whitespaces_are_not_allowed");
-        assertThrows(Exception.class, () -> {
-            userDTOImpl.getPassword();
-        });
+    void companyNameCantBeNull() {
+        //todo @vincent: bitte test reparieren, ggf. mit ameur absprechen
+        CompanyDTOImpl dto = UserEntityFactory.createTestCompanyDTOimpl();
+        dto.setCompanyName(null);
 
-    }
-
-    @Test
-    void cityTest() {
-        /*Pattern p = Pattern.compile("/^[a-zA-Z\\u0080-\\u024F]+(?:([\\ \\-\\']|(\\.\\ ))[a-zA-Z\\u0080-\\u024F]+)*$/"); // https://stackoverflow.com/questions/11757013/regular-expressions-for-city-name
-        Matcher m = p.matcher(jobPortalUserDTOImpl.getCity());
-        assertTrue(m.matches());*/
-        jobPortalUserDTOImpl.setCity("");
         assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getPassword();
-        });
-        jobPortalUserDTOImpl.setCity(")?!@:_special_character_are_not_allowed");
-        assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getPassword();
+            int id = userService.createUser(dto, COMPANY_ROLES);
+            userService.deleteUser(id);
         });
     }
 
     @Test
-    void dateOfBirthTest() {
-        /*Pattern p = Pattern.compile("^(0[1-9]|1[012])[-/.](0[1-9]|[12][0-9]|3[01])[-/.](19|20)\\d\\d$"); // https://stackoverflow.com/questions/22160079/date-of-birth-validation-by-using-regular-expression
-        Matcher m = p.matcher("04/08/21998"); // can we chance public LocalDate getDateOfBirth() to public String getDateOfBirth()?
-        assertTrue(m.matches());
+    void userIdCantBeNull() {
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        dto.setUserid(null);
 
-        jobPortalUserDTOImpl.setDateOfBirth();
-        assertThrows(Exception.class, ()->{jobPortalUserDTOImpl.getDateOfBirth();});*/
-    }
-
-    @Test
-    void zipCodeTest() {
-        /*Pattern p = Pattern.compile("^\\d{5}");
-        Matcher m = p.matcher(jobPortalUserDTOImpl.getZipCode());
-        assertTrue(m.matches());*/
-
-        jobPortalUserDTOImpl.setZipCode("");
         assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getZipCode();
-        });
-        jobPortalUserDTOImpl.setZipCode("only_5_numbers_are_allowed");
-        assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getZipCode();
-        });
-        jobPortalUserDTOImpl.setZipCode("1234");
-        assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getZipCode();
-        });
-        jobPortalUserDTOImpl.setZipCode("123456");
-        assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getZipCode();
+            int id = userService.createUser(dto, STUDENT_ROLES);
+            userService.deleteUser(id);
         });
     }
 
     @Test
-    void streetNumberTest() {
-        /*Pattern p = Pattern.compile("^\\d{1,4}[a-z]?");
-        Matcher m = p.matcher(jobPortalUserDTOImpl.getStreetNumber());
-        assertTrue(m.matches());*/
+    void emailMailCantBeNull() {
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        dto.setEmail(null);
 
-        jobPortalUserDTOImpl.setStreetNumber("");
         assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getStreetNumber();
-        });
-        jobPortalUserDTOImpl.setStreetNumber(" :_whitespaces_are_not_allowed");
-        assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getStreetNumber();
-        });
-        jobPortalUserDTOImpl.setStreetNumber("first_1-4_numbers_then_optional_a_lower_case");
-        assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getStreetNumber();
+            int id = userService.createUser(dto, STUDENT_ROLES);
+            userService.deleteUser(id);
         });
     }
 
     @Test
-    void streetTest() {
-        jobPortalUserDTOImpl.setStreet("");
+    void passwordCantBeNull() {
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        dto.setPassword(null);
+
         assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getStreet();
-        });
-        jobPortalUserDTOImpl.setStreet("!?@:_no_special_characters");
-        assertThrows(Exception.class, () -> {
-            jobPortalUserDTOImpl.getStreet();
+            int id = userService.createUser(dto, STUDENT_ROLES);
+            userService.deleteUser(id);
         });
     }
 
     @Test
-    void companyNameTest() {
-        companyDTOImpl.setCompanyName("");
+    void passwordCantBeShorterThanFourCharacters() {
+        //todo @vincent: das kurze password wirft keine exception, bitte reparieren, ggf. mit ameur absprechen
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+
+        // length == 4
+        dto.setPassword("abcd");
+        assertDoesNotThrow(() -> {
+            int id = userService.createUser(dto, STUDENT_ROLES);
+            userService.deleteUser(id);
+        });
+
+        // length < 4
+        dto.setPassword("abc");
         assertThrows(Exception.class, () -> {
-            companyDTOImpl.getCompanyName();
+            int id = userService.createUser(dto, STUDENT_ROLES);
+            userService.deleteUser(id);
         });
     }
 
+    @Test
+    void rolesAreCreated() {
+        //todo @alex kleemann
+        //todo: a) der test funktioniert leider noch nicht
+        //todo bitte reparieren
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+
+        String[] testRoles = STUDENT_ROLES;
+        int id = -1;
+        try {
+            id = userService.createUser(dto, testRoles);
+
+            // Testing RolleDAO::getRolesOfUser
+            RolleDAO rolleDAO = new RolleDAO();
+            List<RolleDTO> roles = rolleDAO.getRolesOfUser(dto);
+            assertEquals(roles.size(), testRoles.length);
+            for (int i = 0; i < roles.size(); i++) {
+                RolleDTO r1 = roles.get(i);
+                assertEquals(r1.getBezeichhnung(), testRoles[i]);
+            }
+        } catch (DatabaseUserException | DatabaseLayerException e) {
+            e.printStackTrace();
+        } finally {
+            if( id != -1 ){
+                userService.deleteUser(id);
+            }
+        }
+    }
 }

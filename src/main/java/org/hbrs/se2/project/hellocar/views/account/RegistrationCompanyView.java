@@ -94,7 +94,10 @@ public class RegistrationCompanyView extends VerticalLayout implements BeforeEnt
                     binder.writeBean(companyDTO);
 
                     // put company user and its roles into db
-                    userService.createUser(companyDTO, new String[]{"user", "company"});
+                    userService.createUser(
+                            companyDTO,
+                            new String[]{Globals.Roles.COMPANY, Globals.Roles.USER}
+                    );
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

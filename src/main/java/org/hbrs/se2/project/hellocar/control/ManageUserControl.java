@@ -1,7 +1,7 @@
 package org.hbrs.se2.project.hellocar.control;
 
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.hellocar.control.factories.UserFactory;
+import org.hbrs.se2.project.hellocar.control.factories.UserEntityFactory;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
@@ -10,6 +10,7 @@ import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
 import org.hbrs.se2.project.hellocar.entities.Company;
+import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.entities.User;
 import org.hbrs.se2.project.hellocar.repository.UserRepository;
@@ -19,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Optional; // ?
 
 @Component
 public class ManageUserControl {
@@ -27,10 +28,9 @@ public class ManageUserControl {
     @Autowired
     private UserRepository userRepository;
 
-    public int createUser(JobPortalUserDTO jobPortalUserDTO, String[] roles) throws DatabaseUserException {
-        validatelUser(jobPortalUserDTO);
+    public int createUser(JobPortalUserDTO userDTO, String[] roles) throws DatabaseUserException {
 
-        User userEntity = UserFactory.createUser(jobPortalUserDTO);
+        User userEntity = UserEntityFactory.create(userDTO);
         this.userRepository.save(userEntity);
 
         int newPrimaryKey = userEntity.getId();
@@ -47,17 +47,7 @@ public class ManageUserControl {
         return newPrimaryKey;
     }
 
-    public User findUserByUserId(String userid) {
-        Optional<User> userOptional = this.userRepository.findUserByUserid(userid);
-        return userOptional.orElse(null);
-    }
-
-    public User findUserByEmail(String email) {
-        Optional<User> userOptional = this.userRepository.findUserByEmail(email);
-        return userOptional.orElse(null);
-    }
-
-    public StudentDTO readStudentById(int id) {
+    public StudentDTO readStudent(int id) {
         Optional<User> userOptional = this.userRepository.findById(id);
 
         Student user = null;
@@ -92,7 +82,7 @@ public class ManageUserControl {
         return studentDTO;
     }
 
-    public CompanyDTO readCompanyById(int id) {
+    public CompanyDTO readCompany(int id) {
         Optional<User> userOptional = this.userRepository.findById(id);
 
         Company companyEntity = null;
@@ -128,32 +118,81 @@ public class ManageUserControl {
     }
 
     public List<UserDTO> readAllUsers() {
-        //todo: implement this.repositoty.blaBla(...);
+        //todo: implement
         return null;
     }
 
-    public void updateUser(int id) { //one update methode for student and company?
-        // not the userid!! it really is THE id (primary key)
-        //todo: implement this.repositoty.blaBla(...);
+    public User readUserByUserId(String userid) {
+        //todo: return dto instead of entity!
+        Optional<User> userOptional = this.userRepository.findUserByUserid(userid);
+        return userOptional.orElse(null);
     }
 
-    public void updateStudent(int id) {
-        // not the userid!! it really is THE id (primary key)
-        //todo: implement this.repositoty.blaBla(...);
+    public User readUserByEmail(String email) {
+        //todo: return dto instead of entity!
+        Optional<User> userOptional = this.userRepository.findUserByEmail(email);
+        return userOptional.orElse(null);
     }
 
-    public void updateCompany(int id) {
-        // not the userid!! it really is THE id (primary key)
-        //todo: implement this.repositoty.blaBla(...);
+    public void updateStudent(int id, StudentDTO dto) {
+        //todo: provide only one shared method for both student AND company
+        Optional<User> optional = this.userRepository.findById(id);
+        Student entity = null;
+
+        if (optional.isPresent()) {
+            entity = (Student) optional.get();
+
+            setUserPartsOfEntity(entity, dto);
+            setStudentPartsOfEntity(entity, dto);
+
+            this.userRepository.save(entity);
+        }
+    }
+
+    public void updateCompany(int id, CompanyDTO dto) {
+        //todo: provide only one shared method for both student AND company
+        Optional<User> optional = this.userRepository.findById(id);
+
+        Company entity = null;
+
+        if (optional.isPresent()) {
+            entity = (Company) optional.get();
+
+            setUserPartsOfEntity(entity, dto);
+            setCompanyPartsOfEntity(entity, dto);
+
+            this.userRepository.save(entity);
+        }
     }
 
     public void deleteUser(int id) {
-        // not the userid!! it really is THE id (primary key)
-        //todo: implement this.repositoty.blaBla(...);
+        this.userRepository.deleteById(id);
     }
 
-    private void validatelUser(JobPortalUserDTO jobPortalUserDTO) {
-        // todo: implement server side validation here
+    private void setUserPartsOfEntity(JobPortalUser entity, JobPortalUserDTO dto) {
+        entity.setUserid(dto.getUserid()); // it's the username, not the primary key
+        entity.setPassword(dto.getPassword());
+        entity.setEmail(dto.getEmail());
+
+        entity.setGender(dto.getGender());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+
+        entity.setStreet(dto.getStreet());
+        entity.setStreetNumber(dto.getStreetNumber());
+        entity.setZipCode(dto.getZipCode());
+        entity.setCity(dto.getCity());
+
+        entity.setPhone(dto.getPhone());
+        entity.setDateOfBirth(dto.getDateOfBirth());
+    }
+
+    private void setCompanyPartsOfEntity(Company entity, CompanyDTO dto) {
+        entity.setCompanyName(dto.getCompanyName());
+    }
+
+    private void setStudentPartsOfEntity(Student entity, StudentDTO dto) {
+        // there are no student specific entity attributes, yet
     }
 
     private void handleDbException(DatabaseLayerException e) throws DatabaseUserException {
@@ -172,4 +211,6 @@ public class ManageUserControl {
                 throw new DatabaseUserException("A failure occured while...shit was done");
         }
     }
+
+
 }

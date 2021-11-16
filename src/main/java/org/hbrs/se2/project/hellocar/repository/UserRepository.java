@@ -41,6 +41,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<Student> findStudents();
 
     @Query(
+            value = "SELECT * FROM carlook.user WHERE dtype = 'company'",
+            nativeQuery = true
+    )
+    List<Company> findCompanies();
+
+    @Query(
             value = "SELECT * FROM carlook.user",
             nativeQuery = true
     )
