@@ -341,7 +341,7 @@ public class RegistrationTests {
         StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
 
         String[] testRoles = STUDENT_ROLES;
-        int id = 0;
+        int id = -1;
         try {
             id = userService.createUser(dto, testRoles);
 
@@ -356,7 +356,7 @@ public class RegistrationTests {
         } catch (DatabaseUserException | DatabaseLayerException e) {
             e.printStackTrace();
         } finally {
-            if( id != 0 ){
+            if( id != -1 ){
                 userService.deleteUser(id);
             }
         }
