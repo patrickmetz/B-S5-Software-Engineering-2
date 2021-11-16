@@ -333,31 +333,32 @@ public class RegistrationTests {
         });
     }
 
-    @Disabled
+    @Test
     void rolesAreCreated() {
         //todo @alex kleemann
         //todo: a) der test funktioniert leider noch nicht
-        //todo  b) und: er hinterlässt derzeit noch reste in der datenbank
-        //todo diese reste hindern diverse andere tests am funktionieren (doppelte email, userid, etc. in db)
-        //todo bitte reparieren und keine reste übrig lassen
+        //todo bitte reparieren
+        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
 
-        StudentDTOImpl studentDTOImpl1 = UserEntityFactory.createTestStudentDTOImpl();
-
-        String[] setRoles = new String[]{Globals.Roles.USER, Globals.Roles.STUDENT};
+        String[] testRoles = STUDENT_ROLES;
+        int id = 0;
         try {
-            int id = userService.createUser(studentDTOImpl1, setRoles);
+            id = userService.createUser(dto, testRoles);
 
+            // Testing RolleDAO::getRolesOfUser
             RolleDAO rolleDAO = new RolleDAO();
-            List<RolleDTO> roles = rolleDAO.getRolesOfUser(studentDTOImpl1);
-            assertEquals(roles.size(), setRoles.length);
+            List<RolleDTO> roles = rolleDAO.getRolesOfUser(dto);
+            assertEquals(roles.size(), testRoles.length);
             for (int i = 0; i < roles.size(); i++) {
                 RolleDTO r1 = roles.get(i);
-                assertEquals(r1.getBezeichhnung(), setRoles[i]);
+                assertEquals(r1.getBezeichhnung(), testRoles[i]);
             }
-            userService.deleteUser(id);
         } catch (DatabaseUserException | DatabaseLayerException e) {
             e.printStackTrace();
+        } finally {
+            if( id != 0 ){
+                userService.deleteUser(id);
+            }
         }
     }
-
 }
