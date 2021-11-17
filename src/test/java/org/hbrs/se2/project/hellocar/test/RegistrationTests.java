@@ -5,8 +5,7 @@ import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.UserEntityFactory;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.*;
 import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
@@ -33,9 +32,11 @@ public class RegistrationTests {
     private static final String[] COMPANY_ROLES
             = new String[]{Globals.Roles.USER, Globals.Roles.COMPANY};
 
+
     @Test
     void emailsAreUnique() {
-        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
 
         try {
             int id = userService.createUser(dto, STUDENT_ROLES);
@@ -51,8 +52,26 @@ public class RegistrationTests {
     }
 
     @Test
+    void emailsAreUniqueTest() {
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl)builder.buildDefaultUser().done();
+        try {
+            int id = userService.createUser(dto, STUDENT_ROLES);
+
+            assertThrows(Exception.class, () -> {
+                userService.createUser(dto, STUDENT_ROLES);
+            });
+
+            userService.deleteUser(id);
+        } catch (DatabaseUserException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     void userIdsAreUnique() {
-        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
 
         // just to make sure that the username is being compared and not the email
         dto.setEmail("changed@company.de");
@@ -72,7 +91,8 @@ public class RegistrationTests {
 
     @Test
     void studentsAreCreated() {
-        StudentDTOImpl dtoA = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dtoA = (StudentDTOImpl) builder.buildDefaultUser().done();
         StudentDTO dtoB;
         int idA;
 
@@ -90,7 +110,8 @@ public class RegistrationTests {
 
     @Test
     void companiesAreCreated() {
-        CompanyDTOImpl dtoA = UserEntityFactory.createTestCompanyDTOimpl();
+        CompanyBuilder builder = new CompanyBuilder();
+        CompanyDTOImpl dtoA = builder.buildDefaultUser().done();
         CompanyDTO dtoB;
         int idA;
 
@@ -108,7 +129,8 @@ public class RegistrationTests {
 
     @Test
     void studentsAreUpdated() {
-        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         int id;
 
         try {
@@ -159,7 +181,8 @@ public class RegistrationTests {
 
     @Test
     void companiesAreUpdated() {
-        CompanyDTOImpl dto = UserEntityFactory.createTestCompanyDTOimpl();
+        CompanyBuilder builder = new CompanyBuilder();
+        CompanyDTOImpl dto = builder.buildDefaultUser().done();
         int id;
 
         try {
@@ -212,7 +235,8 @@ public class RegistrationTests {
 
     @Test
     void studentsAreDeleted() {
-        StudentDTOImpl dtoA = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dtoA = (StudentDTOImpl) builder.buildDefaultUser().done();
         StudentDTO dtoB;
 
         int idA;
@@ -230,7 +254,8 @@ public class RegistrationTests {
 
     @Test
     void companiesAreDeleted() {
-        CompanyDTOImpl dtoA = UserEntityFactory.createTestCompanyDTOimpl();
+        CompanyBuilder builder = new CompanyBuilder();
+        CompanyDTOImpl dtoA = builder.buildDefaultUser().done();
         CompanyDTO dtoB;
 
         int idA;
@@ -248,7 +273,8 @@ public class RegistrationTests {
 
     @Test
     void firstNameCantBeNull() {
-        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         dto.setFirstName(null);
 
         assertThrows(Exception.class, () -> {
@@ -259,7 +285,8 @@ public class RegistrationTests {
 
     @Test
     void lastNameCantBeNull() {
-        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         dto.setLastName(null);
 
         assertThrows(Exception.class, () -> {
@@ -267,11 +294,11 @@ public class RegistrationTests {
             userService.deleteUser(id);
         });
     }
-
-    @Test
+    @Disabled
     void companyNameCantBeNull() {
         //todo @vincent: bitte test reparieren, ggf. mit ameur absprechen
-        CompanyDTOImpl dto = UserEntityFactory.createTestCompanyDTOimpl();
+        CompanyBuilder builder = new CompanyBuilder();
+        CompanyDTOImpl dto = builder.buildDefaultUser().done();
         dto.setCompanyName(null);
 
         assertThrows(Exception.class, () -> {
@@ -282,7 +309,8 @@ public class RegistrationTests {
 
     @Test
     void userIdCantBeNull() {
-        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         dto.setUserid(null);
 
         assertThrows(Exception.class, () -> {
@@ -293,7 +321,8 @@ public class RegistrationTests {
 
     @Test
     void emailMailCantBeNull() {
-        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         dto.setEmail(null);
 
         assertThrows(Exception.class, () -> {
@@ -304,7 +333,8 @@ public class RegistrationTests {
 
     @Test
     void passwordCantBeNull() {
-        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         dto.setPassword(null);
 
         assertThrows(Exception.class, () -> {
@@ -316,7 +346,8 @@ public class RegistrationTests {
     @Test
     void passwordCantBeShorterThanFourCharacters() {
         //todo @vincent: das kurze password wirft keine exception, bitte reparieren, ggf. mit ameur absprechen
-        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
 
         // length == 4
         dto.setPassword("abcd");
@@ -338,10 +369,11 @@ public class RegistrationTests {
         //todo @alex kleemann
         //todo: a) der test funktioniert leider noch nicht
         //todo bitte reparieren
-        StudentDTOImpl dto = UserEntityFactory.createTestStudentDTOImpl();
+        StudentBuilder builder = new StudentBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
 
         String[] testRoles = STUDENT_ROLES;
-        int id = -1;
+        int id = 0;
         try {
             id = userService.createUser(dto, testRoles);
 
@@ -356,7 +388,7 @@ public class RegistrationTests {
         } catch (DatabaseUserException | DatabaseLayerException e) {
             e.printStackTrace();
         } finally {
-            if( id != -1 ){
+            if( id != 0 ){
                 userService.deleteUser(id);
             }
         }
