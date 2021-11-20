@@ -139,20 +139,21 @@ public class RegistrationTests {
             String update = "update";
 
             // attach update to original
-            dto.setFirstName(dto.getFirstName() + update);
-            dto.setLastName(dto.getLastName() + update);
-            dto.setEmail(dto.getEmail() + update);
-            dto.setUserid(dto.getUserid() + update);
-            dto.setGender(dto.getGender() + update);
-            dto.setCity(dto.getCity() + update);
-            dto.setZipCode(dto.getZipCode() + update);
-            dto.setStreetNumber(dto.getStreetNumber() + update);
-            dto.setStreet(dto.getStreet() + update);
-            dto.setPassword(dto.getPassword() + update);
+           dto = (StudentDTOImpl) builder.
+                    buildGender(dto.getGender() + update).
+                    buildCity(dto.getCity() + update).
+                    buildStreet(dto.getStreet() + update).
+                    buildStreetNumber(dto.getStreetNumber() + update).
+                    buildZipCode(dto.getZipCode() + update).
+                    buildFirstname(dto.getFirstName() + update).
+                    buildLastname(dto.getLastName() + update).
+                    buildEmail(dto.getEmail() + update).
+                    buildUserId(dto.getUserid() + update).
+                    buildPassword(dto.getPassword() + update).
+                    buildDateOfBirth(dto.getDateOfBirth().plusDays(1)).
+                    done();
 
-            //todo @vincent das klappt nicht, weil in getDateOfBirth noch kein Datum ist
-            //todo du musst hier selbst ein passendes objekt erzeugen für den setter
-            //dto.setDateOfBirth(dto.getDateOfBirth().plusDays(1));
+
 
             userService.updateStudent(id, dto);
 
@@ -191,22 +192,21 @@ public class RegistrationTests {
             String update = "update";
 
             // attach update to original
-            dto.setFirstName(dto.getFirstName() + update);
-            dto.setLastName(dto.getLastName() + update);
-            dto.setEmail(dto.getEmail() + update);
-            dto.setUserid(dto.getUserid() + update);
-            dto.setGender(dto.getGender() + update);
-            dto.setCity(dto.getCity() + update);
-            dto.setZipCode(dto.getZipCode() + update);
-            dto.setStreetNumber(dto.getStreetNumber() + update);
-            dto.setStreet(dto.getStreet() + update);
-            dto.setPassword(dto.getPassword() + update);
+            dto = (CompanyDTOImpl)builder.
+                    buildCompanyName(dto.getCompanyName() + update).
+                    buildGender(dto.getGender() + update).
+                    buildCity(dto.getCity() + update).
+                    buildStreet(dto.getStreet() + update).
+                    buildStreetNumber(dto.getStreetNumber() + update).
+                    buildZipCode(dto.getZipCode() + update).
+                    buildFirstname(dto.getFirstName() + update).
+                    buildLastname(dto.getLastName() + update).
+                    buildEmail(dto.getEmail() + update).
+                    buildUserId(dto.getUserid() + update).
+                    buildPassword(dto.getPassword() + update).
+                    buildDateOfBirth(dto.getDateOfBirth().plusDays(1)).
+                    done();
 
-            dto.setCompanyName(dto.getCompanyName() + update);
-
-            //todo @vincent das klappt nicht, weil in getDateOfBirth noch kein Datum ist
-            //todo du musst hier selbst ein passendes objekt erzeugen für den setter
-            //dto.setDateOfBirth(dto.getDateOfBirth().plusDays(1));
 
             userService.updateCompany(id, dto);
 
