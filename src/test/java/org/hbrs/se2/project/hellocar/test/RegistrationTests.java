@@ -207,7 +207,6 @@ public class RegistrationTests {
                     buildDateOfBirth(dto.getDateOfBirth().plusDays(1)).
                     done();
 
-
             userService.updateCompany(id, dto);
 
             CompanyDTO updated = userService.readCompany(id);
@@ -224,8 +223,6 @@ public class RegistrationTests {
             assertEquals(dto.getStreet(), updated.getStreet());
             assertEquals(dto.getPassword(), updated.getPassword());
 
-            //todo @vincent das klappt wieder nicht, sie todo weiter oben
-            //assertEquals(dto.getDateOfBirth().plusDays(1), updated.getDateOfBirth());
 
             userService.deleteUser(id);
         } catch (DatabaseUserException e) {
