@@ -30,6 +30,7 @@ public class ManageUserControl {
 
     public int createUser(JobPortalUserDTO userDTO, String[] roles) throws DatabaseUserException {
 
+        //todo: use vincent's builder here
         User userEntity = UserEntityFactory.create(userDTO);
         this.userRepository.save(userEntity);
 
