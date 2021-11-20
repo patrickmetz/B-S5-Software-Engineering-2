@@ -35,169 +35,72 @@ import java.util.stream.Stream;
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
 @RouteAlias("registerstudent")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
-public class RegistrationStudentView extends VerticalLayout implements BeforeEnterObserver {
-
+public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl>
+{
     /* ToDo Redirection to login after timeout */
-
-    Binder<StudentDTOImpl> binder = new Binder(StudentDTOImpl.class);
-
-    private H3 title;
-
-    private TextField firstName;
-
-    private TextField lastName;
-
-    private TextField userid;
-
-    private Select<String> gender;
 
     private TextField role;
 
-    private EmailField email;
-
-    private PasswordField password;
-    private PasswordField passwordConfirm;
-
-    private TextField street;
-    private TextField zipCode;
-    private TextField city;
-    private TextField streetNumber;
-
     // Student
-    private DatePicker dateOfBirth = new DatePicker();
+    private DatePicker dateOfBirth;
 
     private Button submitButton;
 
-    public RegistrationStudentView(ManageUserControl userService) {
-        title = new H3("Sign up");
-
-        firstName = new TextField("First name");
-        lastName = new TextField("Last name");
-
-        userid = new TextField("Username");
-
-        email = new EmailField("Email");
-
-        password = new PasswordField("Password");
-        passwordConfirm = new PasswordField("Confirm Password");
-
-        gender = new Select<>("Male", "Female");
-        gender.setLabel("Gender");
-
-        street = new TextField("Street");
-        streetNumber = new TextField("Street Number");
-        zipCode = new TextField("ZIP Code");
-        city = new TextField("City");
-
-        dateOfBirth.setLabel("Date Of Birth");
-
-        binder.bindInstanceFields(this);
-
-        submitButton = new Button("Join us");
-        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        submitButton.addClickListener((event) -> {
-                try {
-                    // put form values into student dto
-                    StudentDTOImpl studentDTO = new StudentDTOImpl();
-                    binder.writeBean(studentDTO);
-
-                    // put student user and its roles into db
-                    userService.createUser(
-                            studentDTO,
-                            new String[]{Globals.Roles.STUDENT, Globals.Roles.USER}
-                    );
-
-                    Utils.displayNotification(true, "Registration succeeded");
-                    binder.getFields().forEach(HasValue::clear);
-
-                    UI.getCurrent().navigate(LoginView.class);
-
-                } catch (ValidationException e) {
-                    Utils.displayNotification(false, "Please fill in the required fields");
-                } catch (DatabaseUserException e) {
-                    Utils.displayNotification(
-                            false,
-                            "Something went wrong with database! \n" +
-                            "Please contact the support"
-                    );
-                } catch (Exception e) { /* todo: this block should be removed later */
-                    Utils.displayNotification(
-                            false,
-                            "Something went wrong! Fix ur code :))"
-                    );
-                }
-
-        });
-
-        FormLayout studentForm = createStudentForm();
-        add(studentForm);
-
-        setHorizontalComponentAlignment(Alignment.CENTER, studentForm);
-        setRequiredIndicatorVisible(firstName, lastName, userid, email, password, passwordConfirm);
-
-        // validation
-
-        binder.forField(firstName)
-                .withValidator(
-                        AccountValidation::firstnameValidator,
-                        AccountValidation.FIRST_NAME_ERROR_MESSAGE
-                )
-                .bind(StudentDTOImpl::getFirstName, StudentDTOImpl::setFirstName);
-
-        binder.forField(lastName)
-                .withValidator(
-                        AccountValidation::lastnameValidator,
-                        AccountValidation.LAST_NAME_ERROR_MESSAGE
-                )
-                .bind(StudentDTOImpl::getLastName, StudentDTOImpl::setLastName);
-
-        binder.forField(userid)
-                .withValidator(
-                        AccountValidation::usernameValidator,
-                        AccountValidation.USERNAME_ERROR_MESSAGE
-                )
-                .withValidator(
-                        username -> AccountValidation.usernameAvailableValidator(username, userService),
-                        AccountValidation.USERNAME_IN_USE_ERROR_MESSAGE
-                )
-                .bind(StudentDTOImpl::getUserid, StudentDTOImpl::setUserid);
-
-        binder.forField(password)
-                .withValidator(
-                        AccountValidation::passwordValidator,
-                        AccountValidation.PASSWORD_ERROR_MESSAGE
-                )
-                .bind(StudentDTOImpl::getPassword, StudentDTOImpl::setPassword);
-
-        binder.forField(passwordConfirm)
-                .withValidator(
-                        pw -> AccountValidation.confirmPassowrdValidator(pw, password.getValue()),
-                        AccountValidation.CONFIRM_PASSWORD_ERROR_MESSAGE
-                )
-                .bind(StudentDTOImpl::getPassword, StudentDTOImpl::setPassword);
-
-        binder.forField(email)
-                .withValidator(new EmailValidator(AccountValidation.EMAIL_ERROR_MESSAGE))
-                .withValidator(
-                        email -> AccountValidation.emailAvailableValidator(email, userService),
-                        AccountValidation.EMAIL_IN_USE_ERROR_MESSAGE
-                )
-                .bind(StudentDTOImpl::getEmail, StudentDTOImpl::setEmail);
+    public RegistrationStudentView(ManageUserControl userService)
+    {
+        super(new Binder<>(StudentDTOImpl.class), userService);
     }
 
     @Override
-    public void beforeEnter(BeforeEnterEvent event) {
-        if (getCurrentUser() != null) {
-            event.forwardTo(Globals.Pages.SHOW_CARS);
-            return;
-        }
+    protected void setupCustomElements()
+    {
+        dateOfBirth = new DatePicker();
+        dateOfBirth.setLabel("Date Of Birth");
     }
 
-    private UserDTO getCurrentUser() {
-        return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+    @Override
+    protected void setupSubmitButtons(ManageUserControl userService)
+    {
+        submitButton = new Button("Join us");
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        submitButton.addClickListener((event) -> {
+            try {
+                // put form values into student dto
+                StudentDTOImpl studentDTO = new StudentDTOImpl();
+                binder.writeBean(studentDTO);
+
+                // put student user and its roles into db
+                userService.createUser(
+                        studentDTO,
+                        new String[]{Globals.Roles.STUDENT, Globals.Roles.USER}
+                );
+
+                Utils.displayNotification(true, "Registration succeeded");
+                binder.getFields().forEach(HasValue::clear);
+
+                UI.getCurrent().navigate(LoginView.class);
+
+            } catch (ValidationException e) {
+                Utils.displayNotification(false, "Please fill in the required fields");
+            } catch (DatabaseUserException e) {
+                Utils.displayNotification(
+                        false,
+                        "Something went wrong with database! \n" +
+                                "Please contact the support"
+                );
+            } catch (Exception e) { /* todo: this block should be removed later */
+                Utils.displayNotification(
+                        false,
+                        "Something went wrong! Fix ur code :))"
+                );
+            }
+
+        });
     }
 
-    public FormLayout createStudentForm() {
+    @Override
+    protected FormLayout setupForm()
+    {
         FormLayout formLayout = new FormLayout();
         formLayout.add(
                 title,
@@ -221,8 +124,11 @@ public class RegistrationStudentView extends VerticalLayout implements BeforeEnt
         return formLayout;
     }
 
-    private void setRequiredIndicatorVisible(HasValueAndElement<?, ?>... components) {
-        Stream.of(components).forEach(comp -> comp.setRequiredIndicatorVisible(true));
-    }
+    @Override
+    protected void setupCustomRequiredIndicators()
+    { }
 
+    @Override
+    protected void setupCustomValidation(ManageUserControl userService)
+    { }
 }
