@@ -9,6 +9,10 @@ import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.entities.*;
 
 public class UserEntityFactory {
+    private UserEntityFactory(){
+
+    }
+
     public static JobPortalUser create(JobPortalUserDTO dto) {
         JobPortalUser entity = null;
 
