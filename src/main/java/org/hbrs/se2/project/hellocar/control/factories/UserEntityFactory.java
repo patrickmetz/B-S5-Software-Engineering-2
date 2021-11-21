@@ -27,21 +27,24 @@ public class UserEntityFactory {
             );
         }
 
-        // JobPortalUser parts
-        entity.setGender(dto.getGender());
-        entity.setStreet(dto.getStreet());
-        entity.setStreetNumber(dto.getStreetNumber());
-        entity.setCity(dto.getCity());
-        entity.setZipCode(dto.getZipCode());
+        if (entity != null) {
+            // JobPortalUser parts
 
-        // User parts
-        entity.setEmail(dto.getEmail());
-        entity.setUserid(dto.getUserid());
-        entity.setPassword(dto.getPassword());
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setPhone(dto.getPhone());
-        entity.setDateOfBirth(dto.getDateOfBirth());
+            entity.setGender(dto.getGender());
+            entity.setStreet(dto.getStreet());
+            entity.setStreetNumber(dto.getStreetNumber());
+            entity.setCity(dto.getCity());
+            entity.setZipCode(dto.getZipCode());
+
+            // User parts
+            entity.setEmail(dto.getEmail());
+            entity.setUserid(dto.getUserid());
+            entity.setPassword(dto.getPassword());
+            entity.setFirstName(dto.getFirstName());
+            entity.setLastName(dto.getLastName());
+            entity.setPhone(dto.getPhone());
+            entity.setDateOfBirth(dto.getDateOfBirth());
+        }
 
         return entity;
     }
