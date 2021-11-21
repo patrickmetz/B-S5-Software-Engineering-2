@@ -113,7 +113,7 @@ class HellocarApplicationTests {
         assertEquals(testUser.getDateOfBirth(), userDTO.getDateOfBirth());
     }
 
-    @Test
+    @Disabled
     void testFindUserWithJDBC() {
         assertNotNull(testUser);
         UserDAO userDAO = new UserDAO();
@@ -128,7 +128,7 @@ class HellocarApplicationTests {
         }
     }
 
-    @Test
+    @Disabled
     void testUserDatabaseIntegrity() {
         List<UserDTO> userList = userRepository.getUsers();
         List<String> emailList = new ArrayList<String>();
