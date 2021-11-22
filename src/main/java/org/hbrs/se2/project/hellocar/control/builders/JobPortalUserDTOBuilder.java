@@ -25,7 +25,7 @@ public class JobPortalUserDTOBuilder extends UserDTOBuilder {
     }
 
     public JobPortalUserDTOBuilder buildStreet(String street) {
-        ((JobPortalUserDTOImpl) super.user).setStreetNumber(street);
+        ((JobPortalUserDTOImpl) super.user).setStreet(street);
         return this;
     }
 
