@@ -379,13 +379,17 @@ public class AccountTests {
 
         try {
             for (String[] roleArray : allRoleArrays) {
-
+                // write user to db
                 idA = userService.createUser(dtoA, roleArray);
+
+                // fetch a copy of it from db
                 StudentDTO dtoB = userService.readStudent(idA);
 
+                // fetch copies' roles
                 RolleDAO rolleDAO = new RolleDAO();
                 List<RolleDTO> roles = rolleDAO.getRolesOfUser(dtoB);
 
+                // check if copy contains appropriate roles
                 for (RolleDTO role : roles) {
                     assertTrue(
                             Arrays.asList(roleArray).contains(role.getBezeichhnung())
