@@ -369,26 +369,31 @@ public class AccountTests {
     }
 
     @Test
-    void studentRolesAreCreated() {
+    void rolesAreCreated() {
         StudentBuilder builder = new StudentBuilder();
         StudentDTOImpl dtoA = (StudentDTOImpl) builder.buildDefaultUser().done();
 
         int idA = 0;
 
+        String[][] allRoleArrays = {STUDENT_ROLES, COMPANY_ROLES};
+
         try {
-            idA = userService.createUser(dtoA, STUDENT_ROLES);
-            StudentDTO dtoB = userService.readStudent(idA);
+            for (String[] roleArray : allRoleArrays) {
 
-            RolleDAO rolleDAO = new RolleDAO();
-            List<RolleDTO> roles = rolleDAO.getRolesOfUser(dtoB);
+                idA = userService.createUser(dtoA, roleArray);
+                StudentDTO dtoB = userService.readStudent(idA);
 
-            for (RolleDTO role : roles) {
-                assertTrue(
-                        Arrays.asList(STUDENT_ROLES).contains(role.getBezeichhnung())
-                );
+                RolleDAO rolleDAO = new RolleDAO();
+                List<RolleDTO> roles = rolleDAO.getRolesOfUser(dtoB);
+
+                for (RolleDTO role : roles) {
+                    assertTrue(
+                            Arrays.asList(roleArray).contains(role.getBezeichhnung())
+                    );
+                }
+
+                userService.deleteUser(idA);
             }
-
-            userService.deleteUser(idA);
         } catch (DatabaseUserException | DatabaseLayerException e) {
             e.printStackTrace();
         }
