@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 
-public class RegistrationTests {
+public class AccountTests {
     @Autowired
     private ManageUserControl userService;
 
@@ -55,7 +55,7 @@ public class RegistrationTests {
     @Test
     void emailsAreUniqueTest() {
         StudentBuilder builder = new StudentBuilder();
-        StudentDTOImpl dto = (StudentDTOImpl)builder.buildDefaultUser().done();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         try {
             int id = userService.createUser(dto, STUDENT_ROLES);
 
@@ -140,7 +140,7 @@ public class RegistrationTests {
             String update = "update";
 
             // attach update to original
-           dto = (StudentDTOImpl) builder.
+            dto = (StudentDTOImpl) builder.
                     buildGender(dto.getGender() + update).
                     buildCity(dto.getCity() + update).
                     buildStreet(dto.getStreet() + update).
@@ -153,7 +153,6 @@ public class RegistrationTests {
                     buildPassword(dto.getPassword() + update).
                     buildDateOfBirth(dto.getDateOfBirth().plusDays(1)).
                     done();
-
 
 
             userService.updateStudent(id, dto);
@@ -193,7 +192,7 @@ public class RegistrationTests {
             String update = "update";
 
             // attach update to original
-            dto = (CompanyDTOImpl)builder.
+            dto = (CompanyDTOImpl) builder.
                     buildCompanyName(dto.getCompanyName() + update).
                     buildGender(dto.getGender() + update).
                     buildCity(dto.getCity() + update).
@@ -292,7 +291,8 @@ public class RegistrationTests {
             userService.deleteUser(id);
         });
     }
-    @Disabled
+
+    @Test
     void companyNameCantBeNull() {
         //todo @vincent: bitte test reparieren, ggf. mit ameur absprechen
         CompanyBuilder builder = new CompanyBuilder();
@@ -363,7 +363,7 @@ public class RegistrationTests {
     }
 
     @Test
-    void roundTripWorks(){
+    void roundTripWorks() {
         //todo: implement, see Class RoundTripTest
         fail();
     }
