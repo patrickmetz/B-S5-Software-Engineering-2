@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -367,33 +368,29 @@ public class RegistrationTests {
         fail();
     }
 
-    @Disabled
-    void rolesAreCreated() {
-        //todo @alex kleemann
-        //todo: a) der test funktioniert leider noch nicht
-        //todo bitte reparieren
+    @Test
+    void studentRolesAreCreated() {
         StudentBuilder builder = new StudentBuilder();
-        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
+        StudentDTOImpl dtoA = (StudentDTOImpl) builder.buildDefaultUser().done();
 
-        String[] testRoles = STUDENT_ROLES;
-        int id = 0;
+        int idA = 0;
+
         try {
-            id = userService.createUser(dto, testRoles);
+            idA = userService.createUser(dtoA, STUDENT_ROLES);
+            StudentDTO dtoB = userService.readStudent(idA);
 
-            // Testing RolleDAO::getRolesOfUser
             RolleDAO rolleDAO = new RolleDAO();
-            List<RolleDTO> roles = rolleDAO.getRolesOfUser(dto);
-            assertEquals(roles.size(), testRoles.length);
-            for (int i = 0; i < roles.size(); i++) {
-                RolleDTO r1 = roles.get(i);
-                assertEquals(r1.getBezeichhnung(), testRoles[i]);
+            List<RolleDTO> roles = rolleDAO.getRolesOfUser(dtoB);
+
+            for (RolleDTO role : roles) {
+                assertTrue(
+                        Arrays.asList(STUDENT_ROLES).contains(role.getBezeichhnung())
+                );
             }
+
+            userService.deleteUser(idA);
         } catch (DatabaseUserException | DatabaseLayerException e) {
             e.printStackTrace();
-        } finally {
-            if( id != 0 ){
-                userService.deleteUser(id);
-            }
         }
     }
 }
