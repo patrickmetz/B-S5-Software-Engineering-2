@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.hellocar.control;
 
+import org.hbrs.se2.project.hellocar.control.builders.CompanyDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.JobPortalUserDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
@@ -60,63 +61,67 @@ public class ManageUserControl {
 
             // user parts
             builder
-                .buildId(user.getId())
-                .buildFirstname(user.getFirstName())
-                .buildLastname(user.getLastName())
-                .buildEmail(user.getEmail())
-                .buildPassword(user.getPassword())
-                .buildPhone(user.getPhone())
-                .buildUserId(user.getUserid())
-                .buildDateOfBirth(user.getDateOfBirth());
+                    .buildId(user.getId())
+                    .buildFirstname(user.getFirstName())
+                    .buildLastname(user.getLastName())
+                    .buildEmail(user.getEmail())
+                    .buildPassword(user.getPassword())
+                    .buildPhone(user.getPhone())
+                    .buildUserId(user.getUserid())
+                    .buildDateOfBirth(user.getDateOfBirth());
 
             // job portal user parts
             builder
-                .buildGender(user.getGender())
-                .buildCity(user.getCity())
-                .buildStreet(user.getStreet())
-                .buildStreetNumber(user.getStreetNumber())
-                .buildZipCode(user.getZipCode());
+                    .buildGender(user.getGender())
+                    .buildCity(user.getCity())
+                    .buildStreet(user.getStreet())
+                    .buildStreetNumber(user.getStreetNumber())
+                    .buildZipCode(user.getZipCode());
 
             // student parts
             // none at the moment
+
+            return builder.done();
         }
 
-        return builder.done();
+        return null;
     }
 
     public CompanyDTO readCompany(int id) {
         Optional<User> userOptional = this.userRepository.findById(id);
+        CompanyDTOBuilder builder = new CompanyDTOBuilder();
 
-        Company companyEntity = null;
-        CompanyDTOImpl companyDTO = null;
+        Company user = null;
 
         if (userOptional.isPresent()) {
-            companyEntity = (Company) userOptional.get();
+            user = (Company) userOptional.get();
 
-            companyDTO = new CompanyDTOImpl();
+            // user parts
+            builder
+                    .buildId(user.getId())
+                    .buildFirstname(user.getFirstName())
+                    .buildLastname(user.getLastName())
+                    .buildEmail(user.getEmail())
+                    .buildPassword(user.getPassword())
+                    .buildPhone(user.getPhone())
+                    .buildUserId(user.getUserid())
+                    .buildDateOfBirth(user.getDateOfBirth());
 
-            // User
-            companyDTO.setId(companyEntity.getId());
-            companyDTO.setFirstName(companyEntity.getFirstName());
-            companyDTO.setLastName(companyEntity.getLastName());
-            companyDTO.setEmail(companyEntity.getEmail());
-            companyDTO.setPassword(companyEntity.getPassword());
-            companyDTO.setPhone(companyEntity.getPhone());
-            companyDTO.setUserid(companyEntity.getUserid());
-            companyDTO.setDateOfBirth(companyEntity.getDateOfBirth());
+            // job portal user parts
+            builder
+                    .buildGender(user.getGender())
+                    .buildCity(user.getCity())
+                    .buildStreet(user.getStreet())
+                    .buildStreetNumber(user.getStreetNumber())
+                    .buildZipCode(user.getZipCode());
 
-            // JobPortalUser
-            companyDTO.setGender(companyEntity.getGender());
-            companyDTO.setCity(companyEntity.getCity());
-            companyDTO.setStreet(companyEntity.getStreet());
-            companyDTO.setStreetNumber(companyEntity.getStreetNumber());
-            companyDTO.setZipCode(companyEntity.getZipCode());
+            // company parts
+            builder.buildCompanyName(user.getCompanyName());
 
-            //Company
-            companyDTO.setCompanyName(companyEntity.getCompanyName());
+            return builder.done();
         }
 
-        return companyDTO;
+        return null;
     }
 
     public List<UserDTO> readAllUsers() {
