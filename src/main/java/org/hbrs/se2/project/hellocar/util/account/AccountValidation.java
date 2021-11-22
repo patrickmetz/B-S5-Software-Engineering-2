@@ -31,14 +31,14 @@ public class AccountValidation {
             String username,
             ManageUserControl userService
     ) {
-        return userService.readUserByUserId(username) == null;
+        return ! userService.existsUserName(username);
     }
 
     public static boolean emailAvailableValidator(
             String email,
             ManageUserControl userService
     ) {
-        return userService.readUserByEmail(email) == null;
+        return ! userService.existsEmail(email);
     }
 
     public static boolean passwordValidator(String pw) {

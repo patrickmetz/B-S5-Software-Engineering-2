@@ -29,9 +29,8 @@ public class ManageUserControl {
     private UserRepository userRepository;
 
     public int createUser(JobPortalUserDTO userDTO, String[] roles) throws DatabaseUserException {
-
-        //todo: use vincent's builder here
         User userEntity = UserEntityFactory.createUser(userDTO);
+
         this.userRepository.save(userEntity);
 
         int newPrimaryKey = userEntity.getId();
@@ -123,16 +122,16 @@ public class ManageUserControl {
         return null;
     }
 
-    public User readUserByUserId(String userid) {
-        //todo: return dto instead of entity!
+    public boolean existsUserName(String userid) {
         Optional<User> userOptional = this.userRepository.findUserByUserid(userid);
-        return userOptional.orElse(null);
+
+        return userOptional.isPresent();
     }
 
-    public User readUserByEmail(String email) {
-        //todo: return dto instead of entity!
+    public boolean existsEmail(String email) {
         Optional<User> userOptional = this.userRepository.findUserByEmail(email);
-        return userOptional.orElse(null);
+
+        return userOptional.isPresent();
     }
 
     public void updateStudent(int id, StudentDTO dto) {
