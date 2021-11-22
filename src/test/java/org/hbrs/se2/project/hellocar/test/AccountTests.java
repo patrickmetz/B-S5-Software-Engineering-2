@@ -2,7 +2,8 @@ package org.hbrs.se2.project.hellocar.test;
 
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.hellocar.control.factories.UserEntityFactory;
+import org.hbrs.se2.project.hellocar.control.factories.CompanyBuilder;
+import org.hbrs.se2.project.hellocar.control.factories.StudentBuilder;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.*;
@@ -10,7 +11,6 @@ import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -360,12 +360,6 @@ public class AccountTests {
             int id = userService.createUser(dto, STUDENT_ROLES);
             userService.deleteUser(id);
         });
-    }
-
-    @Test
-    void roundTripWorks() {
-        //todo: implement, see Class RoundTripTest
-        fail();
     }
 
     @Test
