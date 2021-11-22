@@ -22,6 +22,7 @@ public class UserEntityFactory {
         if (dto instanceof StudentDTO) {
             entity = new Student();
         }
+
         // Company parts
         else if (dto instanceof CompanyDTO) {
             entity = new Company();
@@ -33,7 +34,6 @@ public class UserEntityFactory {
 
         if (entity != null) {
             // JobPortalUser parts
-
             entity.setGender(dto.getGender());
             entity.setStreet(dto.getStreet());
             entity.setStreetNumber(dto.getStreetNumber());
@@ -51,42 +51,5 @@ public class UserEntityFactory {
         }
 
         return entity;
-    }
-
-    public static StudentDTOImpl createTestStudentDTOImpl() {
-        StudentDTOImpl dtoImpl = new StudentDTOImpl();
-
-        String identifier = "test-student";
-
-        dtoImpl.setUserid(identifier);
-        dtoImpl.setPassword(identifier);
-        dtoImpl.setEmail(identifier + "@test.de");
-        dtoImpl.setPhone(identifier);
-
-        dtoImpl.setGender(identifier);
-        dtoImpl.setFirstName(identifier);
-        dtoImpl.setLastName(identifier);
-
-        dtoImpl.setStreet(identifier);
-        dtoImpl.setStreetNumber(identifier);
-        dtoImpl.setZipCode(identifier);
-        dtoImpl.setCity(identifier);
-
-        return dtoImpl;
-    }
-
-    public static CompanyDTOImpl createTestCompanyDTOimpl() {
-        CompanyDTOImpl dtoImpl = new CompanyDTOImpl();
-
-        String identifier = "test-company";
-
-        dtoImpl.setCompanyName(identifier);
-        dtoImpl.setFirstName(identifier);
-        dtoImpl.setLastName(identifier);
-        dtoImpl.setUserid(identifier);
-        dtoImpl.setPassword(identifier);
-        dtoImpl.setEmail(identifier + "@test.de");
-
-        return dtoImpl;
     }
 }
