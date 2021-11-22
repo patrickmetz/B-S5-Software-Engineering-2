@@ -1,15 +1,15 @@
-package org.hbrs.se2.project.hellocar.control.factories;
+package org.hbrs.se2.project.hellocar.control.builders;
 
 import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
 
-public class JobPortalUserBuilder extends UserBuilder {
+public class JobPortalUserDTOBuilder extends UserDTOBuilder {
 
-    public JobPortalUserBuilder(JobPortalUserDTOImpl jobPortalUserDTOImpl) {
+    public JobPortalUserDTOBuilder(JobPortalUserDTOImpl jobPortalUserDTOImpl) {
         super(jobPortalUserDTOImpl);
     }
 
     @Override
-    public JobPortalUserBuilder buildDefaultUser() {
+    public JobPortalUserDTOBuilder buildDefaultUser() {
         super.buildDefaultUser();
         ((JobPortalUserDTOImpl) user).setGender("male");
         ((JobPortalUserDTOImpl) user).setStreet("testStreet");
@@ -19,27 +19,27 @@ public class JobPortalUserBuilder extends UserBuilder {
         return this;
     }
 
-    public JobPortalUserBuilder buildGender(String gender) {
+    public JobPortalUserDTOBuilder buildGender(String gender) {
         ((JobPortalUserDTOImpl) user).setGender(gender);
         return this;
     }
 
-    public JobPortalUserBuilder buildStreet(String street) {
+    public JobPortalUserDTOBuilder buildStreet(String street) {
         ((JobPortalUserDTOImpl) super.user).setStreetNumber(street);
         return this;
     }
 
-    public JobPortalUserBuilder buildStreetNumber(String streetNumber) {
+    public JobPortalUserDTOBuilder buildStreetNumber(String streetNumber) {
         ((JobPortalUserDTOImpl) super.user).setStreetNumber(streetNumber);
         return this;
     }
 
-    public JobPortalUserBuilder buildZipCode(String zipCode) {
+    public JobPortalUserDTOBuilder buildZipCode(String zipCode) {
         ((JobPortalUserDTOImpl) super.user).setZipCode(zipCode);
         return this;
     }
 
-    public JobPortalUserBuilder buildCity(String city) {
+    public JobPortalUserDTOBuilder buildCity(String city) {
         ((JobPortalUserDTOImpl) super.user).setCity(city);
         return this;
     }

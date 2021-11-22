@@ -1,20 +1,20 @@
-package org.hbrs.se2.project.hellocar.control.factories;
+package org.hbrs.se2.project.hellocar.control.builders;
 
 import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
 
-public class CompanyBuilder extends JobPortalUserBuilder {
-    public CompanyBuilder() {
+public class CompanyDTOBuilder extends JobPortalUserDTOBuilder {
+    public CompanyDTOBuilder() {
         super(new CompanyDTOImpl());
     }
 
     @Override
-    public CompanyBuilder buildDefaultUser() {
+    public CompanyDTOBuilder buildDefaultUser() {
         super.buildDefaultUser();
         ((CompanyDTOImpl) super.user).setCompanyName("companyName");
         return this;
     }
 
-    public CompanyBuilder buildCompanyName(String companyName) {
+    public CompanyDTOBuilder buildCompanyName(String companyName) {
         ((CompanyDTOImpl) super.user).setCompanyName(companyName);
         return this;
     }

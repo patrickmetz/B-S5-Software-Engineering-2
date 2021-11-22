@@ -10,10 +10,10 @@ import org.hbrs.se2.project.hellocar.entities.*;
 
 public class UserEntityFactory {
     private UserEntityFactory(){
-
+        // factories have no usable constructors
     }
 
-    public static JobPortalUser create(JobPortalUserDTO dto) {
+    public static JobPortalUser createUser(JobPortalUserDTO dto) {
         JobPortalUser entity = null;
 
         // class hierarchy: User <|-- JobPortalUser <|-- Student/Company

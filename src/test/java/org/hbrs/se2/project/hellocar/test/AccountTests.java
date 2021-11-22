@@ -2,8 +2,8 @@ package org.hbrs.se2.project.hellocar.test;
 
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.hellocar.control.factories.CompanyBuilder;
-import org.hbrs.se2.project.hellocar.control.factories.StudentBuilder;
+import org.hbrs.se2.project.hellocar.control.builders.CompanyDTOBuilder;
+import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.*;
@@ -36,7 +36,7 @@ public class AccountTests {
 
     @Test
     void emailsAreUnique() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
 
         try {
@@ -54,7 +54,7 @@ public class AccountTests {
 
     @Test
     void emailsAreUniqueTest() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         try {
             int id = userService.createUser(dto, STUDENT_ROLES);
@@ -71,7 +71,7 @@ public class AccountTests {
 
     @Test
     void userIdsAreUnique() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
 
         // just to make sure that the username is being compared and not the email
@@ -92,7 +92,7 @@ public class AccountTests {
 
     @Test
     void studentsAreCreated() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dtoA = (StudentDTOImpl) builder.buildDefaultUser().done();
         StudentDTO dtoB;
         int idA;
@@ -111,7 +111,7 @@ public class AccountTests {
 
     @Test
     void companiesAreCreated() {
-        CompanyBuilder builder = new CompanyBuilder();
+        CompanyDTOBuilder builder = new CompanyDTOBuilder();
         CompanyDTOImpl dtoA = builder.buildDefaultUser().done();
         CompanyDTO dtoB;
         int idA;
@@ -130,7 +130,7 @@ public class AccountTests {
 
     @Test
     void studentsAreUpdated() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         int id;
 
@@ -182,7 +182,7 @@ public class AccountTests {
 
     @Test
     void companiesAreUpdated() {
-        CompanyBuilder builder = new CompanyBuilder();
+        CompanyDTOBuilder builder = new CompanyDTOBuilder();
         CompanyDTOImpl dto = builder.buildDefaultUser().done();
         int id;
 
@@ -232,7 +232,7 @@ public class AccountTests {
 
     @Test
     void studentsAreDeleted() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dtoA = (StudentDTOImpl) builder.buildDefaultUser().done();
         StudentDTO dtoB;
 
@@ -251,7 +251,7 @@ public class AccountTests {
 
     @Test
     void companiesAreDeleted() {
-        CompanyBuilder builder = new CompanyBuilder();
+        CompanyDTOBuilder builder = new CompanyDTOBuilder();
         CompanyDTOImpl dtoA = builder.buildDefaultUser().done();
         CompanyDTO dtoB;
 
@@ -270,7 +270,7 @@ public class AccountTests {
 
     @Test
     void firstNameCantBeNull() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         dto.setFirstName(null);
 
@@ -282,7 +282,7 @@ public class AccountTests {
 
     @Test
     void lastNameCantBeNull() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         dto.setLastName(null);
 
@@ -295,7 +295,7 @@ public class AccountTests {
     @Test
     void companyNameCantBeNull() {
         //todo @vincent: bitte test reparieren, ggf. mit ameur absprechen
-        CompanyBuilder builder = new CompanyBuilder();
+        CompanyDTOBuilder builder = new CompanyDTOBuilder();
         CompanyDTOImpl dto = builder.buildDefaultUser().done();
         dto.setCompanyName(null);
 
@@ -307,7 +307,7 @@ public class AccountTests {
 
     @Test
     void userIdCantBeNull() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         dto.setUserid(null);
 
@@ -319,7 +319,7 @@ public class AccountTests {
 
     @Test
     void emailMailCantBeNull() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         dto.setEmail(null);
 
@@ -331,7 +331,7 @@ public class AccountTests {
 
     @Test
     void passwordCantBeNull() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
         dto.setPassword(null);
 
@@ -344,7 +344,7 @@ public class AccountTests {
     @Test
     void passwordCantBeShorterThanFourCharacters() {
         //todo @vincent: das kurze password wirft keine exception, bitte reparieren, ggf. mit ameur absprechen
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
 
         // length == 4
@@ -364,7 +364,7 @@ public class AccountTests {
 
     @Test
     void rolesAreCreated() {
-        StudentBuilder builder = new StudentBuilder();
+        StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dtoA = (StudentDTOImpl) builder.buildDefaultUser().done();
 
         int idA = 0;

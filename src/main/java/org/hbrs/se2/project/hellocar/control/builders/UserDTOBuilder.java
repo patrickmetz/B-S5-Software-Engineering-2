@@ -1,4 +1,4 @@
-package org.hbrs.se2.project.hellocar.control.factories;
+package org.hbrs.se2.project.hellocar.control.builders;
 
 import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
@@ -6,10 +6,10 @@ import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import java.time.LocalDate;
 import java.util.List;
 
-public class UserBuilder {
+public class UserDTOBuilder {
     protected UserDTOImpl user;
 
-    public UserBuilder(UserDTOImpl user) {
+    public UserDTOBuilder(UserDTOImpl user) {
         this.user = user;
     }
 
@@ -24,23 +24,23 @@ public class UserBuilder {
         user.setDateOfBirth(LocalDate.of(1989, 10, 3));
     }
 
-    public UserBuilder buildDefaultUser() {
+    public UserDTOBuilder buildDefaultUser() {
         addAllAttributes();
         return this;
 
     }
 
-    public UserBuilder buildFirstname(String firstname) {
+    public UserDTOBuilder buildFirstname(String firstname) {
         user.setFirstName(firstname);
         return this;
     }
 
-    public UserBuilder buildLastname(String lastname) {
+    public UserDTOBuilder buildLastname(String lastname) {
         user.setLastName(lastname);
         return this;
     }
 
-    public UserBuilder buildEmail(String email) {
+    public UserDTOBuilder buildEmail(String email) {
         user.setEmail(email);
         return this;
     }
@@ -48,27 +48,27 @@ public class UserBuilder {
     //id auslassen?
 
 
-    public UserBuilder buildUserId(String userId) {
+    public UserDTOBuilder buildUserId(String userId) {
         user.setUserid(userId);
         return this;
     }
 
-    public UserBuilder buildPassword(String password) {
+    public UserDTOBuilder buildPassword(String password) {
         user.setPassword(password);
         return this;
     }
 
-    public UserBuilder buildPhone(String phone) {
+    public UserDTOBuilder buildPhone(String phone) {
         user.setPhone(phone);
         return this;
     }
 
-    public UserBuilder buildDateOfBirth(LocalDate dateOfBirth) {
+    public UserDTOBuilder buildDateOfBirth(LocalDate dateOfBirth) {
         user.setDateOfBirth(dateOfBirth);
         return this;
     }
 
-    public UserBuilder buildRoles(List<RolleDTO> roles) {
+    public UserDTOBuilder buildRoles(List<RolleDTO> roles) {
         user.setRoles(roles);
         return this;
     }
