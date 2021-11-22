@@ -25,6 +25,7 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
@@ -35,7 +36,7 @@ import java.util.stream.Stream;
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
 @RouteAlias("registerstudent")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
-public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl>
+public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl> implements BeforeEnterObserver
 {
     /* ToDo Redirection to login after timeout */
 
@@ -52,6 +53,13 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
     }
 
     @Override
+    public void beforeEnter(BeforeEnterEvent event)
+    {
+        if (getCurrentUser() != null)
+            event.forwardTo(Globals.Pages.SHOW_CARS);
+    }
+
+    @Override
     protected void setupCustomElements()
     {
         dateOfBirth = new DatePicker();
@@ -59,7 +67,7 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
     }
 
     @Override
-    protected void setupSubmitButtons(ManageUserControl userService)
+    protected void setupSubmitButtons()
     {
         submitButton = new Button("Join us");
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -129,6 +137,25 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
     { }
 
     @Override
-    protected void setupCustomValidation(ManageUserControl userService)
-    { }
+    protected void setupCustomValidation()
+    {
+        binder.forField(userid)
+                .withValidator(
+                        AccountValidation::usernameValidator,
+                        AccountValidation.USERNAME_ERROR_MESSAGE
+                )
+                .withValidator(
+                        username -> AccountValidation.usernameAvailableValidator(username, userService),
+                        AccountValidation.USERNAME_IN_USE_ERROR_MESSAGE
+                )
+                .bind(JobPortalUserDTOImpl::getUserid, JobPortalUserDTOImpl::setUserid);
+
+        binder.forField(email)
+                .withValidator(new EmailValidator(AccountValidation.EMAIL_ERROR_MESSAGE))
+                .withValidator(
+                        email -> AccountValidation.emailAvailableValidator(email, userService),
+                        AccountValidation.EMAIL_IN_USE_ERROR_MESSAGE
+                )
+                .bind(JobPortalUserDTOImpl::getEmail, JobPortalUserDTOImpl::setEmail);
+    }
 }

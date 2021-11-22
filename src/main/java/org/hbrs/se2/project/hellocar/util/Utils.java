@@ -36,20 +36,35 @@ public class Utils {
 
     }
 
-    public static void configureRegistrationForm(FormLayout formLayout, H3 title, Button submitButton) {
-        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    public static void configureRegistrationForm(
+        FormLayout formLayout,
+        H3 title,
+        Button submitButton)
+    {
+        configureRegistrationForm(formLayout, title, submitButton, null);
+    }
+
+    public static void configureRegistrationForm(
+            FormLayout formLayout,
+            H3 title,
+            Button submitButton,
+            Button secondaryButton)
+    {
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY); // @todo überschreibt was in den view klassen gesetzt wurde!?
         submitButton.getElement().getStyle().set("margin-top", "20px");
         submitButton.getElement().getStyle().set("cursor", "pointer");
 
         formLayout.setMaxWidth("500px");
 
         formLayout.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
-                new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP));
+            new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
+            new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP));
 
         // These components always take full width
         formLayout.setColspan(title, 2);
         formLayout.setColspan(submitButton, 2);
+        if (secondaryButton != null)
+            formLayout.setColspan(secondaryButton, 2);
     }
 
     public static void displayNotification(boolean success, String message) {

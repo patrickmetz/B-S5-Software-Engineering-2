@@ -16,6 +16,7 @@ import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.component.textfield.TextField;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
@@ -23,9 +24,10 @@ import org.hbrs.se2.project.hellocar.util.account.AccountValidation;
 
 import java.util.stream.Stream;
 
-public abstract class RegistrationViewBase<T extends JobPortalUserDTOImpl> extends VerticalLayout implements BeforeEnterObserver
+public abstract class RegistrationViewBase<T extends JobPortalUserDTOImpl> extends VerticalLayout
 {
 	protected Binder<T> binder;
+	protected ManageUserControl userService;
 
 	protected H3 title;
 	protected TextField firstName;
@@ -43,13 +45,14 @@ public abstract class RegistrationViewBase<T extends JobPortalUserDTOImpl> exten
 	public RegistrationViewBase(Binder<T> customBinder, ManageUserControl userService)
 	{
 		binder = customBinder;
+		this.userService = userService;
 
 		setupCommonElements();
 		setupCustomElements();
 
 		binder.bindInstanceFields(this);
 
-		setupSubmitButtons(userService);
+		setupSubmitButtons();
 
 		FormLayout form = setupForm();
 		add(form);
@@ -58,15 +61,8 @@ public abstract class RegistrationViewBase<T extends JobPortalUserDTOImpl> exten
 		setupCommonRequiredIndicators();
 		setupCustomRequiredIndicators();
 
-		setupCommonValidation(userService);
-		setupCustomValidation(userService);
-	}
-
-	@Override
-	public void beforeEnter(BeforeEnterEvent event)
-	{
-		if (getCurrentUser() != null)
-			event.forwardTo(Globals.Pages.SHOW_CARS);
+		setupCommonValidation();
+		setupCustomValidation();
 	}
 
 	private void setupCommonElements()
@@ -97,14 +93,14 @@ public abstract class RegistrationViewBase<T extends JobPortalUserDTOImpl> exten
 		setRequiredIndicatorVisible(firstName, lastName, userid, email, password, passwordConfirm);
 	}
 	
-	private void setupCommonValidation(ManageUserControl userService)
+	private void setupCommonValidation()
 	{
 		binder.forField(firstName)
 				.withValidator(
 						AccountValidation::firstnameValidator,
 						AccountValidation.FIRST_NAME_ERROR_MESSAGE
 				)
-				.bind(JobPortalUserDTOImpl::getFirstName, JobPortalUserDTOImpl::setFirstName);
+				.bind(JobPortalUserDTO::getFirstName, JobPortalUserDTOImpl::setFirstName);
 
 		binder.forField(lastName)
 				.withValidator(
@@ -112,17 +108,6 @@ public abstract class RegistrationViewBase<T extends JobPortalUserDTOImpl> exten
 						AccountValidation.LAST_NAME_ERROR_MESSAGE
 				)
 				.bind(JobPortalUserDTOImpl::getLastName, JobPortalUserDTOImpl::setLastName);
-
-		binder.forField(userid)
-				.withValidator(
-						AccountValidation::usernameValidator,
-						AccountValidation.USERNAME_ERROR_MESSAGE
-				)
-				.withValidator(
-						username -> AccountValidation.usernameAvailableValidator(username, userService),
-						AccountValidation.USERNAME_IN_USE_ERROR_MESSAGE
-				)
-				.bind(JobPortalUserDTOImpl::getUserid, JobPortalUserDTOImpl::setUserid);
 
 		binder.forField(password)
 				.withValidator(
@@ -137,25 +122,17 @@ public abstract class RegistrationViewBase<T extends JobPortalUserDTOImpl> exten
 						AccountValidation.CONFIRM_PASSWORD_ERROR_MESSAGE
 				)
 				.bind(JobPortalUserDTOImpl::getPassword, JobPortalUserDTOImpl::setPassword);
-
-		binder.forField(email)
-				.withValidator(new EmailValidator(AccountValidation.EMAIL_ERROR_MESSAGE))
-				.withValidator(
-						email -> AccountValidation.emailAvailableValidator(email, userService),
-						AccountValidation.EMAIL_IN_USE_ERROR_MESSAGE
-				)
-				.bind(JobPortalUserDTOImpl::getEmail, JobPortalUserDTOImpl::setEmail);
 	}
 
 	protected abstract void setupCustomElements();
 
-	protected abstract void setupSubmitButtons(ManageUserControl userService);
+	protected abstract void setupSubmitButtons();
 
 	protected abstract FormLayout setupForm();
 
 	protected abstract void setupCustomRequiredIndicators();
 
-	protected abstract void setupCustomValidation(ManageUserControl userService);
+	protected abstract void setupCustomValidation();
 
 	protected void setRequiredIndicatorVisible(HasValueAndElement<?, ?>... components) {
 		Stream.of(components).forEach(comp -> comp.setRequiredIndicatorVisible(true));

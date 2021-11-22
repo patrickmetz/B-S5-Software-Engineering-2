@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 @Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
 @RouteAlias("registercompany")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
-public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl>
+public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl> implements BeforeEnterObserver
 {
     // Company
     private TextField companyName;
@@ -45,13 +45,20 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
     }
 
     @Override
+    public void beforeEnter(BeforeEnterEvent event)
+    {
+        if (getCurrentUser() != null)
+            event.forwardTo(Globals.Pages.SHOW_CARS);
+    }
+
+    @Override
     protected void setupCustomElements()
     {
         companyName = new TextField("Company Name");
     }
 
     @Override
-    protected void setupSubmitButtons(ManageUserControl userService)
+    protected void setupSubmitButtons()
     {
         submitButton = new Button("Join us");
         submitButton.addClickListener((event) -> {
@@ -111,8 +118,27 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
     }
 
     @Override
-    protected void setupCustomValidation(ManageUserControl userService)
+    protected void setupCustomValidation()
     {
+        binder.forField(userid)
+                .withValidator(
+                        AccountValidation::usernameValidator,
+                        AccountValidation.USERNAME_ERROR_MESSAGE
+                )
+                .withValidator(
+                        username -> AccountValidation.usernameAvailableValidator(username, userService),
+                        AccountValidation.USERNAME_IN_USE_ERROR_MESSAGE
+                )
+                .bind(JobPortalUserDTOImpl::getUserid, JobPortalUserDTOImpl::setUserid);
+
+        binder.forField(email)
+                .withValidator(new EmailValidator(AccountValidation.EMAIL_ERROR_MESSAGE))
+                .withValidator(
+                        email -> AccountValidation.emailAvailableValidator(email, userService),
+                        AccountValidation.EMAIL_IN_USE_ERROR_MESSAGE
+                )
+                .bind(JobPortalUserDTOImpl::getEmail, JobPortalUserDTOImpl::setEmail);
+
         binder.forField(companyName)
                 .withValidator(
                         AccountValidation::companyNameValidator,
