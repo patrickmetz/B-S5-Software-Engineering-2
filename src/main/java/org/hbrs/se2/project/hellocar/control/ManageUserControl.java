@@ -1,19 +1,15 @@
 package org.hbrs.se2.project.hellocar.control;
 
 import org.hbrs.se2.project.hellocar.control.builders.CompanyDTOBuilder;
-import org.hbrs.se2.project.hellocar.control.builders.JobPortalUserDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.UserEntityFactory;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
 import org.hbrs.se2.project.hellocar.entities.Company;
-import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.entities.User;
 import org.hbrs.se2.project.hellocar.repository.UserRepository;
@@ -51,6 +47,7 @@ public class ManageUserControl {
     }
 
     public StudentDTO readStudent(int id) {
+        //todo: provide only one shared method for both student AND company
         Optional<User> userOptional = this.userRepository.findById(id);
         StudentDTOBuilder builder = new StudentDTOBuilder();
 
@@ -88,6 +85,7 @@ public class ManageUserControl {
     }
 
     public CompanyDTO readCompany(int id) {
+        //todo: provide only one shared method for both student AND company
         Optional<User> userOptional = this.userRepository.findById(id);
         CompanyDTOBuilder builder = new CompanyDTOBuilder();
 
@@ -149,8 +147,8 @@ public class ManageUserControl {
         if (optional.isPresent()) {
             entity = (Student) optional.get();
 
-            setUserPartsOfEntity(entity, dto);
-            setStudentPartsOfEntity(entity, dto);
+            UserEntityFactory.addUserParts(entity, dto);
+            UserEntityFactory.addStudentParts(entity, dto);
 
             this.userRepository.save(entity);
         }
@@ -165,8 +163,8 @@ public class ManageUserControl {
         if (optional.isPresent()) {
             entity = (Company) optional.get();
 
-            setUserPartsOfEntity(entity, dto);
-            setCompanyPartsOfEntity(entity, dto);
+            UserEntityFactory.addUserParts(entity, dto);
+            UserEntityFactory.addCompanyParts(entity, dto);
 
             this.userRepository.save(entity);
         }
@@ -176,31 +174,7 @@ public class ManageUserControl {
         this.userRepository.deleteById(id);
     }
 
-    private void setUserPartsOfEntity(JobPortalUser entity, JobPortalUserDTO dto) {
-        entity.setUserid(dto.getUserid()); // it's the username, not the primary key
-        entity.setPassword(dto.getPassword());
-        entity.setEmail(dto.getEmail());
 
-        entity.setGender(dto.getGender());
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-
-        entity.setStreet(dto.getStreet());
-        entity.setStreetNumber(dto.getStreetNumber());
-        entity.setZipCode(dto.getZipCode());
-        entity.setCity(dto.getCity());
-
-        entity.setPhone(dto.getPhone());
-        entity.setDateOfBirth(dto.getDateOfBirth());
-    }
-
-    private void setCompanyPartsOfEntity(Company entity, CompanyDTO dto) {
-        entity.setCompanyName(dto.getCompanyName());
-    }
-
-    private void setStudentPartsOfEntity(Student entity, StudentDTO dto) {
-        // there are no student specific entity attributes, yet
-    }
 
     private void handleDbException(DatabaseLayerException e) throws DatabaseUserException {
         // chain of responsibility pattern

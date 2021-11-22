@@ -9,7 +9,7 @@ import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.entities.*;
 
 public class UserEntityFactory {
-    private UserEntityFactory(){
+    private UserEntityFactory() {
         // factories have no usable constructors
     }
 
@@ -51,5 +51,31 @@ public class UserEntityFactory {
         }
 
         return entity;
+    }
+
+    public static void addUserParts(JobPortalUser entity, JobPortalUserDTO dto) {
+        entity.setUserid(dto.getUserid()); // it's the username, not the primary key
+        entity.setPassword(dto.getPassword());
+        entity.setEmail(dto.getEmail());
+
+        entity.setGender(dto.getGender());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+
+        entity.setStreet(dto.getStreet());
+        entity.setStreetNumber(dto.getStreetNumber());
+        entity.setZipCode(dto.getZipCode());
+        entity.setCity(dto.getCity());
+
+        entity.setPhone(dto.getPhone());
+        entity.setDateOfBirth(dto.getDateOfBirth());
+    }
+
+    public static void addCompanyParts(Company entity, CompanyDTO dto) {
+        entity.setCompanyName(dto.getCompanyName());
+    }
+
+    public static void addStudentParts(Student entity, StudentDTO dto) {
+        // there are no student specific entity attributes, yet
     }
 }
