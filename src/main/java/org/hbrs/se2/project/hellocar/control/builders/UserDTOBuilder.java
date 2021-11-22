@@ -45,9 +45,10 @@ public class UserDTOBuilder {
         return this;
     }
 
-    //id auslassen?
-
-
+    public UserDTOBuilder buildId(int id) {
+        user.setId(id);
+        return this;
+    }
     public UserDTOBuilder buildUserId(String userId) {
         user.setUserid(userId);
         return this;

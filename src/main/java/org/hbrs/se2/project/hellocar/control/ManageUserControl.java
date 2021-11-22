@@ -1,5 +1,7 @@
 package org.hbrs.se2.project.hellocar.control;
 
+import org.hbrs.se2.project.hellocar.control.builders.JobPortalUserDTOBuilder;
+import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.UserEntityFactory;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
@@ -49,37 +51,37 @@ public class ManageUserControl {
 
     public StudentDTO readStudent(int id) {
         Optional<User> userOptional = this.userRepository.findById(id);
+        StudentDTOBuilder builder = new StudentDTOBuilder();
 
         Student user = null;
-        StudentDTOImpl studentDTO = null;
 
         if (userOptional.isPresent()) {
             user = (Student) userOptional.get();
 
-            studentDTO = new StudentDTOImpl();
+            // user parts
+            builder
+                .buildId(user.getId())
+                .buildFirstname(user.getFirstName())
+                .buildLastname(user.getLastName())
+                .buildEmail(user.getEmail())
+                .buildPassword(user.getPassword())
+                .buildPhone(user.getPhone())
+                .buildUserId(user.getUserid())
+                .buildDateOfBirth(user.getDateOfBirth());
 
-            // User
-            studentDTO.setId(user.getId());
-            studentDTO.setFirstName(user.getFirstName());
-            studentDTO.setLastName(user.getLastName());
-            studentDTO.setEmail(user.getEmail());
-            studentDTO.setPassword(user.getPassword());
-            studentDTO.setPhone(user.getPhone());
-            studentDTO.setUserid(user.getUserid());
-            studentDTO.setDateOfBirth(user.getDateOfBirth());
+            // job portal user parts
+            builder
+                .buildGender(user.getGender())
+                .buildCity(user.getCity())
+                .buildStreet(user.getStreet())
+                .buildStreetNumber(user.getStreetNumber())
+                .buildZipCode(user.getZipCode());
 
-            // JobPortalUser
-            studentDTO.setGender(user.getGender());
-            studentDTO.setCity(user.getCity());
-            studentDTO.setStreet(user.getStreet());
-            studentDTO.setStreetNumber(user.getStreetNumber());
-            studentDTO.setZipCode(user.getZipCode());
+            // student parts
+            // none at the moment
         }
 
-        // Student
-        // has nothing
-
-        return studentDTO;
+        return builder.done();
     }
 
     public CompanyDTO readCompany(int id) {
