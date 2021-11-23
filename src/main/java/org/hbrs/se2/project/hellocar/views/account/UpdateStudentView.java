@@ -25,10 +25,10 @@ import org.hbrs.se2.project.hellocar.util.ConfirmationDialog;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.util.account.AccountValidation;
+import org.hbrs.se2.project.hellocar.views.AppView;
 
-@Route(value = Globals.Pages.UPDATE_STUDENT_VIEW)
+@Route(value = Globals.Pages.UPDATE_STUDENT_VIEW, layout = AppView.class)
 @RouteAlias("updatestudent")
-@Theme(value = Lumo.class, variant = Lumo.DARK)
 public class UpdateStudentView extends RegistrationViewBase<StudentDTOImpl> implements BeforeEnterObserver
 {
 	private TextField role;

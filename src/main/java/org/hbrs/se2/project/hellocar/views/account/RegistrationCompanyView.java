@@ -31,7 +31,6 @@ import java.util.stream.Stream;
 
 @Route(value = Globals.Pages.REGISTER_COMPANY_VIEW)
 @RouteAlias("registercompany")
-@Theme(value = Lumo.class, variant = Lumo.DARK)
 public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl> implements BeforeEnterObserver
 {
     // Company

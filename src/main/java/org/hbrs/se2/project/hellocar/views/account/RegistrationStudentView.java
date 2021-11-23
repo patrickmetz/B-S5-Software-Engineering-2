@@ -35,7 +35,6 @@ import java.util.stream.Stream;
 
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
 @RouteAlias("registerstudent")
-@Theme(value = Lumo.class, variant = Lumo.DARK)
 public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl> implements BeforeEnterObserver
 {
     /* ToDo Redirection to login after timeout */

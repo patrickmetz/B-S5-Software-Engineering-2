@@ -19,7 +19,6 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 
 @Route(value = Globals.Pages.REGISTER_VIEW)
 @RouteAlias("register")
-@Theme(value = Lumo.class, variant = Lumo.DARK)
 public class RegistrationView extends VerticalLayout implements BeforeEnterObserver {
 
     H3 title = new H3("Register as a...");

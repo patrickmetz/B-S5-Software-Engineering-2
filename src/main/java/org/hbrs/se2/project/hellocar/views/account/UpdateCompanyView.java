@@ -23,10 +23,10 @@ import org.hbrs.se2.project.hellocar.util.ConfirmationDialog;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.util.account.AccountValidation;
+import org.hbrs.se2.project.hellocar.views.AppView;
 
-@Route(value = Globals.Pages.UPDATE_COMPANY_VIEW)
+@Route(value = Globals.Pages.UPDATE_COMPANY_VIEW, layout = AppView.class)
 @RouteAlias("updatecompany")
-@Theme(value = Lumo.class, variant = Lumo.DARK)
 public class UpdateCompanyView extends RegistrationViewBase<CompanyDTOImpl> implements BeforeEnterObserver
 {
 	private TextField companyName;

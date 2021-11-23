@@ -20,6 +20,8 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.AuthorizationControl;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
@@ -38,6 +40,7 @@ import java.util.Optional;
 @Route("main")
 @PWA(name = "HelloCar", shortName = "HelloCar", enableInstallPrompt = false)
 @JsModule("./styles/shared-styles.js")
+@Theme(value = Lumo.class, variant = Lumo.DARK)
 public class AppView extends AppLayout implements BeforeEnterObserver {
 
     private Tabs menu;
