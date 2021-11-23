@@ -24,6 +24,8 @@ import org.hbrs.se2.project.hellocar.control.AuthorizationControl;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
+import org.hbrs.se2.project.hellocar.views.account.UpdateCompanyView;
+import org.hbrs.se2.project.hellocar.views.account.UpdateStudentView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
@@ -182,6 +184,17 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
        }
 
        // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
+
+        if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.STUDENT)) {
+            System.out.println("User is Student");
+
+            tabs = Utils.append(tabs, createTab("Update Account", UpdateStudentView.class));
+        }
+        else if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
+            System.out.println("User is Company");
+
+            tabs = Utils.append(tabs, createTab("Update Account", UpdateCompanyView.class));
+        }
 
        return tabs;
     }
