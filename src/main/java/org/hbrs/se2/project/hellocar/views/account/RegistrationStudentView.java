@@ -8,6 +8,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -16,10 +17,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.EmailValidator;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
@@ -49,6 +47,9 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
     public RegistrationStudentView(ManageUserControl userService)
     {
         super(new Binder<>(StudentDTOImpl.class), userService);
+
+        HorizontalLayout backLayout = new HorizontalLayout(new RouterLink("Go back", RegistrationView.class));
+        add(backLayout);
     }
 
     @Override
@@ -56,6 +57,13 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
     {
         if (getCurrentUser() != null)
             event.forwardTo(Globals.Pages.SHOW_CARS);
+    }
+
+    @Override
+    protected void setupView() {
+        setSizeFull();
+        this.setAlignItems(Alignment.CENTER);
+        this.setJustifyContentMode(JustifyContentMode.CENTER);
     }
 
     @Override
@@ -89,19 +97,13 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
 
             } catch (ValidationException e) {
                 Utils.displayNotification(false, "Please fill in the required fields");
-            } catch (DatabaseUserException e) {
+            } catch (Exception e) {
                 Utils.displayNotification(
                         false,
-                        "Something went wrong with database! \n" +
-                                "Please contact the support"
-                );
-            } catch (Exception e) { /* todo: this block should be removed later */
-                Utils.displayNotification(
-                        false,
-                        "Something went wrong! Fix ur code :))"
+                        "Sorry, an unexpected error occured.\n" +
+                                "Please contact the support at admin@coll-hbrs.de."
                 );
             }
-
         });
     }
 

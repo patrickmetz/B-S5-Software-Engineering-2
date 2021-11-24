@@ -47,6 +47,8 @@ public abstract class RegistrationViewBase<T extends JobPortalUserDTOImpl> exten
 		binder = customBinder;
 		this.userService = userService;
 
+		setupView();
+
 		setupCommonElements();
 		setupCustomElements();
 
@@ -123,6 +125,8 @@ public abstract class RegistrationViewBase<T extends JobPortalUserDTOImpl> exten
 				)
 				.bind(JobPortalUserDTOImpl::getPassword, JobPortalUserDTOImpl::setPassword);
 	}
+
+	protected abstract void setupView();
 
 	protected abstract void setupCustomElements();
 

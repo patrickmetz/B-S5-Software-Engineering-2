@@ -51,9 +51,14 @@ public class UpdateStudentView extends RegistrationViewBase<StudentDTOImpl> impl
 	}
 
 	@Override
+	protected void setupView() {
+
+	}
+
+	@Override
 	protected void setupCustomElements()
 	{
-		title.setText("Update");
+		title.setText("Update Account Details");
 
 		dateOfBirth = new DatePicker();
 		dateOfBirth.setLabel("Date of Birth");
@@ -84,14 +89,14 @@ public class UpdateStudentView extends RegistrationViewBase<StudentDTOImpl> impl
 			}
 		});
 
-		deleteButton = new Button("Delete self");
+		deleteButton = new Button("Delete account");
 		deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 		deleteButton.addClickListener(event -> {
 			try
 			{
 				new ConfirmationDialog(
 					"Confirm deletion",
-					"Are you sure you want to delete yourself?",
+					"Are you sure you want to delete your account?",
 					new Button("Delete", confirmEvent -> {
 						userService.deleteUser(getCurrentUser().getId());
 

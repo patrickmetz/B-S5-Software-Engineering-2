@@ -10,6 +10,7 @@ import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -60,11 +61,16 @@ public class Utils {
             new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
             new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP));
 
-        // These components always take full width
         formLayout.setColspan(title, 2);
-        formLayout.setColspan(submitButton, 2);
-        if (secondaryButton != null)
+
+        // These components always take full width
+        if(secondaryButton != null) {
+            secondaryButton.getElement().getStyle().set("cursor", "pointer");
+            formLayout.setColspan(submitButton, 2);
             formLayout.setColspan(secondaryButton, 2);
+        } else {
+            formLayout.setColspan(submitButton, 2);
+        }
     }
 
     public static void displayNotification(boolean success, String message) {

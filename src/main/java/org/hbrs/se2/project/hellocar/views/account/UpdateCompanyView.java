@@ -48,9 +48,14 @@ public class UpdateCompanyView extends RegistrationViewBase<CompanyDTOImpl> impl
 	}
 
 	@Override
+	protected void setupView() {
+
+	}
+
+	@Override
 	protected void setupCustomElements()
 	{
-		title.setText("Update");
+		title.setText("Update Account Details");
 
 		companyName = new TextField("Company Name");
 	}
@@ -80,14 +85,14 @@ public class UpdateCompanyView extends RegistrationViewBase<CompanyDTOImpl> impl
 			}
 		});
 
-		deleteButton = new Button("Delete self");
+		deleteButton = new Button("Delete account");
 		deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
 		deleteButton.addClickListener(event -> {
 			try
 			{
 				new ConfirmationDialog(
 					"Confirm deletion",
-					"Are you sure you want to delete yourself?",
+					"Are you sure you want to delete your account?",
 					new Button("Delete", confirmEvent -> {
 						userService.deleteUser(getCurrentUser().getId());
 
