@@ -71,7 +71,7 @@ public class UpdateCompanyView extends RegistrationViewBase<CompanyDTOImpl> impl
 				var companyDTO = new CompanyDTOImpl();
 				binder.writeBean(companyDTO);
 
-				userService.updateCompany(getCurrentUser().getId(), companyDTO);
+				userService.updateUser(getCurrentUser().getId(), companyDTO);
 
 				Utils.displayNotification(true, "Update succeeded");
 			}

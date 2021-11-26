@@ -155,7 +155,7 @@ public class AccountTests {
                     done();
 
 
-            userService.updateStudent(id, dto);
+            userService.updateUser(id, dto);
 
             StudentDTO updated = userService.readStudent(id);
 
@@ -207,7 +207,7 @@ public class AccountTests {
                     buildDateOfBirth(dto.getDateOfBirth().plusDays(1)).
                     done();
 
-            userService.updateCompany(id, dto);
+            userService.updateUser(id, dto);
 
             CompanyDTO updated = userService.readCompany(id);
 

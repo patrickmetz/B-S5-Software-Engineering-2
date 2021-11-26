@@ -10,6 +10,7 @@ import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
 import org.hbrs.se2.project.hellocar.entities.Company;
+import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
 import org.hbrs.se2.project.hellocar.entities.Student;
 import org.hbrs.se2.project.hellocar.entities.User;
 import org.hbrs.se2.project.hellocar.repository.UserRepository;
@@ -139,32 +140,20 @@ public class ManageUserControl {
         return userOptional.isPresent();
     }
 
-    public void updateStudent(int id, StudentDTO dto) {
-        //todo: provide only one shared method for both student AND company
+    public void updateUser(int id, JobPortalUserDTO dto) {
         Optional<User> optional = this.userRepository.findById(id);
-        Student entity = null;
+        JobPortalUser entity = null;
 
         if (optional.isPresent()) {
-            entity = (Student) optional.get();
+            entity = (JobPortalUser) optional.get();
 
             UserEntityFactory.addUserParts(entity, dto);
-            UserEntityFactory.addStudentParts(entity, dto);
 
-            this.userRepository.save(entity);
-        }
-    }
-
-    public void updateCompany(int id, CompanyDTO dto) {
-        //todo: provide only one shared method for both student AND company
-        Optional<User> optional = this.userRepository.findById(id);
-
-        Company entity = null;
-
-        if (optional.isPresent()) {
-            entity = (Company) optional.get();
-
-            UserEntityFactory.addUserParts(entity, dto);
-            UserEntityFactory.addCompanyParts(entity, dto);
+            if (dto instanceof StudentDTO) {
+                UserEntityFactory.addStudentParts((Student) entity, (StudentDTO) dto);
+            } else if (dto instanceof CompanyDTO) {
+                UserEntityFactory.addCompanyParts((Company) entity, (CompanyDTO) dto);
+            }
 
             this.userRepository.save(entity);
         }
@@ -173,7 +162,6 @@ public class ManageUserControl {
     public void deleteUser(int id) {
         this.userRepository.deleteById(id);
     }
-
 
 
     private void handleDbException(DatabaseLayerException e) throws DatabaseUserException {

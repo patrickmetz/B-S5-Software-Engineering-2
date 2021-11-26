@@ -75,7 +75,7 @@ public class UpdateStudentView extends RegistrationViewBase<StudentDTOImpl> impl
 				var studentDTO = new StudentDTOImpl();
 				binder.writeBean(studentDTO);
 
-				userService.updateStudent(getCurrentUser().getId(), studentDTO);
+				userService.updateUser(getCurrentUser().getId(), studentDTO);
 
 				Utils.displayNotification(true, "Update succeeded");
 			}
