@@ -71,26 +71,28 @@ public class ManageUserControl {
                 // none at the moment
             }
 
-            // job portal user parts
-            builder
-                    .buildGender(user.getGender())
-                    .buildCity(user.getCity())
-                    .buildStreet(user.getStreet())
-                    .buildStreetNumber(user.getStreetNumber())
-                    .buildZipCode(user.getZipCode());
+            if (builder != null) {
+                // job portal user parts
+                builder
+                        .buildGender(user.getGender())
+                        .buildCity(user.getCity())
+                        .buildStreet(user.getStreet())
+                        .buildStreetNumber(user.getStreetNumber())
+                        .buildZipCode(user.getZipCode());
 
-            // user parts
-            builder
-                    .buildId(user.getId())
-                    .buildFirstname(user.getFirstName())
-                    .buildLastname(user.getLastName())
-                    .buildEmail(user.getEmail())
-                    .buildPassword(user.getPassword())
-                    .buildPhone(user.getPhone())
-                    .buildUserId(user.getUserid())
-                    .buildDateOfBirth(user.getDateOfBirth());
+                // user parts
+                builder
+                        .buildId(user.getId())
+                        .buildFirstname(user.getFirstName())
+                        .buildLastname(user.getLastName())
+                        .buildEmail(user.getEmail())
+                        .buildPassword(user.getPassword())
+                        .buildPhone(user.getPhone())
+                        .buildUserId(user.getUserid())
+                        .buildDateOfBirth(user.getDateOfBirth());
 
-            return builder.done();
+                return builder.done();
+            }
         }
 
         return null;
