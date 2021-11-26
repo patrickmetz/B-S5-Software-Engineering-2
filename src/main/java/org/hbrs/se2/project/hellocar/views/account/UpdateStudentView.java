@@ -143,7 +143,7 @@ public class UpdateStudentView extends RegistrationViewBase<StudentDTOImpl> impl
 
 		Utils.configureRegistrationForm(formLayout, title, submitButton, deleteButton);
 
-		binder.readBean((StudentDTOImpl)userService.readStudent(getCurrentUser().getId()));
+		binder.readBean((StudentDTOImpl)userService.readUser(getCurrentUser().getId()));
 		passwordConfirm.setValue(password.getValue());
 
 		return formLayout;

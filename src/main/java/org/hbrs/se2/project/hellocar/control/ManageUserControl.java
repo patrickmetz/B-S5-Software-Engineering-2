@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.hellocar.control;
 
 import org.hbrs.se2.project.hellocar.control.builders.CompanyDTOBuilder;
+import org.hbrs.se2.project.hellocar.control.builders.JobPortalUserDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.UserEntityFactory;
@@ -47,15 +48,36 @@ public class ManageUserControl {
         return newPrimaryKey;
     }
 
-    public StudentDTO readStudent(int id) {
-        //todo: provide only one shared method for both student AND company
+    public JobPortalUserDTO readUser(int id) {
         Optional<User> userOptional = this.userRepository.findById(id);
-        StudentDTOBuilder builder = new StudentDTOBuilder();
 
-        Student user = null;
+        JobPortalUser user = null;
 
         if (userOptional.isPresent()) {
-            user = (Student) userOptional.get();
+            user = (JobPortalUser) userOptional.get();
+
+            JobPortalUserDTOBuilder builder = null;
+
+            if (user instanceof Company) {
+                builder = new CompanyDTOBuilder();
+
+                //company parts
+                ((CompanyDTOBuilder) builder).buildCompanyName(
+                        ((Company) user).getCompanyName()
+                );
+            } else if (user instanceof Student) {
+                builder = new StudentDTOBuilder();
+                // student parts
+                // none at the moment
+            }
+
+            // job portal user parts
+            builder
+                    .buildGender(user.getGender())
+                    .buildCity(user.getCity())
+                    .buildStreet(user.getStreet())
+                    .buildStreetNumber(user.getStreetNumber())
+                    .buildZipCode(user.getZipCode());
 
             // user parts
             builder
@@ -67,55 +89,6 @@ public class ManageUserControl {
                     .buildPhone(user.getPhone())
                     .buildUserId(user.getUserid())
                     .buildDateOfBirth(user.getDateOfBirth());
-
-            // job portal user parts
-            builder
-                    .buildGender(user.getGender())
-                    .buildCity(user.getCity())
-                    .buildStreet(user.getStreet())
-                    .buildStreetNumber(user.getStreetNumber())
-                    .buildZipCode(user.getZipCode());
-
-            // student parts
-            // none at the moment
-
-            return builder.done();
-        }
-
-        return null;
-    }
-
-    public CompanyDTO readCompany(int id) {
-        //todo: provide only one shared method for both student AND company
-        Optional<User> userOptional = this.userRepository.findById(id);
-        CompanyDTOBuilder builder = new CompanyDTOBuilder();
-
-        Company user = null;
-
-        if (userOptional.isPresent()) {
-            user = (Company) userOptional.get();
-
-            // user parts
-            builder
-                    .buildId(user.getId())
-                    .buildFirstname(user.getFirstName())
-                    .buildLastname(user.getLastName())
-                    .buildEmail(user.getEmail())
-                    .buildPassword(user.getPassword())
-                    .buildPhone(user.getPhone())
-                    .buildUserId(user.getUserid())
-                    .buildDateOfBirth(user.getDateOfBirth());
-
-            // job portal user parts
-            builder
-                    .buildGender(user.getGender())
-                    .buildCity(user.getCity())
-                    .buildStreet(user.getStreet())
-                    .buildStreetNumber(user.getStreetNumber())
-                    .buildZipCode(user.getZipCode());
-
-            // company parts
-            builder.buildCompanyName(user.getCompanyName());
 
             return builder.done();
         }

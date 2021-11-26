@@ -99,7 +99,7 @@ public class AccountTests {
 
         try {
             idA = userService.createUser(dtoA, STUDENT_ROLES);
-            dtoB = userService.readStudent(idA);
+            dtoB = (StudentDTO) userService.readUser(idA);
 
             assertEquals(dtoB.getId(), idA);
 
@@ -118,7 +118,7 @@ public class AccountTests {
 
         try {
             idA = userService.createUser(dtoA, COMPANY_ROLES);
-            dtoB = userService.readCompany(idA);
+            dtoB = (CompanyDTO) userService.readUser(idA);
 
             assertEquals(dtoB.getId(), idA);
 
@@ -157,7 +157,7 @@ public class AccountTests {
 
             userService.updateUser(id, dto);
 
-            StudentDTO updated = userService.readStudent(id);
+            StudentDTO updated = (StudentDTO) userService.readUser(id);
 
             // compare updated original with its updated data in the database
             assertEquals(dto.getFirstName(), updated.getFirstName());
@@ -209,7 +209,7 @@ public class AccountTests {
 
             userService.updateUser(id, dto);
 
-            CompanyDTO updated = userService.readCompany(id);
+            CompanyDTO updated = (CompanyDTO) userService.readUser(id);
 
             // compare updated original with its updated data in the database
             assertEquals(dto.getFirstName(), updated.getFirstName());
@@ -242,7 +242,7 @@ public class AccountTests {
             idA = userService.createUser(dtoA, STUDENT_ROLES);
             userService.deleteUser(idA);
 
-            dtoB = userService.readStudent(idA);
+            dtoB = (StudentDTO) userService.readUser(idA);
             assertNull(dtoB);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
@@ -261,7 +261,7 @@ public class AccountTests {
             idA = userService.createUser(dtoA, COMPANY_ROLES);
             userService.deleteUser(idA);
 
-            dtoB = userService.readCompany(idA);
+            dtoB = (CompanyDTO) userService.readUser(idA);
             assertNull(dtoB);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
@@ -377,7 +377,7 @@ public class AccountTests {
                 idA = userService.createUser(dtoA, roleArray);
 
                 // fetch a copy of it from db
-                StudentDTO dtoB = userService.readStudent(idA);
+                StudentDTO dtoB = (StudentDTO) userService.readUser(idA);
 
                 // fetch copies' roles
                 RolleDAO rolleDAO = new RolleDAO();
