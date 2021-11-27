@@ -98,6 +98,10 @@ public class AccountTests {
         }
     }
 
+    void entityIsUpdated(JobPortalUserDTO dto){
+
+    }
+
     @Test
     void studentsAreUpdated() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
@@ -141,8 +145,6 @@ public class AccountTests {
             assertEquals(dto.getStreet(), updated.getStreet());
             assertEquals(dto.getPassword(), updated.getPassword());
 
-            //todo @vincent das klappt wieder nicht, sie todo weiter oben
-            //assertEquals(dto.getDateOfBirth().plusDays(1), updated.getDateOfBirth());
 
             userService.deleteUser(id);
         } catch (DatabaseUserException e) {
@@ -200,19 +202,12 @@ public class AccountTests {
         }
     }
 
-    @Test
-    void studentsAreDeleted() {
-        StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dtoA = (StudentDTOImpl) builder.buildDefaultUser().done();
-        StudentDTO dtoB;
-
-        int idA;
-
+    void entityIsDeleted(JobPortalUserDTO dtoA){
         try {
-            idA = userService.createUser(dtoA, STUDENT_ROLES);
+            int idA = userService.createUser(dtoA, STUDENT_ROLES);
             userService.deleteUser(idA);
 
-            dtoB = (StudentDTO) userService.readUser(idA);
+            JobPortalUserDTO dtoB = (StudentDTO) userService.readUser(idA);
             assertNull(dtoB);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
@@ -220,22 +215,17 @@ public class AccountTests {
     }
 
     @Test
+    void studentsAreDeleted() {
+        StudentDTOBuilder builder = new StudentDTOBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
+        entityIsDeleted(dto);
+    }
+
+    @Test
     void companiesAreDeleted() {
         CompanyDTOBuilder builder = new CompanyDTOBuilder();
-        CompanyDTOImpl dtoA = builder.buildDefaultUser().done();
-        CompanyDTO dtoB;
-
-        int idA;
-
-        try {
-            idA = userService.createUser(dtoA, COMPANY_ROLES);
-            userService.deleteUser(idA);
-
-            dtoB = (CompanyDTO) userService.readUser(idA);
-            assertNull(dtoB);
-        } catch (DatabaseUserException e) {
-            e.printStackTrace();
-        }
+        CompanyDTOImpl dto = builder.buildDefaultUser().done();
+        entityIsDeleted(dto);
     }
 
     @Test
