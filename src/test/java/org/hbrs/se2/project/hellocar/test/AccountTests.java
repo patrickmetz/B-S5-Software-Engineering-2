@@ -54,23 +54,6 @@ public class AccountTests {
     }
 
     @Test
-    void emailsAreUniqueTest() {
-        StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
-        try {
-            int id = userService.createUser(dto, STUDENT_ROLES);
-
-            assertThrows(Exception.class, () -> {
-                userService.createUser(dto, STUDENT_ROLES);
-            });
-
-            userService.deleteUser(id);
-        } catch (DatabaseUserException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
     void userIdsAreUnique() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
