@@ -74,36 +74,25 @@ public class AccountTests {
     @Test
     void studentsAreCreated() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dtoA = (StudentDTOImpl) builder.buildDefaultUser().done();
-        StudentDTO dtoB;
-        int idA;
-
-        try {
-            idA = userService.createUser(dtoA, STUDENT_ROLES);
-            dtoB = (StudentDTO) userService.readUser(idA);
-
-            assertEquals(dtoB.getId(), idA);
-
-            userService.deleteUser(idA);
-        } catch (DatabaseUserException e) {
-            e.printStackTrace();
-        }
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
+        entityIsCreated(dto);
     }
 
     @Test
     void companiesAreCreated() {
         CompanyDTOBuilder builder = new CompanyDTOBuilder();
-        CompanyDTOImpl dtoA = builder.buildDefaultUser().done();
-        CompanyDTO dtoB;
-        int idA;
+        CompanyDTOImpl dto = builder.buildDefaultUser().done();
+        entityIsCreated(dto);
+    }
 
+    void entityIsCreated(JobPortalUserDTO dtoA){
         try {
-            idA = userService.createUser(dtoA, COMPANY_ROLES);
-            dtoB = (CompanyDTO) userService.readUser(idA);
+            int id = userService.createUser(dtoA, COMPANY_ROLES);
+            JobPortalUserDTO dtoB = userService.readUser(id);
 
-            assertEquals(dtoB.getId(), idA);
+            assertEquals(dtoB.getId(), id);
 
-            userService.deleteUser(idA);
+            userService.deleteUser(id);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
         }
