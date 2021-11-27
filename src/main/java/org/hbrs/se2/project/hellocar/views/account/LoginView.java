@@ -21,7 +21,6 @@ import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
-import org.hbrs.se2.project.hellocar.views.account.RegistrationView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

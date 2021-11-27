@@ -36,7 +36,6 @@ public class AccountTests {
     private static final String[] COMPANY_ROLES
             = new String[]{Globals.Roles.USER, Globals.Roles.COMPANY};
 
-
     @Test
     void emailsAreUnique() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
@@ -69,7 +68,6 @@ public class AccountTests {
         entityIsCreated(dto, COMPANY_ROLES);
     }
 
-
     @Test
     void studentsAreUpdated() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
@@ -83,7 +81,6 @@ public class AccountTests {
         CompanyDTOImpl dto = builder.buildDefaultUser().done();
         entityIsUpdated(dto, builder, COMPANY_ROLES);
     }
-
 
     @Test
     void studentsAreDeleted() {
@@ -127,7 +124,6 @@ public class AccountTests {
             userService.deleteUser(id);
         });
     }
-
 
     @Test
     void userIdCantBeNull() {
@@ -248,7 +244,6 @@ public class AccountTests {
                 ((CompanyDTOBuilder) builder).buildCompanyName(((CompanyDTO) dto).getCompanyName() + update);
             }
 
-
             // attach update to original
             dto = (JobPortalUserDTO) builder.
                     buildGender(dto.getGender() + update).
@@ -263,7 +258,6 @@ public class AccountTests {
                     buildPassword(dto.getPassword() + update).
                     buildDateOfBirth(dto.getDateOfBirth().plusDays(1)).
                     done();
-
 
             userService.updateUser(id, dto);
 
@@ -280,9 +274,11 @@ public class AccountTests {
             assertEquals(dto.getStreetNumber(), updated.getStreetNumber());
             assertEquals(dto.getStreet(), updated.getStreet());
             assertEquals(dto.getPassword(), updated.getPassword());
+
             if (updated instanceof CompanyDTO) {
                 assertEquals((((CompanyDTO) dto).getCompanyName()), ((CompanyDTO) updated).getCompanyName());
             }
+
             userService.deleteUser(id);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
