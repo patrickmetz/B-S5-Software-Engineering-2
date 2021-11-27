@@ -13,14 +13,14 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 
 @Route(value = Globals.Pages.REGISTER_VIEW)
 @RouteAlias("register")
-public class RegistrationView extends VerticalLayout implements BeforeEnterObserver {
+public class RegistrationChoiceView extends VerticalLayout implements BeforeEnterObserver {
 
     H3 title = new H3("Register as a...");
     Select<String> role = new Select<>("Student", "Company");
     Button studentButton = new Button("Student");
     Button companyButton = new Button("Company");
 
-    public RegistrationView() {
+    public RegistrationChoiceView() {
         setSizeFull();
         studentButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         studentButton.getElement().getStyle().set("height", "3rem").set("width", "100%");

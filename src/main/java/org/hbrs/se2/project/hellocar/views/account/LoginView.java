@@ -107,7 +107,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
                 .set("height", "2.5rem")
                 .set("width", "22.5rem")
                 .set("margin-bottom", "50px");
-        registerButton.addClickListener((event)-> UI.getCurrent().navigate(RegistrationView.class));
+        registerButton.addClickListener((event)-> UI.getCurrent().navigate(RegistrationChoiceView.class));
         return registerButton;
     }
 

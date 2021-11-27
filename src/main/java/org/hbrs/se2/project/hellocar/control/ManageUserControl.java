@@ -103,7 +103,7 @@ public class ManageUserControl {
         return null;
     }
 
-    public boolean existsUserName(String userid) {
+    public boolean existsUserId(String userid) {
         Optional<User> userOptional = this.userRepository.findUserByUserid(userid);
 
         return userOptional.isPresent();

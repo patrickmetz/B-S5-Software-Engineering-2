@@ -29,7 +29,7 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
     {
         super(new Binder<>(CompanyDTOImpl.class), userService);
 
-        HorizontalLayout backLayout = new HorizontalLayout(new RouterLink("Go back", RegistrationView.class));
+        HorizontalLayout backLayout = new HorizontalLayout(new RouterLink("Go back", RegistrationChoiceView.class));
         add(backLayout);
     }
 

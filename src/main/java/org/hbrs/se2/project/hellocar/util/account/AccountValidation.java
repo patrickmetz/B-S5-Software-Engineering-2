@@ -31,7 +31,7 @@ public class AccountValidation {
             String username,
             ManageUserControl userService
     ) {
-        return ! userService.existsUserName(username);
+        return ! userService.existsUserId(username);
     }
 
     public static boolean emailAvailableValidator(

@@ -33,7 +33,7 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
     {
         super(new Binder<>(StudentDTOImpl.class), userService);
 
-        HorizontalLayout backLayout = new HorizontalLayout(new RouterLink("Go back", RegistrationView.class));
+        HorizontalLayout backLayout = new HorizontalLayout(new RouterLink("Go back", RegistrationChoiceView.class));
         add(backLayout);
     }
 
