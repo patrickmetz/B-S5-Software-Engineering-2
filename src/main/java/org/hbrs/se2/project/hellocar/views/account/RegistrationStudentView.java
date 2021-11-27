@@ -1,35 +1,23 @@
 package org.hbrs.se2.project.hellocar.views.account;
 
 import com.vaadin.flow.component.HasValue;
-import com.vaadin.flow.component.HasValueAndElement;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.textfield.EmailField;
-import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.*;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
-import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.util.account.AccountValidation;
-
-import java.util.stream.Stream;
 
 @Route(value = Globals.Pages.REGISTER_STUDENT_VIEW)
 @RouteAlias("registerstudent")
@@ -140,23 +128,6 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
     @Override
     protected void setupCustomValidation()
     {
-        binder.forField(userid)
-                .withValidator(
-                        AccountValidation::usernameValidator,
-                        AccountValidation.USERNAME_ERROR_MESSAGE
-                )
-                .withValidator(
-                        username -> AccountValidation.usernameAvailableValidator(username, userService),
-                        AccountValidation.USERNAME_IN_USE_ERROR_MESSAGE
-                )
-                .bind(JobPortalUserDTOImpl::getUserid, JobPortalUserDTOImpl::setUserid);
-
-        binder.forField(email)
-                .withValidator(new EmailValidator(AccountValidation.EMAIL_ERROR_MESSAGE))
-                .withValidator(
-                        email -> AccountValidation.emailAvailableValidator(email, userService),
-                        AccountValidation.EMAIL_IN_USE_ERROR_MESSAGE
-                )
-                .bind(JobPortalUserDTOImpl::getEmail, JobPortalUserDTOImpl::setEmail);
+        setupRegistrationCommonValidation();
     }
 }

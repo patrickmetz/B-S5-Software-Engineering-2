@@ -27,12 +27,10 @@ import org.hbrs.se2.project.hellocar.views.AppView;
 
 @Route(value = Globals.Pages.UPDATE_COMPANY_VIEW, layout = AppView.class)
 @RouteAlias("updatecompany")
-public class UpdateCompanyView extends RegistrationViewBase<CompanyDTOImpl> implements BeforeEnterObserver
+public class UpdateCompanyView extends UpdateViewBase<CompanyDTOImpl>
 {
 	private TextField companyName;
 	private Button submitButton;
-	private Button deleteButton;
-	private StudentDTOImpl studentDTO;
 
 	public UpdateCompanyView(ManageUserControl userControl)
 	{
@@ -40,16 +38,9 @@ public class UpdateCompanyView extends RegistrationViewBase<CompanyDTOImpl> impl
 	}
 
 	@Override
-	public void beforeEnter(BeforeEnterEvent event)
+	protected void setupView()
 	{
-		// @todo funktioniert nicht.
-		if (getCurrentUser() == null)
-			event.forwardTo(Globals.Pages.LOGIN_VIEW);
-	}
-
-	@Override
-	protected void setupView() {
-
+		// no custom setup required
 	}
 
 	@Override
@@ -85,34 +76,7 @@ public class UpdateCompanyView extends RegistrationViewBase<CompanyDTOImpl> impl
 			}
 		});
 
-		deleteButton = new Button("Delete account");
-		deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-		deleteButton.addClickListener(event -> {
-			try
-			{
-				new ConfirmationDialog(
-					"Confirm deletion",
-					"Are you sure you want to delete your account?",
-					new Button("Delete", confirmEvent -> {
-						userService.deleteUser(getCurrentUser().getId());
-
-						Utils.displayNotification(true, "Deletion succeeded");
-
-						// Logout
-						UI ui = this.getUI().get();
-						ui.getSession().close();
-						ui.getPage().setLocation("/");
-
-						UI.getCurrent().navigate(LoginView.class);
-					}),
-					new Button("Cancel", cancelEvent -> { })
-				).open();
-			}
-			catch (Exception e)
-			{
-				Utils.displayNotification(false, "Unknown error: " + e);
-			}
-		});
+		setupDeleteButton();
 	}
 
 	@Override
@@ -148,7 +112,7 @@ public class UpdateCompanyView extends RegistrationViewBase<CompanyDTOImpl> impl
 	@Override
 	protected void setupCustomRequiredIndicators()
 	{
-
+		// no custom setup needed
 	}
 
 	@Override
