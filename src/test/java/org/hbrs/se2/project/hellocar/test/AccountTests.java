@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.hellocar.test;
 
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
+import org.hbrs.se2.project.hellocar.control.builders.JobPortalUserDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.builders.CompanyDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
@@ -75,19 +76,19 @@ public class AccountTests {
     void studentsAreCreated() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
-        entityIsCreated(dto);
+        entityIsCreated(dto, STUDENT_ROLES);
     }
 
     @Test
     void companiesAreCreated() {
         CompanyDTOBuilder builder = new CompanyDTOBuilder();
         CompanyDTOImpl dto = builder.buildDefaultUser().done();
-        entityIsCreated(dto);
+        entityIsCreated(dto, COMPANY_ROLES);
     }
 
-    void entityIsCreated(JobPortalUserDTO dtoA){
+    void entityIsCreated(JobPortalUserDTO dtoA, String[] roles){
         try {
-            int id = userService.createUser(dtoA, COMPANY_ROLES);
+            int id = userService.createUser(dtoA, roles);
             JobPortalUserDTO dtoB = userService.readUser(id);
 
             assertEquals(dtoB.getId(), id);
@@ -98,116 +99,75 @@ public class AccountTests {
         }
     }
 
-    void entityIsUpdated(JobPortalUserDTO dto){
+    void entityIsUpdated(JobPortalUserDTO dto, JobPortalUserDTOBuilder builder, String[] roles){
+        try {
+            String update = "update";
+            int id = userService.createUser(dto, roles);
+            if( builder instanceof CompanyDTOBuilder){
+                ((CompanyDTOBuilder) builder).buildCompanyName(((CompanyDTO)dto).getCompanyName()+ update);
+            }
 
+
+            // attach update to original
+            dto = (JobPortalUserDTO) builder.
+                    buildGender(dto.getGender() + update).
+                    buildCity(dto.getCity() + update).
+                    buildStreet(dto.getStreet() + update).
+                    buildStreetNumber(dto.getStreetNumber() + update).
+                    buildZipCode(dto.getZipCode() + update).
+                    buildFirstname(dto.getFirstName() + update).
+                    buildLastname(dto.getLastName() + update).
+                    buildEmail(dto.getEmail() + update).
+                    buildUserId(dto.getUserid() + update).
+                    buildPassword(dto.getPassword() + update).
+                    buildDateOfBirth(dto.getDateOfBirth().plusDays(1)).
+                    done();
+
+
+            userService.updateUser(id, dto);
+
+            JobPortalUserDTO updated = userService.readUser(id);
+
+            // compare updated original with its updated data in the database
+            assertEquals(dto.getFirstName(), updated.getFirstName());
+            assertEquals(dto.getLastName(), updated.getLastName());
+            assertEquals(dto.getEmail(), updated.getEmail());
+            assertEquals(dto.getUserid(), updated.getUserid());
+            assertEquals(dto.getGender(), updated.getGender());
+            assertEquals(dto.getCity(), updated.getCity());
+            assertEquals(dto.getZipCode(), updated.getZipCode());
+            assertEquals(dto.getStreetNumber(), updated.getStreetNumber());
+            assertEquals(dto.getStreet(), updated.getStreet());
+            assertEquals(dto.getPassword(), updated.getPassword());
+            if(updated instanceof CompanyDTO){
+                assertEquals((((CompanyDTO)dto).getCompanyName()), ((CompanyDTO) updated).getCompanyName());
+            }
+            userService.deleteUser(id);
+        } catch (DatabaseUserException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     void studentsAreUpdated() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
-        int id;
-
-        try {
-            id = userService.createUser(dto, STUDENT_ROLES);
-
-            String update = "update";
-
-            // attach update to original
-            dto = (StudentDTOImpl) builder.
-                    buildGender(dto.getGender() + update).
-                    buildCity(dto.getCity() + update).
-                    buildStreet(dto.getStreet() + update).
-                    buildStreetNumber(dto.getStreetNumber() + update).
-                    buildZipCode(dto.getZipCode() + update).
-                    buildFirstname(dto.getFirstName() + update).
-                    buildLastname(dto.getLastName() + update).
-                    buildEmail(dto.getEmail() + update).
-                    buildUserId(dto.getUserid() + update).
-                    buildPassword(dto.getPassword() + update).
-                    buildDateOfBirth(dto.getDateOfBirth().plusDays(1)).
-                    done();
-
-
-            userService.updateUser(id, dto);
-
-            StudentDTO updated = (StudentDTO) userService.readUser(id);
-
-            // compare updated original with its updated data in the database
-            assertEquals(dto.getFirstName(), updated.getFirstName());
-            assertEquals(dto.getLastName(), updated.getLastName());
-            assertEquals(dto.getEmail(), updated.getEmail());
-            assertEquals(dto.getUserid(), updated.getUserid());
-            assertEquals(dto.getGender(), updated.getGender());
-            assertEquals(dto.getCity(), updated.getCity());
-            assertEquals(dto.getZipCode(), updated.getZipCode());
-            assertEquals(dto.getStreetNumber(), updated.getStreetNumber());
-            assertEquals(dto.getStreet(), updated.getStreet());
-            assertEquals(dto.getPassword(), updated.getPassword());
-
-
-            userService.deleteUser(id);
-        } catch (DatabaseUserException e) {
-            e.printStackTrace();
-        }
+        entityIsUpdated(dto, builder, STUDENT_ROLES);
     }
 
     @Test
     void companiesAreUpdated() {
         CompanyDTOBuilder builder = new CompanyDTOBuilder();
         CompanyDTOImpl dto = builder.buildDefaultUser().done();
-        int id;
-
-        try {
-            id = userService.createUser(dto, COMPANY_ROLES);
-
-            String update = "update";
-
-            // attach update to original
-            dto = (CompanyDTOImpl) builder.
-                    buildCompanyName(dto.getCompanyName() + update).
-                    buildGender(dto.getGender() + update).
-                    buildCity(dto.getCity() + update).
-                    buildStreet(dto.getStreet() + update).
-                    buildStreetNumber(dto.getStreetNumber() + update).
-                    buildZipCode(dto.getZipCode() + update).
-                    buildFirstname(dto.getFirstName() + update).
-                    buildLastname(dto.getLastName() + update).
-                    buildEmail(dto.getEmail() + update).
-                    buildUserId(dto.getUserid() + update).
-                    buildPassword(dto.getPassword() + update).
-                    buildDateOfBirth(dto.getDateOfBirth().plusDays(1)).
-                    done();
-
-            userService.updateUser(id, dto);
-
-            CompanyDTO updated = (CompanyDTO) userService.readUser(id);
-
-            // compare updated original with its updated data in the database
-            assertEquals(dto.getFirstName(), updated.getFirstName());
-            assertEquals(dto.getLastName(), updated.getLastName());
-            assertEquals(dto.getEmail(), updated.getEmail());
-            assertEquals(dto.getUserid(), updated.getUserid());
-            assertEquals(dto.getGender(), updated.getGender());
-            assertEquals(dto.getCity(), updated.getCity());
-            assertEquals(dto.getZipCode(), updated.getZipCode());
-            assertEquals(dto.getStreetNumber(), updated.getStreetNumber());
-            assertEquals(dto.getStreet(), updated.getStreet());
-            assertEquals(dto.getPassword(), updated.getPassword());
-
-
-            userService.deleteUser(id);
-        } catch (DatabaseUserException e) {
-            e.printStackTrace();
-        }
+        entityIsUpdated(dto, builder, COMPANY_ROLES);
     }
 
-    void entityIsDeleted(JobPortalUserDTO dtoA){
+    void entityIsDeleted(JobPortalUserDTO dtoA, String[] roles){
         try {
-            int idA = userService.createUser(dtoA, STUDENT_ROLES);
+            int idA = userService.createUser(dtoA, roles);
             userService.deleteUser(idA);
 
-            JobPortalUserDTO dtoB = (StudentDTO) userService.readUser(idA);
+            JobPortalUserDTO dtoB =  userService.readUser(idA);
             assertNull(dtoB);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
@@ -218,14 +178,14 @@ public class AccountTests {
     void studentsAreDeleted() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
-        entityIsDeleted(dto);
+        entityIsDeleted(dto, STUDENT_ROLES);
     }
 
     @Test
     void companiesAreDeleted() {
         CompanyDTOBuilder builder = new CompanyDTOBuilder();
         CompanyDTOImpl dto = builder.buildDefaultUser().done();
-        entityIsDeleted(dto);
+        entityIsDeleted(dto, COMPANY_ROLES);
     }
 
     @Test
