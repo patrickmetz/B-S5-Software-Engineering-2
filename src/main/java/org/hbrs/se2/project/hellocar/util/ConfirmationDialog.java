@@ -1,6 +1,5 @@
 package org.hbrs.se2.project.hellocar.util;
 
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Label;
@@ -10,10 +9,10 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class ConfirmationDialog extends Dialog
 {
-	private Label title;
-	private Label question;
-	private Button confirm;
-	private Button cancel;
+	private final Label title;
+	private final Label question;
+	private final Button confirm;
+	private final Button cancel;
 
 	public ConfirmationDialog(
 			String title,

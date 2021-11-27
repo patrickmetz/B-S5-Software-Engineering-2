@@ -10,15 +10,10 @@ import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
-import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
-import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Arrays;
 
 public class Utils {

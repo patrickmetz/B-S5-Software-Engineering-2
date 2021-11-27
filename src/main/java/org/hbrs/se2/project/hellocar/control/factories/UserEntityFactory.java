@@ -1,12 +1,11 @@
 package org.hbrs.se2.project.hellocar.control.factories;
 
-import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
-
-import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
-import org.hbrs.se2.project.hellocar.entities.*;
+import org.hbrs.se2.project.hellocar.entities.Company;
+import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
+import org.hbrs.se2.project.hellocar.entities.Student;
 
 public class UserEntityFactory {
     private UserEntityFactory() {
