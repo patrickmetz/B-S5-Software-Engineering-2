@@ -6,6 +6,7 @@ import org.hbrs.se2.project.hellocar.control.builders.CompanyDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.*;
 import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
@@ -35,14 +36,12 @@ public class AccountTests {
             = new String[]{Globals.Roles.USER, Globals.Roles.COMPANY};
 
 
-    @Test
-    void emailsAreUnique() {
-        StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
-
+    void valueIsUnique(JobPortalUserDTO dto) {
         try {
+            // save dto to db
             int id = userService.createUser(dto, STUDENT_ROLES);
 
+            // provoke exception by saving duplicate to db
             assertThrows(Exception.class, () -> {
                 userService.createUser(dto, STUDENT_ROLES);
             });
@@ -53,6 +52,14 @@ public class AccountTests {
         }
     }
 
+
+    @Test
+    void emailsAreUnique() {
+        StudentDTOBuilder builder = new StudentDTOBuilder();
+        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
+        valueIsUnique(dto);
+    }
+
     @Test
     void userIdsAreUnique() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
@@ -61,17 +68,7 @@ public class AccountTests {
         // just to make sure that the username is being compared and not the email
         dto.setEmail("changed@company.de");
 
-        try {
-            int id = userService.createUser(dto, STUDENT_ROLES);
-
-            assertThrows(Exception.class, () -> {
-                userService.createUser(dto, STUDENT_ROLES);
-            });
-
-            userService.deleteUser(id);
-        } catch (DatabaseUserException e) {
-            e.printStackTrace();
-        }
+        valueIsUnique(dto);
     }
 
     @Test
