@@ -45,7 +45,7 @@ vaadin-app-layout[dir='rtl'] #header vaadin-avatar {
   cursor: pointer;
   font-size: 20px;
   font-weight: 600;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 #update-account-profile-image {
