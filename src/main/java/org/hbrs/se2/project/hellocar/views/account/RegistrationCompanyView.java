@@ -5,6 +5,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -31,6 +33,7 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
 
         HorizontalLayout backLayout = new HorizontalLayout(new RouterLink("Go back", RegistrationChoiceView.class));
         add(backLayout);
+
     }
 
     @Override
@@ -45,6 +48,21 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
         setSizeFull();
         this.setAlignItems(Alignment.CENTER);
         this.setJustifyContentMode(JustifyContentMode.CENTER);
+
+        //Logo
+        HorizontalLayout logoLayout = new HorizontalLayout();
+        logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        logoLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
+        Image image = new Image("images/logo.png", "HelloCar logo");
+        image.setWidth("300px");
+        image.setHeight("150px");
+
+        image.getElement().getStyle().set("cursor", "pointer");
+        image.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW));
+
+        logoLayout.add(image);
+        add(logoLayout);
     }
 
     @Override

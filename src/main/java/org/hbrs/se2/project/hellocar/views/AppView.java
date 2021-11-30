@@ -42,7 +42,9 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
     private Tabs menu;
     private H1 viewTitle;
-    private RouterLink link;
+    private HorizontalLayout profile;
+    private Image avatar;
+    private RouterLink accountLink;
 
     private AuthorizationControl authorizationControl;
 
@@ -104,15 +106,23 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         topRightPanel.setAlignItems( FlexComponent.Alignment.CENTER );
 
         // Href und Text wird später ersetzt, wenn die Navigation stattfindet
-        link = new RouterLink("Update Account", UpdateStudentView.class);
-        link.getElement().getStyle().set("color", "white");
-        link.getElement().getStyle().set("font-size", "18px");
-        link.getElement().getStyle().set("font-weight", "600");
-        topRightPanel.add(link);
+        profile = new HorizontalLayout();
+        profile.setId("update-account-profile");
+        profile.setAlignItems(FlexComponent.Alignment.CENTER);
+        profile.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
+        avatar = new Image("images/default-avatar.png", "Avatar logo");
+        avatar.setId("update-account-profile-image");
+        accountLink = new RouterLink(this.getCurrentUserNameOfUser(), UpdateStudentView.class);
+        accountLink.setId("update-account-link");
+
+        topRightPanel.add(profile);
 
         // Logout-Button am rechts-oberen Rand.
         MenuBar bar = new MenuBar();
         MenuItem item = bar.addItem("Logout" , e -> logoutUser());
+        item.getElement().getStyle().set("cursor", "pointer");
+        item.setId("edit-logout");
         topRightPanel.add(bar);
 
         layout.add( topRightPanel );
@@ -231,13 +241,15 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Setzen des Usernamens von dem aktuell eingeloggten Benutzer
         if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.STUDENT)) {
             System.out.println("User is Student");
-            link.setRoute(UpdateStudentView.class);
-            link.setText(this.getCurrentUserNameOfUser());
+            accountLink.setRoute(UpdateStudentView.class);
+            profile.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.UPDATE_STUDENT_VIEW));
+            profile.add(avatar, accountLink);
         }
         else if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
             System.out.println("User is Company");
-            link.setRoute(UpdateCompanyView.class);
-            link.setText(this.getCurrentUserNameOfUser());
+            accountLink.setRoute(UpdateCompanyView.class);
+            profile.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.UPDATE_COMPANY_VIEW));
+            profile.add(avatar, accountLink);
         }
     }
 

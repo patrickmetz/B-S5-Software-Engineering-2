@@ -4,6 +4,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -22,6 +24,22 @@ public class RegistrationChoiceView extends VerticalLayout implements BeforeEnte
 
     public RegistrationChoiceView() {
         setSizeFull();
+
+        //Logo
+        HorizontalLayout logoLayout = new HorizontalLayout();
+        logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        logoLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
+        Image image = new Image("images/logo.png", "HelloCar logo");
+        image.setWidth("300px");
+        image.setHeight("150px");
+
+        image.getElement().getStyle().set("cursor", "pointer");
+        image.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW));
+
+        logoLayout.add(image);
+        add(logoLayout);
+
         studentButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         studentButton.getElement().getStyle().set("height", "3rem").set("width", "100%");
         companyButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
