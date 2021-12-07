@@ -3,6 +3,7 @@ package org.hbrs.se2.project.hellocar.views.account;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -15,6 +16,7 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 
 @Route(value = Globals.Pages.REGISTER_VIEW)
 @RouteAlias("register")
+@CssImport("./styles/views/registration/registration-view.css")
 public class RegistrationChoiceView extends VerticalLayout implements BeforeEnterObserver {
 
     H3 title = new H3("Register as a...");
@@ -33,17 +35,15 @@ public class RegistrationChoiceView extends VerticalLayout implements BeforeEnte
         logoLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
         Image image = new Image("images/logo.png", "HelloCar logo");
-        image.setWidth("300px");
-        image.setHeight("150px");
+        image.addClassName("logo");
 
-        image.getElement().getStyle().set("cursor", "pointer");
         image.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW));
 
         logoLayout.add(image);
         add(logoLayout);
 
         studentButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        studentButton.getElement().getStyle().set("height", "3rem").set("width", "100%");
+        studentButton.addClassName("choiceButton");
         companyButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         companyButton.addClassName("choiceButton");
 
@@ -51,7 +51,7 @@ public class RegistrationChoiceView extends VerticalLayout implements BeforeEnte
         companyButton.addClickListener((event) -> UI.getCurrent().navigate(RegistrationCompanyView.class));
 
         HorizontalLayout buttonsLayout = new HorizontalLayout(studentButton, companyButton);
-        buttonsLayout.setWidth("400px");
+        buttonsLayout.addClassName("choiceButtonLayout");
 
         VerticalLayout layout = new VerticalLayout(title, buttonsLayout);
         layout.addClassName("choiceButtonLayout");
