@@ -47,19 +47,20 @@ public class Utils {
             Button secondaryButton)
     {
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY); // @todo überschreibt was in den view klassen gesetzt wurde!?
-        submitButton.addClassName("registerButton");
 
-        formLayout.setMaxWidth("500px");
+        submitButton.addClassName("registerButton");
+        formLayout.addClassName("registerForm");
 
         formLayout.setResponsiveSteps(
             new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
-            new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP));
+            new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP)
+        );
 
         formLayout.setColspan(title, 2);
 
         // These components always take full width
         if(secondaryButton != null) {
-            secondaryButton.getElement().getStyle().set("cursor", "pointer");
+            secondaryButton.addClassName("goBackButton");
             formLayout.setColspan(submitButton, 2);
             formLayout.setColspan(secondaryButton, 2);
         } else {

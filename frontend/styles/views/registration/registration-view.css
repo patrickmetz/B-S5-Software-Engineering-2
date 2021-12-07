@@ -12,5 +12,10 @@
     cursor: pointer;
 }
 
+.account-view .registerForm {
+    max-width: 500px;
+
+}
+
 
 
