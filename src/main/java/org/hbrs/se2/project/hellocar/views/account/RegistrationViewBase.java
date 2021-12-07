@@ -1,5 +1,6 @@
 package org.hbrs.se2.project.hellocar.views.account;
 
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.validator.EmailValidator;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;

@@ -28,7 +28,7 @@ public class RegistrationChoiceView extends VerticalLayout implements BeforeEnte
     public RegistrationChoiceView() {
         setSizeFull();
 
-        addClassName("registration-view");
+        addClassName("account-view");
 
         //Logo
         HorizontalLayout logoLayout = new HorizontalLayout();

@@ -1,12 +1,31 @@
 .welcome-text {
-     font-size: 36px;
-     color: #08ACEC;
+    font-size: 36px;
+    color: #08ACEC;
 
 }
 
 .welcome2-text {
-     font-size: 18px;
-     color: white;
-     max-width: 50%;
-     text-align: center;
+    font-size: 18px;
+    color: white;
+    max-width: 50%;
+    text-align: center;
 }
+
+.login-view vaadin-login-form {
+    padding-top: 20px;
+    border-radius: 2px;
+}
+
+.login-view .createAccountButton {
+    margin-top: 1.5rem;
+    cursor: pointer;
+    height: 2.5rem;
+    width: 22.5rem;
+    margin-bottom: 50px;
+}
+
+/*.set("margin-top", "1.5rem")*/
+/*.set("cursor", "pointer")*/
+/*.set("height", "2.5rem")*/
+/*.set("width", "22.5rem")*/
+/*.set("margin-bottom", "50px");*/

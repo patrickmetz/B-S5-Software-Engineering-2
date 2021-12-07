@@ -2,6 +2,7 @@ package org.hbrs.se2.project.hellocar.views.account;
 
 import com.vaadin.flow.component.HasValueAndElement;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -19,6 +20,8 @@ import org.hbrs.se2.project.hellocar.util.account.AccountValidation;
 
 import java.util.stream.Stream;
 
+@CssImport("./styles/views/registration/registration-view.css")
+@CssImport("./styles/views/logo/logo.css")
 public abstract class AccountViewBase<T extends JobPortalUserDTOImpl> extends VerticalLayout
 {
 	protected Binder<T> binder;
@@ -39,6 +42,9 @@ public abstract class AccountViewBase<T extends JobPortalUserDTOImpl> extends Ve
 
 	public AccountViewBase(Binder<T> customBinder, ManageUserControl userService)
 	{
+
+		addClassName("account-view");
+
 		binder = customBinder;
 		this.userService = userService;
 

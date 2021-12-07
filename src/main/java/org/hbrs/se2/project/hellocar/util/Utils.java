@@ -47,8 +47,7 @@ public class Utils {
             Button secondaryButton)
     {
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY); // @todo überschreibt was in den view klassen gesetzt wurde!?
-        submitButton.getElement().getStyle().set("margin-top", "20px");
-        submitButton.getElement().getStyle().set("cursor", "pointer");
+        submitButton.addClassName("registerButton");
 
         formLayout.setMaxWidth("500px");
 

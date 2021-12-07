@@ -58,10 +58,8 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
         logoLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
         Image image = new Image("images/logo.png", "HelloCar logo");
-        image.setWidth("300px");
-        image.setHeight("150px");
+        image.addClassName("logo");
 
-        image.getElement().getStyle().set("cursor", "pointer");
         image.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW));
 
         logoLayout.add(image);

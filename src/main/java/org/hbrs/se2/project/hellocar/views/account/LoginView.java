@@ -44,8 +44,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
         logoLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
         Image image = new Image("images/logo.png", "HelloCar logo");
-        image.setWidth("300px");
-        image.setHeight("150px");
+        image.addClassName("logo");
 
         Label label1 = new Label("Welcome to Coll@HBRS!");
         Label label2 = new Label("Welcome to the Coll@HBRS portal of the Bonn-Rhein-Sieg University of Applied Sciences." +
@@ -60,9 +59,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
 
         setSizeFull();
         LoginForm component = new LoginForm();
-        component.getElement().getStyle().set("padding-top", "20px");
         component.setForgotPasswordButtonVisible(false);
-        component.getElement().getStyle().set("border-radius", "2px");
         component.addLoginListener(e -> {
             boolean isAuthenticated = false;
             try {
@@ -84,7 +81,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
         });
 
         add(component);
-        add(registerButton());
+        add(createAccountButton());
         this.setAlignItems(Alignment.CENTER);
         this.setJustifyContentMode(JustifyContentMode.CENTER);
     }
@@ -101,13 +98,14 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
         return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     }
 
-    private Button registerButton() {
-        Button registerButton = new Button("Create account");
-        registerButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        registerButton.getElement().getStyle();
+    private Button createAccountButton() {
+        Button createAccountButton = new Button("Create account");
+        createAccountButton.addClassName("createAccountButton");
+        createAccountButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+        createAccountButton.getElement().getStyle();
 
-        registerButton.addClickListener((event)-> UI.getCurrent().navigate(RegistrationChoiceView.class));
-        return registerButton;
+        createAccountButton.addClickListener((event)-> UI.getCurrent().navigate(RegistrationChoiceView.class));
+        return createAccountButton;
     }
 
     private void grabAndSetUserIntoSession() {

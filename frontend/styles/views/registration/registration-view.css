@@ -1,10 +1,15 @@
-.registration-view .choiceButton {
+.account-view .choiceButton {
     height: 3rem;
     width: 100%;
 }
 
-.registration-view .choiceButtonLayout {
+.account-view .choiceButtonLayout {
     width: 400px !important;
+}
+
+.account-view .registerButton {
+    margin-top: 20px;
+    cursor: pointer;
 }
 
 
