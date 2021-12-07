@@ -1,0 +1,16 @@
+.registration-view .choiceButton {
+    height: 3rem;
+    width: 100%;
+}
+
+.registration-view .choiceButtonLayout {
+    width: 400px !important;
+}
+
+.registration-view .logo {
+    width: 300px;
+    height: 150px;
+    cursor: pointer;
+}
+
+

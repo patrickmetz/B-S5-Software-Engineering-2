@@ -25,6 +25,8 @@ public class RegistrationChoiceView extends VerticalLayout implements BeforeEnte
     public RegistrationChoiceView() {
         setSizeFull();
 
+        addClassName("registration-view");
+
         //Logo
         HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
@@ -43,7 +45,7 @@ public class RegistrationChoiceView extends VerticalLayout implements BeforeEnte
         studentButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         studentButton.getElement().getStyle().set("height", "3rem").set("width", "100%");
         companyButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        companyButton.getElement().getStyle().set("height", "3rem").set("width", "100%");
+        companyButton.addClassName("choiceButton");
 
         studentButton.addClickListener((event) -> UI.getCurrent().navigate(RegistrationStudentView.class));
         companyButton.addClickListener((event) -> UI.getCurrent().navigate(RegistrationCompanyView.class));
@@ -52,7 +54,7 @@ public class RegistrationChoiceView extends VerticalLayout implements BeforeEnte
         buttonsLayout.setWidth("400px");
 
         VerticalLayout layout = new VerticalLayout(title, buttonsLayout);
-        layout.setWidth("400px");
+        layout.addClassName("choiceButtonLayout");
 
         HorizontalLayout backLayout = new HorizontalLayout(new RouterLink("Go back", LoginView.class));
 
