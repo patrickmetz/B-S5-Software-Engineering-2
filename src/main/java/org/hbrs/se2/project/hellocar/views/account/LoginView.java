@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Route(value = "" )
 @CssImport("./styles/views/login/login-view.css")
+@CssImport("./styles/views/logo/logo.css")
 @RouteAlias(value = "login")
 public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
 
@@ -35,6 +36,8 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
     private LoginControl loginControl;
 
     public LoginView() {
+        addClassName("login-view");
+
         //Hinzufügen des Logos
         HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
@@ -101,12 +104,8 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
     private Button registerButton() {
         Button registerButton = new Button("Create account");
         registerButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        registerButton.getElement().getStyle()
-                .set("margin-top", "1.5rem")
-                .set("cursor", "pointer")
-                .set("height", "2.5rem")
-                .set("width", "22.5rem")
-                .set("margin-bottom", "50px");
+        registerButton.getElement().getStyle();
+
         registerButton.addClickListener((event)-> UI.getCurrent().navigate(RegistrationChoiceView.class));
         return registerButton;
     }
