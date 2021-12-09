@@ -5,7 +5,6 @@ import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -20,13 +19,15 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.theme.Theme;
+import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.AuthorizationControl;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hbrs.se2.project.hellocar.views.account.UpdateCompanyView;
+import org.hbrs.se2.project.hellocar.views.account.UpdateStudentView;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -36,11 +37,14 @@ import java.util.Optional;
 @Route("main")
 @PWA(name = "HelloCar", shortName = "HelloCar", enableInstallPrompt = false)
 @JsModule("./styles/shared-styles.js")
+@Theme(value = Lumo.class, variant = Lumo.DARK)
 public class AppView extends AppLayout implements BeforeEnterObserver {
 
     private Tabs menu;
     private H1 viewTitle;
-    private H1 helloUser;
+    private HorizontalLayout profile;
+    private Image avatar;
+    private RouterLink accountLink;
 
     private AuthorizationControl authorizationControl;
 
@@ -78,7 +82,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
      * Erzeugung der horizontalen Leiste (Header).
      * @return
      */
-    private Component   createHeaderContent() {
+    private Component createHeaderContent() {
         // Ein paar Grund-Einstellungen. Alles wird in ein horizontales Layout gesteckt.
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
@@ -97,16 +101,28 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Interner Layout
         HorizontalLayout topRightPanel = new HorizontalLayout();
         topRightPanel.setWidthFull();
+        topRightPanel.setPadding(true);
         topRightPanel.setJustifyContentMode( FlexComponent.JustifyContentMode.END );
         topRightPanel.setAlignItems( FlexComponent.Alignment.CENTER );
 
-        // Der Name des Users wird später reingesetzt, falls die Navigation stattfindet
-        helloUser = new H1();
-        topRightPanel.add(helloUser);
+        // Href und Text wird später ersetzt, wenn die Navigation stattfindet
+        profile = new HorizontalLayout();
+        profile.setId("update-account-profile");
+        profile.setAlignItems(FlexComponent.Alignment.CENTER);
+        profile.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
+        avatar = new Image("images/default-avatar.png", "Avatar logo");
+        avatar.setId("update-account-profile-image");
+        accountLink = new RouterLink(this.getCurrentUserNameOfUser(), UpdateStudentView.class);
+        accountLink.setId("update-account-link");
+
+        topRightPanel.add(profile);
 
         // Logout-Button am rechts-oberen Rand.
         MenuBar bar = new MenuBar();
         MenuItem item = bar.addItem("Logout" , e -> logoutUser());
+        item.getElement().getStyle().set("cursor", "pointer");
+        item.setId("edit-logout");
         topRightPanel.add(bar);
 
         layout.add( topRightPanel );
@@ -116,7 +132,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private void logoutUser() {
         UI ui = this.getUI().get();
         ui.getSession().close();
-        ui.getPage().setLocation("/");
+        ui.navigate(Globals.Pages.MAIN_VIEW);
     }
 
     /**
@@ -139,8 +155,13 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Hinzufügen des Logos
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "HelloCar logo"));
-        logoLayout.add(new H1("HelloCar"));
+        logoLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
+        Image image = new Image("images/logo.png", "HelloCar logo");
+        image.getElement().getStyle().set("cursor", "pointer");
+        image.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.SHOW_CARS));
+
+        logoLayout.add(image);
 
         // Hinzufügen des Menus inklusive der Tabs
         layout.add(logoLayout, menu);
@@ -183,6 +204,17 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
        // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
 
+        /*if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.STUDENT)) {
+            System.out.println("User is Student");
+
+            tabs = Utils.append(tabs, createTab("Update Account", UpdateStudentView.class));
+        }
+        else if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
+            System.out.println("User is Company");
+
+            tabs = Utils.append(tabs, createTab("Update Account", UpdateCompanyView.class));
+        }*/
+
        return tabs;
     }
 
@@ -206,8 +238,19 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Setzen des aktuellen Names des Tabs
         viewTitle.setText(getCurrentPageTitle());
 
-        // Setzen des Vornamens von dem aktuell eingeloggten Benutzer
-        helloUser.setText("Hello my dear old friend!! "  + this.getCurrentNameOfUser() );
+        // Setzen des Usernamens von dem aktuell eingeloggten Benutzer
+        if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.STUDENT)) {
+            System.out.println("User is Student");
+            accountLink.setRoute(UpdateStudentView.class);
+            profile.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.UPDATE_STUDENT_VIEW));
+            profile.add(avatar, accountLink);
+        }
+        else if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
+            System.out.println("User is Company");
+            accountLink.setRoute(UpdateCompanyView.class);
+            profile.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.UPDATE_COMPANY_VIEW));
+            profile.add(avatar, accountLink);
+        }
     }
 
     private Optional<Tab> getTabForComponent(Component component) {
@@ -221,7 +264,11 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     private String getCurrentNameOfUser() {
-        return getCurrentUser().getFirstName();
+        return getCurrentUser().getFirstName() + " " + getCurrentUser().getLastName();
+    }
+
+    private String getCurrentUserNameOfUser() {
+        return getCurrentUser().getUserid();
     }
 
     private UserDTO getCurrentUser() {

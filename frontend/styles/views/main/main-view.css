@@ -28,6 +28,39 @@ vaadin-app-layout[dir='rtl'] #header vaadin-avatar {
   margin: 0 var(--lumo-space-s);
 }
 
+#update-account-profile {
+  cursor: pointer;
+  background: transparent;
+}
+
+#update-account-profile:hover #update-account-link {
+  color: white;
+}
+
+#update-account-profile:hover #update-account-profile-image {
+  border: 2px solid var(--lumo-primary-color-50pct);
+}
+
+#update-account-link {
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+#update-account-profile-image {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  height: 30px;
+  width: auto;
+  margin-right: -5px;
+}
+
+#edit-logout {
+  cursor: pointer;
+}
+
 vaadin-tab {
   font-size: var(--lumo-font-size-s);
   height: var(--lumo-size-l);

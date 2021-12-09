@@ -1,11 +1,12 @@
 package org.hbrs.se2.project.hellocar.control;
 
+import org.hbrs.se2.project.hellocar.control.builders.CompanyDTOBuilder;
+import org.hbrs.se2.project.hellocar.control.builders.JobPortalUserDTOBuilder;
+import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.UserEntityFactory;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
@@ -29,8 +30,8 @@ public class ManageUserControl {
     private UserRepository userRepository;
 
     public int createUser(JobPortalUserDTO userDTO, String[] roles) throws DatabaseUserException {
+        User userEntity = UserEntityFactory.createUser(userDTO);
 
-        User userEntity = UserEntityFactory.create(userDTO);
         this.userRepository.save(userEntity);
 
         int newPrimaryKey = userEntity.getId();
@@ -47,74 +48,54 @@ public class ManageUserControl {
         return newPrimaryKey;
     }
 
-    public StudentDTO readStudent(int id) {
+    public JobPortalUserDTO readUser(int id) {
         Optional<User> userOptional = this.userRepository.findById(id);
 
-        Student user = null;
-        StudentDTOImpl studentDTO = null;
+        JobPortalUser user = null;
 
         if (userOptional.isPresent()) {
-            user = (Student) userOptional.get();
+            user = (JobPortalUser) userOptional.get();
 
-            studentDTO = new StudentDTOImpl();
+            JobPortalUserDTOBuilder builder = null;
 
-            // User
-            studentDTO.setId(user.getId());
-            studentDTO.setFirstName(user.getFirstName());
-            studentDTO.setLastName(user.getLastName());
-            studentDTO.setEmail(user.getEmail());
-            studentDTO.setPassword(user.getPassword());
-            studentDTO.setPhone(user.getPhone());
-            studentDTO.setUserid(user.getUserid());
-            studentDTO.setDateOfBirth(user.getDateOfBirth());
+            if (user instanceof Company) {
+                builder = new CompanyDTOBuilder();
 
-            // JobPortalUser
-            studentDTO.setGender(user.getGender());
-            studentDTO.setCity(user.getCity());
-            studentDTO.setStreet(user.getStreet());
-            studentDTO.setStreetNumber(user.getStreetNumber());
-            studentDTO.setZipCode(user.getZipCode());
+                //company parts
+                ((CompanyDTOBuilder) builder).buildCompanyName(
+                        ((Company) user).getCompanyName()
+                );
+            } else if (user instanceof Student) {
+                builder = new StudentDTOBuilder();
+                // student parts
+                // none at the moment
+            }
+
+            if (builder != null) {
+                // job portal user parts
+                builder
+                        .buildGender(user.getGender())
+                        .buildCity(user.getCity())
+                        .buildStreet(user.getStreet())
+                        .buildStreetNumber(user.getStreetNumber())
+                        .buildZipCode(user.getZipCode());
+
+                // user parts
+                builder
+                        .buildId(user.getId())
+                        .buildFirstname(user.getFirstName())
+                        .buildLastname(user.getLastName())
+                        .buildEmail(user.getEmail())
+                        .buildPassword(user.getPassword())
+                        .buildPhone(user.getPhone())
+                        .buildUserId(user.getUserid())
+                        .buildDateOfBirth(user.getDateOfBirth());
+
+                return builder.done();
+            }
         }
 
-        // Student
-        // has nothing
-
-        return studentDTO;
-    }
-
-    public CompanyDTO readCompany(int id) {
-        Optional<User> userOptional = this.userRepository.findById(id);
-
-        Company companyEntity = null;
-        CompanyDTOImpl companyDTO = null;
-
-        if (userOptional.isPresent()) {
-            companyEntity = (Company) userOptional.get();
-
-            companyDTO = new CompanyDTOImpl();
-
-            // User
-            companyDTO.setId(companyEntity.getId());
-            companyDTO.setFirstName(companyEntity.getFirstName());
-            companyDTO.setLastName(companyEntity.getLastName());
-            companyDTO.setEmail(companyEntity.getEmail());
-            companyDTO.setPassword(companyEntity.getPassword());
-            companyDTO.setPhone(companyEntity.getPhone());
-            companyDTO.setUserid(companyEntity.getUserid());
-            companyDTO.setDateOfBirth(companyEntity.getDateOfBirth());
-
-            // JobPortalUser
-            companyDTO.setGender(companyEntity.getGender());
-            companyDTO.setCity(companyEntity.getCity());
-            companyDTO.setStreet(companyEntity.getStreet());
-            companyDTO.setStreetNumber(companyEntity.getStreetNumber());
-            companyDTO.setZipCode(companyEntity.getZipCode());
-
-            //Company
-            companyDTO.setCompanyName(companyEntity.getCompanyName());
-        }
-
-        return companyDTO;
+        return null;
     }
 
     public List<UserDTO> readAllUsers() {
@@ -122,44 +103,32 @@ public class ManageUserControl {
         return null;
     }
 
-    public User readUserByUserId(String userid) {
-        //todo: return dto instead of entity!
+    public boolean existsUserId(String userid) {
         Optional<User> userOptional = this.userRepository.findUserByUserid(userid);
-        return userOptional.orElse(null);
+
+        return userOptional.isPresent();
     }
 
-    public User readUserByEmail(String email) {
-        //todo: return dto instead of entity!
+    public boolean existsEmail(String email) {
         Optional<User> userOptional = this.userRepository.findUserByEmail(email);
-        return userOptional.orElse(null);
+
+        return userOptional.isPresent();
     }
 
-    public void updateStudent(int id, StudentDTO dto) {
-        //todo: provide only one shared method for both student AND company
+    public void updateUser(int id, JobPortalUserDTO dto) {
         Optional<User> optional = this.userRepository.findById(id);
-        Student entity = null;
+        JobPortalUser entity = null;
 
         if (optional.isPresent()) {
-            entity = (Student) optional.get();
+            entity = (JobPortalUser) optional.get();
 
-            setUserPartsOfEntity(entity, dto);
-            setStudentPartsOfEntity(entity, dto);
+            UserEntityFactory.addUserParts(entity, dto);
 
-            this.userRepository.save(entity);
-        }
-    }
-
-    public void updateCompany(int id, CompanyDTO dto) {
-        //todo: provide only one shared method for both student AND company
-        Optional<User> optional = this.userRepository.findById(id);
-
-        Company entity = null;
-
-        if (optional.isPresent()) {
-            entity = (Company) optional.get();
-
-            setUserPartsOfEntity(entity, dto);
-            setCompanyPartsOfEntity(entity, dto);
+            if (dto instanceof StudentDTO) {
+                UserEntityFactory.addStudentParts((Student) entity, (StudentDTO) dto);
+            } else if (dto instanceof CompanyDTO) {
+                UserEntityFactory.addCompanyParts((Company) entity, (CompanyDTO) dto);
+            }
 
             this.userRepository.save(entity);
         }
@@ -169,31 +138,6 @@ public class ManageUserControl {
         this.userRepository.deleteById(id);
     }
 
-    private void setUserPartsOfEntity(JobPortalUser entity, JobPortalUserDTO dto) {
-        entity.setUserid(dto.getUserid()); // it's the username, not the primary key
-        entity.setPassword(dto.getPassword());
-        entity.setEmail(dto.getEmail());
-
-        entity.setGender(dto.getGender());
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-
-        entity.setStreet(dto.getStreet());
-        entity.setStreetNumber(dto.getStreetNumber());
-        entity.setZipCode(dto.getZipCode());
-        entity.setCity(dto.getCity());
-
-        entity.setPhone(dto.getPhone());
-        entity.setDateOfBirth(dto.getDateOfBirth());
-    }
-
-    private void setCompanyPartsOfEntity(Company entity, CompanyDTO dto) {
-        entity.setCompanyName(dto.getCompanyName());
-    }
-
-    private void setStudentPartsOfEntity(Student entity, StudentDTO dto) {
-        // there are no student specific entity attributes, yet
-    }
 
     private void handleDbException(DatabaseLayerException e) throws DatabaseUserException {
         // chain of responsibility pattern

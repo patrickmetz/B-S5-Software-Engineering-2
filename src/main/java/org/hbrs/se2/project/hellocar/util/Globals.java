@@ -13,6 +13,9 @@ public class Globals {
         public static final String REGISTER_VIEW = "register";
         public static final String REGISTER_STUDENT_VIEW = "registerstudent";
         public static final String REGISTER_COMPANY_VIEW = "registercompany";
+
+        public static final String UPDATE_STUDENT_VIEW = "updatestudent";
+        public static final String UPDATE_COMPANY_VIEW = "updatecompany";
     }
 
     public static class Roles {

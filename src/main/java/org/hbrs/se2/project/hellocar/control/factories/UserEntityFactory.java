@@ -1,19 +1,18 @@
 package org.hbrs.se2.project.hellocar.control.factories;
 
-import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
-
-import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
-import org.hbrs.se2.project.hellocar.entities.*;
+import org.hbrs.se2.project.hellocar.entities.Company;
+import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
+import org.hbrs.se2.project.hellocar.entities.Student;
 
 public class UserEntityFactory {
-    private UserEntityFactory(){
-
+    private UserEntityFactory() {
+        // factories have no usable constructors
     }
 
-    public static JobPortalUser create(JobPortalUserDTO dto) {
+    public static JobPortalUser createUser(JobPortalUserDTO dto) {
         JobPortalUser entity = null;
 
         // class hierarchy: User <|-- JobPortalUser <|-- Student/Company
@@ -22,6 +21,7 @@ public class UserEntityFactory {
         if (dto instanceof StudentDTO) {
             entity = new Student();
         }
+
         // Company parts
         else if (dto instanceof CompanyDTO) {
             entity = new Company();
@@ -33,7 +33,6 @@ public class UserEntityFactory {
 
         if (entity != null) {
             // JobPortalUser parts
-
             entity.setGender(dto.getGender());
             entity.setStreet(dto.getStreet());
             entity.setStreetNumber(dto.getStreetNumber());
@@ -53,40 +52,29 @@ public class UserEntityFactory {
         return entity;
     }
 
-    public static StudentDTOImpl createTestStudentDTOImpl() {
-        StudentDTOImpl dtoImpl = new StudentDTOImpl();
+    public static void addUserParts(JobPortalUser entity, JobPortalUserDTO dto) {
+        entity.setUserid(dto.getUserid()); // it's the username, not the primary key
+        entity.setPassword(dto.getPassword());
+        entity.setEmail(dto.getEmail());
 
-        String identifier = "test-student";
+        entity.setGender(dto.getGender());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
 
-        dtoImpl.setUserid(identifier);
-        dtoImpl.setPassword(identifier);
-        dtoImpl.setEmail(identifier + "@test.de");
-        dtoImpl.setPhone(identifier);
+        entity.setStreet(dto.getStreet());
+        entity.setStreetNumber(dto.getStreetNumber());
+        entity.setZipCode(dto.getZipCode());
+        entity.setCity(dto.getCity());
 
-        dtoImpl.setGender(identifier);
-        dtoImpl.setFirstName(identifier);
-        dtoImpl.setLastName(identifier);
-
-        dtoImpl.setStreet(identifier);
-        dtoImpl.setStreetNumber(identifier);
-        dtoImpl.setZipCode(identifier);
-        dtoImpl.setCity(identifier);
-
-        return dtoImpl;
+        entity.setPhone(dto.getPhone());
+        entity.setDateOfBirth(dto.getDateOfBirth());
     }
 
-    public static CompanyDTOImpl createTestCompanyDTOimpl() {
-        CompanyDTOImpl dtoImpl = new CompanyDTOImpl();
+    public static void addCompanyParts(Company entity, CompanyDTO dto) {
+        entity.setCompanyName(dto.getCompanyName());
+    }
 
-        String identifier = "test-company";
-
-        dtoImpl.setCompanyName(identifier);
-        dtoImpl.setFirstName(identifier);
-        dtoImpl.setLastName(identifier);
-        dtoImpl.setUserid(identifier);
-        dtoImpl.setPassword(identifier);
-        dtoImpl.setEmail(identifier + "@test.de");
-
-        return dtoImpl;
+    public static void addStudentParts(Student entity, StudentDTO dto) {
+        // there are no student specific entity attributes, yet
     }
 }

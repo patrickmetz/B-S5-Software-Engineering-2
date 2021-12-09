@@ -13,11 +13,7 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
-import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
-import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Arrays;
 
 public class Utils {
@@ -36,20 +32,40 @@ public class Utils {
 
     }
 
-    public static void configureRegistrationForm(FormLayout formLayout, H3 title, Button submitButton) {
-        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        submitButton.getElement().getStyle().set("margin-top", "20px");
-        submitButton.getElement().getStyle().set("cursor", "pointer");
+    public static void configureRegistrationForm(
+        FormLayout formLayout,
+        H3 title,
+        Button submitButton)
+    {
+        configureRegistrationForm(formLayout, title, submitButton, null);
+    }
 
-        formLayout.setMaxWidth("500px");
+    public static void configureRegistrationForm(
+            FormLayout formLayout,
+            H3 title,
+            Button submitButton,
+            Button secondaryButton)
+    {
+        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY); // @todo überschreibt was in den view klassen gesetzt wurde!?
+
+        submitButton.addClassName("registerButton");
+        formLayout.addClassName("registerForm");
 
         formLayout.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
-                new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP));
+            new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
+            new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP)
+        );
+
+        formLayout.setColspan(title, 2);
 
         // These components always take full width
-        formLayout.setColspan(title, 2);
-        formLayout.setColspan(submitButton, 2);
+        if(secondaryButton != null) {
+            secondaryButton.addClassName("goBackButton");
+            formLayout.setColspan(submitButton, 2);
+            formLayout.setColspan(secondaryButton, 2);
+        } else {
+            formLayout.setColspan(submitButton, 2);
+        }
     }
 
     public static void displayNotification(boolean success, String message) {

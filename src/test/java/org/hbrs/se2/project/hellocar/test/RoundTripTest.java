@@ -3,6 +3,7 @@ package org.hbrs.se2.project.hellocar.test;
 import org.hbrs.se2.project.hellocar.entities.User;
 import org.hbrs.se2.project.hellocar.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,7 @@ public class RoundTripTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Test
+    @Disabled
     /**
      * Round Triping Test mit einer einfachen Strecke (C-R-Ass-D).
      * Dieses Muster für Unit-Tests wird in der Vorlesung SE-2 eingeführt (Kapitel 6).

@@ -1,0 +1,127 @@
+package org.hbrs.se2.project.hellocar.views.account;
+
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.validator.EmailValidator;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
+import org.hbrs.se2.project.hellocar.control.ManageUserControl;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
+import org.hbrs.se2.project.hellocar.util.Globals;
+import org.hbrs.se2.project.hellocar.util.Utils;
+import org.hbrs.se2.project.hellocar.util.account.AccountValidation;
+import org.hbrs.se2.project.hellocar.views.AppView;
+
+@Route(value = Globals.Pages.UPDATE_STUDENT_VIEW, layout = AppView.class)
+@RouteAlias("updatestudent")
+public class UpdateStudentView extends UpdateViewBase<StudentDTOImpl>
+{
+	private TextField role;
+	private DatePicker dateOfBirth;
+	private Button submitButton;
+
+	public UpdateStudentView(ManageUserControl userControl)
+	{
+		super(new Binder<>(StudentDTOImpl.class), userControl);
+	}
+
+	@Override
+	protected void setupView()
+	{
+		// no custom setup needed
+	}
+
+	@Override
+	protected void setupCustomElements()
+	{
+		title.setText("Update Account Details");
+
+		dateOfBirth = new DatePicker();
+		dateOfBirth.setLabel("Date of Birth");
+	}
+
+	@Override
+	protected void setupSubmitButtons()
+	{
+		submitButton = new Button("Update");
+		submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+		submitButton.addClickListener(event -> {
+			try
+			{
+				var studentDTO = new StudentDTOImpl();
+				binder.writeBean(studentDTO);
+
+				userService.updateUser(getCurrentUser().getId(), studentDTO);
+
+				Utils.displayNotification(true, "Update succeeded");
+			}
+			catch (ValidationException e)
+			{
+				Utils.displayNotification(false, "Please fill in the required fields");
+			}
+			catch (Exception e)
+			{
+				Utils.displayNotification(false, "Unknown error: " + e);
+			}
+		});
+
+		setupDeleteButton();
+	}
+
+	@Override
+	protected FormLayout setupForm()
+	{
+		FormLayout formLayout = new FormLayout();
+		formLayout.add(
+				title,
+				firstName,
+				lastName,
+				userid,
+				email,
+				gender,
+				password,
+				passwordConfirm,
+				street,
+				zipCode,
+				city,
+				streetNumber,
+				dateOfBirth,
+				submitButton,
+				deleteButton
+		);
+
+		Utils.configureRegistrationForm(formLayout, title, submitButton, deleteButton);
+
+		binder.readBean((StudentDTOImpl)userService.readUser(getCurrentUser().getId()));
+		passwordConfirm.setValue(password.getValue());
+
+		return formLayout;
+	}
+
+	@Override
+	protected void setupCustomRequiredIndicators()
+	{
+		// no custom setup needed
+	}
+
+	@Override
+	protected void setupCustomValidation()
+	{
+		binder.forField(userid)
+				.withValidator(
+						AccountValidation::usernameValidator,
+						AccountValidation.USERNAME_ERROR_MESSAGE
+				)
+				.bind(JobPortalUserDTOImpl::getUserid, JobPortalUserDTOImpl::setUserid);
+
+		binder.forField(email)
+				.withValidator(new EmailValidator(AccountValidation.EMAIL_ERROR_MESSAGE))
+				.bind(JobPortalUserDTOImpl::getEmail, JobPortalUserDTOImpl::setEmail);
+	}
+}
