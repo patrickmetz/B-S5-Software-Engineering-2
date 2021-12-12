@@ -38,6 +38,8 @@ public class UserEntityFactory {
             entity.setStreetNumber(dto.getStreetNumber());
             entity.setCity(dto.getCity());
             entity.setZipCode(dto.getZipCode());
+            entity.setProfilePicture(dto.getProfilePicture());
+            entity.setAbout(dto.getAbout());
 
             // User parts
             entity.setEmail(dto.getEmail());
@@ -66,15 +68,21 @@ public class UserEntityFactory {
         entity.setZipCode(dto.getZipCode());
         entity.setCity(dto.getCity());
 
+        entity.setProfilePicture(dto.getProfilePicture());
+        entity.setAbout(dto.getAbout());
+
         entity.setPhone(dto.getPhone());
         entity.setDateOfBirth(dto.getDateOfBirth());
     }
 
     public static void addCompanyParts(Company entity, CompanyDTO dto) {
         entity.setCompanyName(dto.getCompanyName());
+        entity.setWebSite(dto.getWebSite());
     }
 
     public static void addStudentParts(Student entity, StudentDTO dto) {
-        // there are no student specific entity attributes, yet
+        entity.setStudyCourse(dto.getStudyCourse());
+        entity.setSpezialization(dto.getSpecialization());
+        entity.setSemester(dto.getSemester());
     }
 }

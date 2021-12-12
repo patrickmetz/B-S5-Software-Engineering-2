@@ -12,5 +12,9 @@ public interface JobPortalUserDTO extends UserDTO {
     public String getZipCode();
 
     public String getCity();
+
+    public Byte[] getProfilePicture();
+
+    public String getAbout();
 }
 

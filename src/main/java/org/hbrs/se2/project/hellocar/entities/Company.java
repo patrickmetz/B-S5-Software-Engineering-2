@@ -13,6 +13,18 @@ public class Company extends JobPortalUser {
     @Column(name = "company_name")
     private String companyName;
 
+    @Basic
+    @Column(name = "website")
+    private String webSite;
+
+    public String getWebSite() {
+        return webSite;
+    }
+
+    public void setWebSite(String webSite) {
+        this.webSite = webSite;
+    }
+
     public String getCompanyName() {
         return companyName;
     }

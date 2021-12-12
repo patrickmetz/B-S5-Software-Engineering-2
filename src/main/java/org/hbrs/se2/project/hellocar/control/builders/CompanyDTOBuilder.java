@@ -11,6 +11,7 @@ public class CompanyDTOBuilder extends JobPortalUserDTOBuilder {
     public CompanyDTOBuilder buildDefaultUser() {
         super.buildDefaultUser();
         ((CompanyDTOImpl) super.user).setCompanyName("companyName");
+        ((CompanyDTOImpl) super.user).setWebSite("webSite");
         return this;
     }
 
@@ -19,8 +20,15 @@ public class CompanyDTOBuilder extends JobPortalUserDTOBuilder {
         return this;
     }
 
+    public CompanyDTOBuilder buildWebSite(String webSite) {
+        ((CompanyDTOImpl) super.user).setWebSite(webSite);
+        return this;
+    }
+
+
     @Override
     public CompanyDTOImpl done() {
         return (CompanyDTOImpl) user;
     }
+
 }
