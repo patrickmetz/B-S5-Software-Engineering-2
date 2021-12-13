@@ -59,16 +59,31 @@ public class ManageUserControl {
             JobPortalUserDTOBuilder builder = null;
 
             if (user instanceof Company) {
+                //company parts
                 builder = new CompanyDTOBuilder();
 
-                //company parts
                 ((CompanyDTOBuilder) builder).buildCompanyName(
                         ((Company) user).getCompanyName()
                 );
+
+                ((CompanyDTOBuilder) builder).buildWebSite(
+                        ((Company) user).getWebSite()
+                );
             } else if (user instanceof Student) {
-                builder = new StudentDTOBuilder();
                 // student parts
-                // none at the moment
+                builder = new StudentDTOBuilder();
+
+                ((StudentDTOBuilder) builder).buildStudyCourse(
+                        ((Student) user).getStudyCourse()
+                );
+
+                ((StudentDTOBuilder) builder).buildSpecialization(
+                        ((Student) user).getSpezialization()
+                );
+
+                ((StudentDTOBuilder) builder).buildSemester(
+                        ((Student) user).getSemester()
+                );
             }
 
             if (builder != null) {
@@ -78,7 +93,9 @@ public class ManageUserControl {
                         .buildCity(user.getCity())
                         .buildStreet(user.getStreet())
                         .buildStreetNumber(user.getStreetNumber())
-                        .buildZipCode(user.getZipCode());
+                        .buildZipCode(user.getZipCode())
+                        .buildAbout(user.getAbout())
+                        .buildProfilePicture(user.getProfilePicture());
 
                 // user parts
                 builder
