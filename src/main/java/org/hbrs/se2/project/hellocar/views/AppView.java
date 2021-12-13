@@ -19,6 +19,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.AuthorizationControl;
@@ -29,6 +30,7 @@ import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.account.UpdateCompanyView;
 import org.hbrs.se2.project.hellocar.views.account.UpdateStudentView;
 
+import java.io.ByteArrayInputStream;
 import java.util.Optional;
 
 /**
@@ -113,7 +115,10 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         profile.setAlignItems(FlexComponent.Alignment.CENTER);
         profile.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        avatar = new Image("images/default-avatar.png", "Avatar logo");
+        byte[] profilePicture = this.getCurrentUser().getProfilePicture();
+        StreamResource resource = new StreamResource("avatar.png", () -> new ByteArrayInputStream(profilePicture));
+
+        avatar = new Image(resource, "Avatar logo");
         avatar.setId("update-account-profile-image");
         accountLink = new RouterLink(this.getCurrentUserNameOfUser(), UpdateStudentView.class);
         accountLink.setId("update-account-link");
@@ -274,8 +279,8 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         return getCurrentUser().getUserid();
     }
 
-    private UserDTO getCurrentUser() {
-        return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+    private JobPortalUserDTO getCurrentUser() {
+        return (JobPortalUserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     }
 
 
