@@ -41,7 +41,7 @@ public class AccountTests {
         StudentDTOBuilder builder = new StudentDTOBuilder();
         StudentDTOImpl dto =  builder.buildDefaultUser().done();
         // just to make sure that the email is being compared and not the picture
-        Byte[] b= {10,2};
+        byte[] b= {10,2};
         dto.setProfilePicture(b);
         valueIsUnique(dto);
     }
@@ -53,7 +53,7 @@ public class AccountTests {
 
         // just to make sure that the username is being compared and not the email and picture
         dto.setEmail("changed@company.de");
-        Byte[] b= {10,2};
+        byte[] b= {10,2};
         dto.setProfilePicture(b);
 
         valueIsUnique(dto);
@@ -74,7 +74,7 @@ public class AccountTests {
         CompanyDTOImpl dto =  builder.buildDefaultUser().done();
         // just to make sure that the username is being compared and not the email and picture
         dto.setEmail("changed@company.de");
-        Byte[] b= {10,2};
+        byte[] b= {10,2};
         dto.setProfilePicture(b);
 
         valueIsUnique(dto);

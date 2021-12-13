@@ -115,10 +115,14 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         profile.setAlignItems(FlexComponent.Alignment.CENTER);
         profile.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
 
-        byte[] profilePicture = this.getCurrentUser().getProfilePicture();
-        StreamResource resource = new StreamResource("avatar.png", () -> new ByteArrayInputStream(profilePicture));
+        avatar = new Image("images/default-avatar.png", "Avatar logo");
 
-        avatar = new Image(resource, "Avatar logo");
+        byte[] profilePicture = this.getCurrentUser().getProfilePicture();
+        if (profilePicture != null) {
+            StreamResource resource = new StreamResource("avatar.png", () -> new ByteArrayInputStream(profilePicture));
+            avatar = new Image(resource, "Avatar logo");
+        }
+
         avatar.setId("update-account-profile-image");
         accountLink = new RouterLink(this.getCurrentUserNameOfUser(), UpdateStudentView.class);
         accountLink.setId("update-account-link");
