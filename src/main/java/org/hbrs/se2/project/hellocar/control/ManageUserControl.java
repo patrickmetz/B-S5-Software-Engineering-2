@@ -4,7 +4,9 @@ import org.hbrs.se2.project.hellocar.control.builders.CompanyDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.JobPortalUserDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.hellocar.control.factories.UserEntityFactory;
+import org.hbrs.se2.project.hellocar.control.factories.AbstractJobPortalUserFactory;
+import org.hbrs.se2.project.hellocar.control.factories.CompanyFactory;
+import org.hbrs.se2.project.hellocar.control.factories.StudentFactory;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
@@ -21,16 +23,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional; // ?
+import java.util.Optional;
 
 @Component
 public class ManageUserControl {
+    AbstractJobPortalUserFactory factory;
 
     @Autowired
     private UserRepository userRepository;
 
     public int createUser(JobPortalUserDTO userDTO, String[] roles) throws DatabaseUserException {
-        User userEntity = UserEntityFactory.createUser(userDTO);
+        JobPortalUser userEntity = null;
+
+        if (userDTO instanceof StudentDTO) {
+            factory = new StudentFactory();
+        } else if (userDTO instanceof CompanyDTO) {
+            factory = new CompanyFactory();
+        }
+
+        userEntity = factory.create();
+        factory.setupEntityByDto(userEntity, userDTO);
 
         this.userRepository.save(userEntity);
 
@@ -139,13 +151,7 @@ public class ManageUserControl {
         if (optional.isPresent()) {
             entity = (JobPortalUser) optional.get();
 
-            UserEntityFactory.addUserParts(entity, dto);
-
-            if (dto instanceof StudentDTO) {
-                UserEntityFactory.addStudentParts((Student) entity, (StudentDTO) dto);
-            } else if (dto instanceof CompanyDTO) {
-                UserEntityFactory.addCompanyParts((Company) entity, (CompanyDTO) dto);
-            }
+            factory.setupEntityByDto(entity, dto);
 
             this.userRepository.save(entity);
         }
