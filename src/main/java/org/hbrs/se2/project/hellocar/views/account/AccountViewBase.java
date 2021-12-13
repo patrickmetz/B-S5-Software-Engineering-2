@@ -2,6 +2,8 @@ package org.hbrs.se2.project.hellocar.views.account;
 
 import com.vaadin.flow.component.HasValueAndElement;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H3;
@@ -9,8 +11,12 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.data.binder.Binder;
+import org.apache.commons.compress.utils.IOUtils;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
@@ -18,6 +24,8 @@ import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.account.AccountValidation;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.stream.Stream;
 
 @CssImport("./styles/views/registration/registration-view.css")
@@ -39,6 +47,9 @@ public abstract class AccountViewBase<T extends JobPortalUserDTOImpl> extends Ve
 	protected TextField zipCode;
 	protected TextField city;
 	protected TextField streetNumber;
+	protected byte[] profilePicture;
+	protected Upload profilePictureUpload;
+	protected TextArea about;
 
 	public AccountViewBase(Binder<T> customBinder, ManageUserControl userService)
 	{
@@ -89,13 +100,32 @@ public abstract class AccountViewBase<T extends JobPortalUserDTOImpl> extends Ve
 		streetNumber = new TextField("Street Number");
 		zipCode = new TextField("ZIP Code");
 		city = new TextField("City");
+
+		MemoryBuffer buffer = new MemoryBuffer();
+		profilePictureUpload = new Upload(buffer);
+		Button uploadButton = new Button("Upload Image");
+		uploadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+		profilePictureUpload.setUploadButton(uploadButton);
+		profilePictureUpload.setDropAllowed(false);
+		profilePictureUpload.setAcceptedFileTypes(".png");
+		profilePictureUpload.addSucceededListener(event -> {
+			InputStream inputStream = buffer.getInputStream();
+			try {
+				profilePicture = IOUtils.toByteArray(inputStream);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+
+		about = new TextArea("Tell us more about you!");
+
 	}
 
 	private void setupCommonRequiredIndicators()
 	{
 		setRequiredIndicatorVisible(firstName, lastName, userid, email, password, passwordConfirm);
 	}
-	
+
 	private void setupCommonValidation()
 	{
 		binder.forField(firstName)

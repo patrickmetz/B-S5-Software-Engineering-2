@@ -90,10 +90,12 @@ public class UpdateCompanyView extends UpdateViewBase<CompanyDTOImpl>
 				city,
 				streetNumber,
 				submitButton,
+				profilePictureUpload,
+				about,
 				deleteButton
 		);
 
-		Utils.configureRegistrationForm(formLayout, title, submitButton, deleteButton);
+		Utils.configureRegistrationForm(formLayout, title, submitButton, deleteButton, about);
 
 		binder.readBean((CompanyDTOImpl)userService.readUser(getCurrentUser().getId()));
 		passwordConfirm.setValue(password.getValue());

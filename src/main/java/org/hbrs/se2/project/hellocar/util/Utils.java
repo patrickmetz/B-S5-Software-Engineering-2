@@ -12,7 +12,9 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.PasswordField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
 
 import java.util.Arrays;
 
@@ -33,33 +35,33 @@ public class Utils {
     }
 
     public static void configureRegistrationForm(
-        FormLayout formLayout,
-        H3 title,
-        Button submitButton)
-    {
-        configureRegistrationForm(formLayout, title, submitButton, null);
+            FormLayout formLayout,
+            H3 title,
+            Button submitButton) {
+        configureRegistrationForm(formLayout, title, submitButton, null, null);
     }
 
     public static void configureRegistrationForm(
             FormLayout formLayout,
             H3 title,
             Button submitButton,
-            Button secondaryButton)
-    {
+            Button secondaryButton,
+            TextArea about
+    ) {
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY); // @todo überschreibt was in den view klassen gesetzt wurde!?
 
         submitButton.addClassName("registerButton");
         formLayout.addClassName("registerForm");
-
         formLayout.setResponsiveSteps(
-            new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
-            new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP)
+                new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
+                new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP)
         );
 
         formLayout.setColspan(title, 2);
+        formLayout.setColspan(about, 2);
 
         // These components always take full width
-        if(secondaryButton != null) {
+        if (secondaryButton != null) {
             secondaryButton.addClassName("goBackButton");
             formLayout.setColspan(submitButton, 2);
             formLayout.setColspan(secondaryButton, 2);

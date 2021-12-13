@@ -10,7 +10,7 @@ public class JobPortalUserDTOImpl extends UserDTOImpl implements JobPortalUserDT
     private String streetNumber;
     private String zipCode;
     private String city;
-    private Byte[] profilePicture;
+    private byte[] profilePicture;
     private String about;
 
     public void setGender(String gender) { this.gender = gender; }
@@ -18,7 +18,7 @@ public class JobPortalUserDTOImpl extends UserDTOImpl implements JobPortalUserDT
     public void setStreetNumber(String streetNumber) { this.streetNumber = streetNumber; }
     public void setZipCode(String zipCode) { this.zipCode = zipCode; }
     public void setCity(String city) { this.city = city; }
-    public void setProfilePicture(Byte[] profilePicture) { this.profilePicture = profilePicture; }
+    public void setProfilePicture(byte[] profilePicture) { this.profilePicture = profilePicture; }
     public void setAbout(String about) { this.about = about; }
 
     @Override
@@ -47,7 +47,7 @@ public class JobPortalUserDTOImpl extends UserDTOImpl implements JobPortalUserDT
     }
 
     @Override
-    public Byte[] getProfilePicture() {
+    public byte[] getProfilePicture() {
         return profilePicture;
     }
 

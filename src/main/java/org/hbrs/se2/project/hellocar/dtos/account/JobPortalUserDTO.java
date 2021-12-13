@@ -13,7 +13,7 @@ public interface JobPortalUserDTO extends UserDTO {
 
     public String getCity();
 
-    public Byte[] getProfilePicture();
+    public byte[] getProfilePicture();
 
     public String getAbout();
 }

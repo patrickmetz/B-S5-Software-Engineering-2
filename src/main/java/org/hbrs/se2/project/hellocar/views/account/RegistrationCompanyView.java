@@ -24,6 +24,7 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
 {
     // Company
     private TextField companyName;
+    private TextField website;
 
     private Button submitButton;
 
@@ -64,9 +65,9 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
     }
 
     @Override
-    protected void setupCustomElements()
-    {
+    protected void setupCustomElements() {
         companyName = new TextField("Company Name");
+        website = new TextField("Homepage");
     }
 
     @Override
@@ -79,6 +80,7 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
                 // put form values into company dto
                 CompanyDTOImpl companyDTO = new CompanyDTOImpl();
                 binder.writeBean(companyDTO);
+                companyDTO.setProfilePicture(this.profilePicture);
 
                 // put company user and its roles into db
                 userService.createUser(
@@ -121,10 +123,13 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
                 zipCode,
                 city,
                 streetNumber,
+                website,
+                profilePictureUpload,
+                about,
                 submitButton
         );
 
-        Utils.configureRegistrationForm(formLayout, title, submitButton);
+        Utils.configureRegistrationForm(formLayout, title, submitButton, null, about);
 
         return formLayout;
     }

@@ -9,6 +9,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
@@ -28,6 +29,9 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
 
     // Student
     private DatePicker dateOfBirth;
+    private TextField studyCourse;
+    private TextField specialization;
+    private IntegerField semester;
 
     private Button submitButton;
 
@@ -69,8 +73,10 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
     @Override
     protected void setupCustomElements()
     {
-        dateOfBirth = new DatePicker();
-        dateOfBirth.setLabel("Date Of Birth");
+        dateOfBirth = new DatePicker("Date Of Birth");
+        studyCourse = new TextField("Study Course");
+        specialization = new TextField("Specialization");
+        semester = new IntegerField("Semester");
     }
 
     @Override
@@ -83,6 +89,7 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
                 // put form values into student dto
                 StudentDTOImpl studentDTO = new StudentDTOImpl();
                 binder.writeBean(studentDTO);
+                studentDTO.setProfilePicture(this.profilePicture);
 
                 // put student user and its roles into db
                 userService.createUser(
@@ -125,10 +132,15 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
                 city,
                 streetNumber,
                 dateOfBirth,
+                studyCourse,
+                specialization,
+                semester,
+                profilePictureUpload,
+                about,
                 submitButton
         );
 
-        Utils.configureRegistrationForm(formLayout, title, submitButton);
+        Utils.configureRegistrationForm(formLayout, title, submitButton, null,  about);
 
         return formLayout;
     }

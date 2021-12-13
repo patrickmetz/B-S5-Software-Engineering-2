@@ -23,6 +23,7 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.hbrs.se2.project.hellocar.control.AuthorizationControl;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.account.UpdateCompanyView;
@@ -80,6 +81,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
     /**
      * Erzeugung der horizontalen Leiste (Header).
+     *
      * @return
      */
     private Component createHeaderContent() {
@@ -90,20 +92,20 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         layout.setWidthFull();
         layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);
-        layout.setJustifyContentMode( FlexComponent.JustifyContentMode.EVENLY );
+        layout.setJustifyContentMode(FlexComponent.JustifyContentMode.EVENLY);
 
         // Hinzufügen des Toogle ('Big Mac') zum Ein- und Ausschalten des Drawers
         layout.add(new DrawerToggle());
         viewTitle = new H1();
         viewTitle.setWidthFull();
-        layout.add( viewTitle );
+        layout.add(viewTitle);
 
         // Interner Layout
         HorizontalLayout topRightPanel = new HorizontalLayout();
         topRightPanel.setWidthFull();
         topRightPanel.setPadding(true);
-        topRightPanel.setJustifyContentMode( FlexComponent.JustifyContentMode.END );
-        topRightPanel.setAlignItems( FlexComponent.Alignment.CENTER );
+        topRightPanel.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+        topRightPanel.setAlignItems(FlexComponent.Alignment.CENTER);
 
         // Href und Text wird später ersetzt, wenn die Navigation stattfindet
         profile = new HorizontalLayout();
@@ -120,12 +122,12 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         // Logout-Button am rechts-oberen Rand.
         MenuBar bar = new MenuBar();
-        MenuItem item = bar.addItem("Logout" , e -> logoutUser());
+        MenuItem item = bar.addItem("Logout", e -> logoutUser());
         item.getElement().getStyle().set("cursor", "pointer");
         item.setId("edit-logout");
         topRightPanel.add(bar);
 
-        layout.add( topRightPanel );
+        layout.add(topRightPanel);
         return layout;
     }
 
@@ -139,6 +141,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
      * Hinzufügen der vertikalen Leiste (Drawer)
      * Diese besteht aus dem Logo ganz oben links sowie den Menu-Einträgen (menu items).
      * Die Menu Items sind zudem verlinkt zu den internen Tab-Components.
+     *
      * @param menu
      * @return
      */
@@ -170,6 +173,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
     /**
      * Erzeugung des Menu auf der vertikalen Leiste (Drawer)
+     *
      * @return
      */
     private Tabs createMenu() {
@@ -186,23 +190,23 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     }
 
     private Component[] createMenuItems() {
-       // Abholung der Referenz auf den Authorisierungs-Service
-       authorizationControl = new AuthorizationControl();
+        // Abholung der Referenz auf den Authorisierungs-Service
+        authorizationControl = new AuthorizationControl();
 
-       // Jeder User sollte Autos sehen können, von daher wird dieser schon mal erzeugt und
-       // und dem Tabs-Array hinzugefügt. In der Methode createTab wird ein (Key, Value)-Pair übergeben:
+        // Jeder User sollte Autos sehen können, von daher wird dieser schon mal erzeugt und
+        // und dem Tabs-Array hinzugefügt. In der Methode createTab wird ein (Key, Value)-Pair übergeben:
         // Key: der sichtbare String des Menu-Items
         // Value: Die UI-Component, die nach dem Klick auf das Menuitem angezeigt wird.
-       Tab[] tabs = new Tab[]{ createTab( "Show Cars", ShowCarsView.class) };
+        Tab[] tabs = new Tab[]{createTab("Show Cars", ShowCarsView.class)};
 
-       // Falls er Admin-Rechte hat, sollte der User auch Autos hinzufügen können
-       // (Alternative: Verwendung der Methode 'isUserisAllowedToAccessThisFeature')
-       if ( this.authorizationControl.isUserInRole( this.getCurrentUser() , Globals.Roles.ADMIN ) ) {
-           System.out.println("User is Admin!");
-           tabs = Utils.append( tabs , createTab("Enter Car", EnterCarView.class)  );
-       }
+        // Falls er Admin-Rechte hat, sollte der User auch Autos hinzufügen können
+        // (Alternative: Verwendung der Methode 'isUserisAllowedToAccessThisFeature')
+        if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.ADMIN)) {
+            System.out.println("User is Admin!");
+            tabs = Utils.append(tabs, createTab("Enter Car", EnterCarView.class));
+        }
 
-       // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
+        // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
 
         /*if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.STUDENT)) {
             System.out.println("User is Student");
@@ -215,7 +219,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             tabs = Utils.append(tabs, createTab("Update Account", UpdateCompanyView.class));
         }*/
 
-       return tabs;
+        return tabs;
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
@@ -230,7 +234,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         super.afterNavigation();
 
         // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
-        if ( !checkIfUserIsLoggedIn() ) return;
+        if (!checkIfUserIsLoggedIn()) return;
 
         // Der aktuell-selektierte Tab wird gehighlighted.
         getTabForComponent(getContent()).ifPresent(menu::setSelectedTab);
@@ -244,8 +248,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             accountLink.setRoute(UpdateStudentView.class);
             profile.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.UPDATE_STUDENT_VIEW));
             profile.add(avatar, accountLink);
-        }
-        else if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
+        } else if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
             System.out.println("User is Company");
             accountLink.setRoute(UpdateCompanyView.class);
             profile.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.UPDATE_COMPANY_VIEW));
@@ -287,7 +290,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
      *
      */
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        if (getCurrentUser() == null){
+        if (getCurrentUser() == null) {
             beforeEnterEvent.rerouteTo(Globals.Pages.LOGIN_VIEW);
         }
 

@@ -47,7 +47,7 @@ public class JobPortalUserDTOBuilder extends UserDTOBuilder {
         return this;
     }
 
-    public JobPortalUserDTOBuilder buildProfilePicture(Byte[] profilePicture) {
+    public JobPortalUserDTOBuilder buildProfilePicture(byte[] profilePicture) {
         ((JobPortalUserDTOImpl) super.user).setProfilePicture(profilePicture);
         return this;
     }

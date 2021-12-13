@@ -28,7 +28,7 @@ public class JobPortalUser extends User {
 
     @Basic
     @Column(name = "profile_picture")
-    private Byte[] profilePicture;
+    private byte[] profilePicture;
 
     @Basic
     @Column(name = "about")
@@ -70,11 +70,11 @@ public class JobPortalUser extends User {
 
     public void setGender(String gender) {this.gender = gender;}
 
-    public Byte[] getProfilePicture() {
+    public byte[] getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(Byte[] profilePicture) {
+    public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
     }
 
