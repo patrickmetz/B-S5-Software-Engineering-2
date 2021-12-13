@@ -5,7 +5,7 @@ import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.entities.Company;
 import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
 
-public class CompanyFactory extends AbstractJobPortalUserFactory {
+public class CompanyFactoryImpl extends AbstractJobPortalUserFactory {
     public Company create() {
         return new Company();
     }

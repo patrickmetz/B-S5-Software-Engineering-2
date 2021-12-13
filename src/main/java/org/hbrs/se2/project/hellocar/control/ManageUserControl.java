@@ -5,8 +5,8 @@ import org.hbrs.se2.project.hellocar.control.builders.JobPortalUserDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.AbstractJobPortalUserFactory;
-import org.hbrs.se2.project.hellocar.control.factories.CompanyFactory;
-import org.hbrs.se2.project.hellocar.control.factories.StudentFactory;
+import org.hbrs.se2.project.hellocar.control.factories.CompanyFactoryImpl;
+import org.hbrs.se2.project.hellocar.control.factories.StudentFactoryImpl;
 import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
@@ -36,9 +36,9 @@ public class ManageUserControl {
         JobPortalUser userEntity = null;
 
         if (userDTO instanceof StudentDTO) {
-            factory = new StudentFactory();
+            factory = new StudentFactoryImpl();
         } else if (userDTO instanceof CompanyDTO) {
-            factory = new CompanyFactory();
+            factory = new CompanyFactoryImpl();
         }
 
         userEntity = factory.create();

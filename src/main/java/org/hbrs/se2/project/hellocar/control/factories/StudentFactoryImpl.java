@@ -5,7 +5,7 @@ import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
 import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
 import org.hbrs.se2.project.hellocar.entities.Student;
 
-public class StudentFactory extends AbstractJobPortalUserFactory {
+public class StudentFactoryImpl extends AbstractJobPortalUserFactory {
     public Student create() {
         return new Student();
     }
