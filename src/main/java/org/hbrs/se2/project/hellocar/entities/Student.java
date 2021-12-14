@@ -19,6 +19,10 @@ public class Student extends JobPortalUser {
     @Column(name = "semester")
     private Integer semester;
 
+    @Basic
+    @Column(name = "degree")
+    private String degree;
+
     public String getStudyCourse() {
         return studyCourse;
     }
@@ -41,5 +45,13 @@ public class Student extends JobPortalUser {
 
     public void setSemester(Integer semester) {
         this.semester = semester;
+    }
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
     }
 }
