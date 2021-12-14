@@ -280,16 +280,17 @@ public class AccountTests {
             String update = "update";
             Byte[] b = {10,11};
             int id = userService.createUser(dto, roles);
+
             if (builder instanceof CompanyDTOBuilder) {
                 ((CompanyDTOBuilder) builder).buildCompanyName(((CompanyDTO) dto).getCompanyName() + update).
                         buildWebSite(((CompanyDTO) dto).getWebSite() + update);
-
             }
+
             if (builder instanceof StudentDTOBuilder) {
                 ((StudentDTOBuilder)builder).buildSemester(((StudentDTO) dto).getSemester() + 1).
                         buildStudyCourse(((StudentDTO) dto).getStudyCourse() + update).
-                        buildSpecialization(((StudentDTO)dto).getSpecialization() + update);
-                //add student properties
+                        buildSpecialization(((StudentDTO)dto).getSpecialization() + update).
+                        buildSpecialization(((StudentDTO)dto).getDegree() + update);
             }
 
 
@@ -334,6 +335,7 @@ public class AccountTests {
                 assertEquals((((StudentDTO) dto).getSemester()), ((StudentDTO) updated).getSemester());
                 assertEquals((((StudentDTO) dto).getStudyCourse()), ((StudentDTO) updated).getStudyCourse());
                 assertEquals((((StudentDTO) dto).getSpecialization()), ((StudentDTO) updated).getSpecialization());
+                assertEquals((((StudentDTO) dto).getDegree()), ((StudentDTO) updated).getDegree());
             }
 
             userService.deleteUser(id);
