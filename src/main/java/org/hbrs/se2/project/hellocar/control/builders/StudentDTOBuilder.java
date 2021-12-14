@@ -15,6 +15,8 @@ public class StudentDTOBuilder extends JobPortalUserDTOBuilder {
         ((StudentDTOImpl) user).setStudyCourse("computer science");
         ((StudentDTOImpl) user).setSpecialization("cyber security");
         ((StudentDTOImpl) user).setSemester(3);
+        ((StudentDTOImpl) user).setDegree("Bachelor");
+
         return this;
     }
 
@@ -30,6 +32,11 @@ public class StudentDTOBuilder extends JobPortalUserDTOBuilder {
 
     public StudentDTOBuilder buildSemester(Integer semester) {
         ((StudentDTOImpl) user).setSemester(semester);
+        return this;
+    }
+
+    public StudentDTOBuilder buildDegree(String degree) {
+        ((StudentDTOImpl) user).setDegree(degree);
         return this;
     }
 

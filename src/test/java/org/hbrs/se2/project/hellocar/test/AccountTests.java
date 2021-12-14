@@ -111,7 +111,7 @@ public class AccountTests {
     @Test
     void studentsAreDeleted() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
+        StudentDTOImpl dto = builder.buildDefaultUser().done();
         entityIsDeleted(dto, STUDENT_ROLES);
     }
 

@@ -7,6 +7,8 @@ public interface StudentDTO extends JobPortalUserDTO {
 
     public Integer getSemester();
 
+    public String getDegree();
+
 
 }
 
