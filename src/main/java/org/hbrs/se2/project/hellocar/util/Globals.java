@@ -26,6 +26,14 @@ public class Globals {
         public static final String COMPANY = "company";
     }
 
+    public static class Degrees {
+        public static final String BACHELOR = "bachelor";
+        public static final String MASTER = "master";
+        public static final String DOCTORAL_STUDENT = "doctoral student";
+
+        public static final String[] DEGREES = {"bachelor", "master", "doctoral student"};
+    }
+
     public static class Errors {
         public static final String NOUSERFOUND = "nouser";
         public static final String SQLERROR = "sql";

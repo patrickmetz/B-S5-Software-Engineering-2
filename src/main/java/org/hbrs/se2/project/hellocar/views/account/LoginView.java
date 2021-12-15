@@ -19,6 +19,7 @@ import com.vaadin.flow.router.RouteAlias;
 import org.hbrs.se2.project.hellocar.control.LoginControl;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,8 +95,8 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
         }
     }
 
-    private UserDTO getCurrentUser() {
-        return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+    private JobPortalUserDTO getCurrentUser() {
+        return (JobPortalUserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     }
 
     private Button createAccountButton() {
@@ -109,7 +110,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
     }
 
     private void grabAndSetUserIntoSession() {
-        UserDTO userDTO = loginControl.getCurrentUser();
+        JobPortalUserDTO userDTO = loginControl.getCurrentUser();
         UI.getCurrent().getSession().setAttribute( Globals.CURRENT_USER, userDTO );
     }
 

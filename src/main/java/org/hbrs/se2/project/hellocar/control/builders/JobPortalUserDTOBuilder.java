@@ -16,6 +16,9 @@ public class JobPortalUserDTOBuilder extends UserDTOBuilder {
         ((JobPortalUserDTOImpl) user).setStreetNumber("53b");
         ((JobPortalUserDTOImpl) user).setZipCode("50823");
         ((JobPortalUserDTOImpl) user).setCity("cologne");
+        // TODO: add default avatar image
+        ((JobPortalUserDTOImpl) user).setProfilePicture(null);
+        ((JobPortalUserDTOImpl) user).setAbout("about me");
         return this;
     }
 
@@ -41,6 +44,16 @@ public class JobPortalUserDTOBuilder extends UserDTOBuilder {
 
     public JobPortalUserDTOBuilder buildCity(String city) {
         ((JobPortalUserDTOImpl) super.user).setCity(city);
+        return this;
+    }
+
+    public JobPortalUserDTOBuilder buildProfilePicture(byte[] profilePicture) {
+        ((JobPortalUserDTOImpl) super.user).setProfilePicture(profilePicture);
+        return this;
+    }
+
+    public JobPortalUserDTOBuilder buildAbout(String about) {
+        ((JobPortalUserDTOImpl) super.user).setAbout(about);
         return this;
     }
 

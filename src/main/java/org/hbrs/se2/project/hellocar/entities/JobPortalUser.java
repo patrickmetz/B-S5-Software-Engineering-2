@@ -26,6 +26,14 @@ public class JobPortalUser extends User {
     @Column(name = "city")
     private String city;
 
+    @Basic
+    @Column(name = "profile_picture")
+    private byte[] profilePicture;
+
+    @Basic
+    @Column(name = "about")
+    private String about;
+
     public String getStreet() {
         return street;
     }
@@ -61,4 +69,20 @@ public class JobPortalUser extends User {
     public String getGender() {return gender;}
 
     public void setGender(String gender) {this.gender = gender;}
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
 }

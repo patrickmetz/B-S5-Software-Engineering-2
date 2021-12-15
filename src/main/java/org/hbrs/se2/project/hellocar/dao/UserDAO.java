@@ -2,7 +2,9 @@ package org.hbrs.se2.project.hellocar.dao;
 
 import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.UserDTOImpl;
+import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
@@ -21,7 +23,7 @@ public class UserDAO {
      * @return
      * @throws DatabaseLayerException
      */
-    public UserDTO findUserByUseridAndPassword(String id, String password) throws DatabaseLayerException {
+    public JobPortalUserDTO findUserByUseridAndPassword(String id, String password) throws DatabaseLayerException {
         // Set ResultSet to null;
         ResultSet set = null;
 
@@ -53,13 +55,13 @@ public class UserDAO {
             throw e;
         }
 
-        UserDTOImpl user = null;
+        JobPortalUserDTOImpl user = null;
 
         try {
             if (set.next()) {
                 // Durchführung des Object-Relational-Mapping (ORM)
 
-                user = new UserDTOImpl();
+                user = new JobPortalUserDTOImpl();
                 user.setId( set.getInt(1));
                 user.setFirstName( set.getString(4) );
                 user.setLastName(set.getString(5));
