@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table( name ="user" , schema = "carlook" )
@@ -19,6 +20,7 @@ public class User {
     private String phone;
     private String userid;
     private List<Rolle> roles;
+    private Set<JobAdvertisement> advertisements;
 
     @Id
     @GeneratedValue
@@ -111,6 +113,33 @@ public class User {
         this.userid = userid;
     }
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_to_rolle", catalog = "demouser",
+            schema = "carlook",
+            joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichhnung", nullable = false))
+    public List<Rolle> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Rolle> roles) {
+        this.roles = roles;
+    }
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_to_job_advertisement", catalog = "demouser",
+            schema = "carlook",
+            joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "id", nullable = false))
+    public Set<JobAdvertisement> getAdvertisements() {
+        return advertisements;
+    }
+
+    public void setAdvertisements(Set<JobAdvertisement> advertisements) {
+        this.advertisements = advertisements;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -130,18 +159,5 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, dateOfBirth, email, firstName, lastName, occupation, password, phone, userid);
-    }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_to_rolle", catalog = "demouser",
-            schema = "carlook",
-            joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "bezeichnung", referencedColumnName = "bezeichhnung", nullable = false))
-    public List<Rolle> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Rolle> roles) {
-        this.roles = roles;
     }
 }

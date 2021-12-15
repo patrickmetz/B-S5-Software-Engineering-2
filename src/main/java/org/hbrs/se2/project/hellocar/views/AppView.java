@@ -215,6 +215,10 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
             tabs = Utils.append(tabs, createTab("Enter Car", EnterCarView.class));
         }
 
+        if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
+            tabs = Utils.append(tabs, createTab("Create Job Advertisement", EnterCarView.class));
+        }
+
         // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
 
         /*if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.STUDENT)) {
