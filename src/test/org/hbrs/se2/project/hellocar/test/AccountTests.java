@@ -177,19 +177,6 @@ public class AccountTests {
         fieldCantHaveThisValue(dto, STUDENT_ROLES);
     }
 
-    @Test
-    void semesterIsARealisticInteger(){
-        StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto;
-        Integer[] wrongInputs ={0,-1,1000};
-        for (Integer i: wrongInputs) {
-            dto = builder.buildSemester(i).buildDefaultUser().done();
-            fieldCantHaveThisValue(dto,STUDENT_ROLES);
-        }
-    }
-
-
-
     @Disabled
     void passwordCantBeShorterThanFourCharacters() {
         //todo @vincent: das kurze password wirft keine exception, bitte reparieren, ggf. mit ameur absprechen
@@ -290,7 +277,7 @@ public class AccountTests {
                 ((StudentDTOBuilder)builder).buildSemester(((StudentDTO) dto).getSemester() + 1).
                         buildStudyCourse(((StudentDTO) dto).getStudyCourse() + update).
                         buildSpecialization(((StudentDTO)dto).getSpecialization() + update).
-                        buildSpecialization(((StudentDTO)dto).getDegree() + update);
+                        buildDegree(((StudentDTO)dto).getDegree() + update);
             }
 
 
