@@ -6,9 +6,11 @@ import java.time.LocalDate;
 
 public class JobAdvertisementDTOBuilder {
 
-    private JobAdvertisementDTOImpl advertisement;
+    private final JobAdvertisementDTOImpl advertisement;
 
-    public JobAdvertisementDTOBuilder(JobAdvertisementDTOImpl advertisement){ this.advertisement = advertisement;}
+    public JobAdvertisementDTOBuilder() {
+        this.advertisement = new JobAdvertisementDTOImpl();
+    }
 
     protected void addAllAttributes() {
 
@@ -24,34 +26,34 @@ public class JobAdvertisementDTOBuilder {
         return this;
     }
 
-    public JobAdvertisementDTOBuilder buildJobTitle(String jobTitle){
+    public JobAdvertisementDTOBuilder buildJobTitle(String jobTitle) {
         advertisement.setJobTitle(jobTitle);
         return this;
     }
 
-    public JobAdvertisementDTOBuilder buildJobType(String jobType){
+    public JobAdvertisementDTOBuilder buildJobType(String jobType) {
         advertisement.setJobType(jobType);
         return this;
     }
 
-    public JobAdvertisementDTOBuilder buildDescription(String description){
+    public JobAdvertisementDTOBuilder buildDescription(String description) {
         advertisement.setDescription(description);
         return this;
     }
 
 
-    public JobAdvertisementDTOBuilder buildBegin(LocalDate begin){
+    public JobAdvertisementDTOBuilder buildBegin(LocalDate begin) {
         advertisement.setBegin(begin);
         return this;
     }
 
-    public JobAdvertisementDTOBuilder buildTag(String tag){
-        advertisement.setTags(tag);
+    public JobAdvertisementDTOBuilder buildTags(String tags) {
+        advertisement.setTags(tags);
         return this;
     }
 
 
-    public JobAdvertisementDTOImpl done(){
+    public JobAdvertisementDTOImpl done() {
         return advertisement;
     }
 }

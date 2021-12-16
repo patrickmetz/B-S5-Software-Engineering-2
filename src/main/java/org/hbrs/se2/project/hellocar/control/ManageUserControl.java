@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @Component
 public class ManageUserControl {
-    AbstractJobPortalUserFactory factory;
+    private AbstractJobPortalUserFactory factory;
 
     @Autowired
     private UserRepository userRepository;
