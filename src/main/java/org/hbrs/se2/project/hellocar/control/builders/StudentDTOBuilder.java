@@ -33,6 +33,11 @@ public class StudentDTOBuilder extends JobPortalUserDTOBuilder {
         return this;
     }
 
+    public StudentDTOBuilder buildDegree(String degree) {
+        ((StudentDTOImpl) user).setDegree(degree);
+        return this;
+    }
+
     @Override
     public StudentDTOImpl done() {
         return (StudentDTOImpl) user;

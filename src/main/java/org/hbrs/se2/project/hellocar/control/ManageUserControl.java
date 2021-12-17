@@ -96,6 +96,11 @@ public class ManageUserControl {
                 ((StudentDTOBuilder) builder).buildSemester(
                         ((Student) user).getSemester()
                 );
+
+                ((StudentDTOBuilder) builder).buildDegree(
+                        ((Student) user).getDegree()
+                );
+
             }
 
             if (builder != null) {
