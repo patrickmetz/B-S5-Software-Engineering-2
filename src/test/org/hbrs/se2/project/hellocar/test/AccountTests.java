@@ -111,7 +111,7 @@ public class AccountTests {
     @Test
     void studentsAreDeleted() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto = (StudentDTOImpl) builder.buildDefaultUser().done();
+        StudentDTOImpl dto = builder.buildDefaultUser().done();
         entityIsDeleted(dto, STUDENT_ROLES);
     }
 
@@ -176,19 +176,6 @@ public class AccountTests {
         dto.setPassword(null);
         fieldCantHaveThisValue(dto, STUDENT_ROLES);
     }
-
-    @Test
-    void semesterIsARealisticInteger(){
-        StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto;
-        Integer[] wrongInputs ={0,-1,1000};
-        for (Integer i: wrongInputs) {
-            dto = builder.buildSemester(i).buildDefaultUser().done();
-            fieldCantHaveThisValue(dto,STUDENT_ROLES);
-        }
-    }
-
-
 
     @Disabled
     void passwordCantBeShorterThanFourCharacters() {
@@ -280,16 +267,17 @@ public class AccountTests {
             String update = "update";
             Byte[] b = {10,11};
             int id = userService.createUser(dto, roles);
+
             if (builder instanceof CompanyDTOBuilder) {
                 ((CompanyDTOBuilder) builder).buildCompanyName(((CompanyDTO) dto).getCompanyName() + update).
                         buildWebSite(((CompanyDTO) dto).getWebSite() + update);
-
             }
+
             if (builder instanceof StudentDTOBuilder) {
                 ((StudentDTOBuilder)builder).buildSemester(((StudentDTO) dto).getSemester() + 1).
                         buildStudyCourse(((StudentDTO) dto).getStudyCourse() + update).
-                        buildSpecialization(((StudentDTO)dto).getSpecialization() + update);
-                //add student properties
+                        buildSpecialization(((StudentDTO)dto).getSpecialization() + update).
+                        buildDegree(((StudentDTO)dto).getDegree() + update);
             }
 
 
@@ -334,6 +322,7 @@ public class AccountTests {
                 assertEquals((((StudentDTO) dto).getSemester()), ((StudentDTO) updated).getSemester());
                 assertEquals((((StudentDTO) dto).getStudyCourse()), ((StudentDTO) updated).getStudyCourse());
                 assertEquals((((StudentDTO) dto).getSpecialization()), ((StudentDTO) updated).getSpecialization());
+                assertEquals((((StudentDTO) dto).getDegree()), ((StudentDTO) updated).getDegree());
             }
 
             userService.deleteUser(id);

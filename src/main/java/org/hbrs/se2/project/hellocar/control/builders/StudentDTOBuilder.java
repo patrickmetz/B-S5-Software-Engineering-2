@@ -15,6 +15,8 @@ public class StudentDTOBuilder extends JobPortalUserDTOBuilder {
         ((StudentDTOImpl) user).setStudyCourse("computer science");
         ((StudentDTOImpl) user).setSpecialization("cyber security");
         ((StudentDTOImpl) user).setSemester(3);
+        ((StudentDTOImpl) user).setDegree("Bachelor");
+
         return this;
     }
 

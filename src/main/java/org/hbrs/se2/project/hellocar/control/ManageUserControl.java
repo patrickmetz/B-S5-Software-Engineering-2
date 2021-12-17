@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @Component
 public class ManageUserControl {
-    AbstractJobPortalUserFactory factory;
+    private AbstractJobPortalUserFactory factory;
 
     @Autowired
     private UserRepository userRepository;
@@ -100,7 +100,6 @@ public class ManageUserControl {
                 ((StudentDTOBuilder) builder).buildDegree(
                         ((Student) user).getDegree()
                 );
-
             }
 
             if (builder != null) {
@@ -183,6 +182,5 @@ public class ManageUserControl {
                 throw new DatabaseUserException("A failure occured while...shit was done");
         }
     }
-
 
 }

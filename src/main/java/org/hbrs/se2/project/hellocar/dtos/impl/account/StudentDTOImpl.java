@@ -16,6 +16,7 @@ public class StudentDTOImpl extends JobPortalUserDTOImpl implements StudentDTO {
         this.degree = degree;
     }
 
+
     @Override
     public String getStudyCourse() {
         return studyCourse;
@@ -35,7 +36,6 @@ public class StudentDTOImpl extends JobPortalUserDTOImpl implements StudentDTO {
     public String getDegree() {
         return degree;
     }
-
 
 }
 
