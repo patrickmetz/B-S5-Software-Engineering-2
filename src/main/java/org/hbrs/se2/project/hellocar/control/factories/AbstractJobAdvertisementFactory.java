@@ -11,5 +11,6 @@ public abstract class AbstractJobAdvertisementFactory {
         entity.setJobType(dto.getJobType());
         entity.setDescription(dto.getDescription());
         entity.setBegin(dto.getBegin());
+        entity.setTags(dto.getTags());
     }
 }

@@ -14,6 +14,7 @@ import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.AppView;
+import org.hbrs.se2.project.hellocar.views.ShowCarsView;
 import org.hbrs.se2.project.hellocar.views.account.LoginView;
 
 @Route(value = Globals.Pages.CREATE_JOB_AD, layout = AppView.class)
@@ -64,12 +65,14 @@ public class JobAdvertisementCreateView extends JobAdvertisementBaseView {
                         this.getCurrentUser().getId()
                 );
 
-                Utils.displayNotification(true, "Registration succeeded");
+                Utils.displayNotification(true, "Job advertisement created successfully");
+                UI.getCurrent().navigate(ShowCarsView.class); /* todo replace with the advertisement view later */
                 binder.getFields().forEach(HasValue::clear);
 
             } catch (ValidationException e) {
                 Utils.displayNotification(false, "Please fill in the required fields");
             } catch (Exception e) {
+                e.printStackTrace();
                 Utils.displayNotification(
                         false,
                         "Sorry, an unexpected error occured.\n" +
