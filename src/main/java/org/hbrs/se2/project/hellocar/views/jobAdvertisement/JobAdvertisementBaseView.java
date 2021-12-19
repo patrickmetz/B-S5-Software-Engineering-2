@@ -1,8 +1,7 @@
 package org.hbrs.se2.project.hellocar.views.jobAdvertisement;
 
+import com.vaadin.flow.component.HasValueAndElement;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -12,10 +11,12 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import org.hbrs.se2.project.hellocar.control.ManageJobAdvertisementControl;
-import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.JobAdvertisementDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
+import org.hbrs.se2.project.hellocar.util.jobAdvertisement.JobAdvertisementValidation;
+
+import java.util.stream.Stream;
 
 @CssImport("./styles/views/jobAdvertisement/jobAdvertisement.css")
 public abstract class JobAdvertisementBaseView extends VerticalLayout {
@@ -35,6 +36,8 @@ public abstract class JobAdvertisementBaseView extends VerticalLayout {
         this.jobAdService = jobAdService;
         binder = new Binder<>(JobAdvertisementDTOImpl.class);
         setupElements();
+        setupValidation();
+        setRequiredIndicatorVisible(jobTitle, jobType, description, begin, tags);
     }
 
     protected void setupElements() {
@@ -63,11 +66,48 @@ public abstract class JobAdvertisementBaseView extends VerticalLayout {
     protected abstract FormLayout setupForm();
 
     protected void setupValidation() {
+        binder.forField(jobTitle)
+                .withValidator(
+                        JobAdvertisementValidation::notEmptyFieldValidator,
+                        "Title " + JobAdvertisementValidation.IS_EMPTY_ERROR
+                )
+                .bind(JobAdvertisementDTOImpl::getJobTitle, JobAdvertisementDTOImpl::setJobTitle);
 
+        binder.forField(jobType)
+                .withValidator(
+                        JobAdvertisementValidation::notEmptyFieldValidator,
+                        "Type " + JobAdvertisementValidation.IS_EMPTY_ERROR
+                )
+                .bind(JobAdvertisementDTOImpl::getJobType, JobAdvertisementDTOImpl::setJobType);
+
+        binder.forField(description)
+                .withValidator(
+                        JobAdvertisementValidation::notEmptyFieldValidator,
+                        "Description " + JobAdvertisementValidation.IS_EMPTY_ERROR
+                )
+                .bind(JobAdvertisementDTOImpl::getDescription, JobAdvertisementDTOImpl::setDescription);
+
+        binder.forField(begin)
+                .withValidator(
+                        JobAdvertisementValidation::notNullDateValidator,
+                        "Starting date " + JobAdvertisementValidation.IS_EMPTY_ERROR
+                )
+                .bind(JobAdvertisementDTOImpl::getBegin, JobAdvertisementDTOImpl::setBegin);
+
+        binder.forField(tags)
+                .withValidator(
+                        JobAdvertisementValidation::notEmptyFieldValidator,
+                        "Tags " + JobAdvertisementValidation.IS_EMPTY_ERROR
+                )
+                .bind(JobAdvertisementDTOImpl::getTags, JobAdvertisementDTOImpl::setTags);
     }
 
     protected JobPortalUserDTO getCurrentUser() {
         return (JobPortalUserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+    }
+
+    protected void setRequiredIndicatorVisible(HasValueAndElement<?, ?>... components) {
+        Stream.of(components).forEach(comp -> comp.setRequiredIndicatorVisible(true));
     }
 
 }

@@ -31,7 +31,7 @@ public class JobAdvertisement {
     }
 
     @Basic
-    @Column(name = "job_title")
+    @Column(name = "job_title", nullable = false)
     public String getJobTitle() {
         return jobTitle;
     }
@@ -41,7 +41,7 @@ public class JobAdvertisement {
     }
 
     @Basic
-    @Column(name = "job_type")
+    @Column(name = "job_type", nullable = false)
     public String getJobType() {
         return jobType;
     }
@@ -51,7 +51,7 @@ public class JobAdvertisement {
     }
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     public String getDescription() {
         return description;
     }
@@ -61,7 +61,7 @@ public class JobAdvertisement {
     }
 
     @Basic
-    @Column(name = "begin_date")
+    @Column(name = "begin_date", nullable = false)
     public LocalDate getBegin() {
         return begin;
     }
@@ -71,7 +71,7 @@ public class JobAdvertisement {
     }
 
     @Basic
-    @Column(name = "tags")
+    @Column(name = "tags", nullable = false)
     public String getTags() {
         return tags;
     }
