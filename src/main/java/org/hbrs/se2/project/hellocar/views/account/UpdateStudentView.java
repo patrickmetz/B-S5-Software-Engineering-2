@@ -68,6 +68,7 @@ public class UpdateStudentView extends UpdateViewBase<StudentDTOImpl>
 			{
 				var studentDTO = new StudentDTOImpl();
 				binder.writeBean(studentDTO);
+				studentDTO.setProfilePicture(this.profilePicture);
 
 				userService.updateUser(getCurrentUser().getId(), studentDTO);
 

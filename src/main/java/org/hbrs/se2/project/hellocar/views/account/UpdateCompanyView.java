@@ -55,6 +55,7 @@ public class UpdateCompanyView extends UpdateViewBase<CompanyDTOImpl>
 			{
 				var companyDTO = new CompanyDTOImpl();
 				binder.writeBean(companyDTO);
+				companyDTO.setProfilePicture(this.profilePicture);
 
 				userService.updateUser(getCurrentUser().getId(), companyDTO);
 
