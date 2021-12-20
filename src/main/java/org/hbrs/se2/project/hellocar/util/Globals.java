@@ -17,6 +17,9 @@ public class Globals {
         public static final String UPDATE_STUDENT_VIEW = "updatestudent";
         public static final String UPDATE_COMPANY_VIEW = "updatecompany";
 
+        public static final String READONLY_STUDENT_VIEW = "viewstudent";
+        public static final String READONLY_COMPANY_VIEW = "viewcompany";
+
         public static final String CREATE_JOB_AD = "jobadvertisement";
     }
 

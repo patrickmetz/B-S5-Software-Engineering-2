@@ -77,7 +77,8 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
         UserDTO userDTO = this.getCurrentUser();
         if (userDTO == null) {
-            UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
+            // @todo prevents display of ReadOnly*View to guests, commented for now
+            //UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
             return false;
         }
         return true;
@@ -305,9 +306,10 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
      *
      */
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        if (getCurrentUser() == null) {
-            beforeEnterEvent.rerouteTo(Globals.Pages.LOGIN_VIEW);
-        }
+        // @todo prevents display of ReadOnly*View to guests, commented for now
+//        if (getCurrentUser() == null) {
+//            beforeEnterEvent.rerouteTo(Globals.Pages.LOGIN_VIEW);
+//        }
 
     }
 }
