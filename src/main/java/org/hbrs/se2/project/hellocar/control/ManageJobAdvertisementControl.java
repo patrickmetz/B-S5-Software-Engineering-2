@@ -62,7 +62,7 @@ public class ManageJobAdvertisementControl {
         return null;
     }
 
-    public void updateJobAdvertisement(int id, JobAdvertisementDTO dto) {
+    public void updateJobAdvertisement(JobAdvertisementDTO dto, int id) {
         Optional<JobAdvertisement> optional = repository.findById(id);
         JobAdvertisement entity = null;
 

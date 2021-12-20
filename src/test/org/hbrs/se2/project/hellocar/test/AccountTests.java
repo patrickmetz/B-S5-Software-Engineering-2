@@ -27,7 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @SpringBootTest
 
 public class AccountTests {
-    @Autowired
+
+   @Autowired
     private ManageUserControl userService;
 
     private static final String[] STUDENT_ROLES
@@ -35,6 +36,7 @@ public class AccountTests {
 
     private static final String[] COMPANY_ROLES
             = new String[]{Globals.Roles.USER, Globals.Roles.COMPANY};
+
 
     @Test
     void emailsAreUnique() {
@@ -233,7 +235,7 @@ public class AccountTests {
         }
     }
 
-    void valueIsUnique(JobPortalUserDTO dto) {
+   void valueIsUnique(JobPortalUserDTO dto) {
         try {
             // save dto to db
             int id = userService.createUser(dto, STUDENT_ROLES);
