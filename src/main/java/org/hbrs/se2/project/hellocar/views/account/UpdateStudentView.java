@@ -4,6 +4,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
@@ -24,6 +26,10 @@ public class UpdateStudentView extends UpdateViewBase<StudentDTOImpl>
 {
 	private TextField role;
 	private DatePicker dateOfBirth;
+	private TextField studyCourse;
+	private TextField specialization;
+	private IntegerField semester;
+	private Select<String> degree;
 	private Button submitButton;
 
 	public UpdateStudentView(ManageUserControl userControl)
@@ -44,6 +50,12 @@ public class UpdateStudentView extends UpdateViewBase<StudentDTOImpl>
 
 		dateOfBirth = new DatePicker();
 		dateOfBirth.setLabel("Date of Birth");
+
+		studyCourse = new TextField("Study Course");
+		specialization = new TextField("Specialization");
+		semester = new IntegerField("Semester");
+		degree = new Select<>(Globals.Degrees.BACHELOR, Globals.Degrees.MASTER, Globals.Degrees.DOCTORAL_STUDENT);
+		degree.setLabel("Degree");
 	}
 
 	@Override
@@ -92,6 +104,12 @@ public class UpdateStudentView extends UpdateViewBase<StudentDTOImpl>
 				city,
 				streetNumber,
 				dateOfBirth,
+				degree,
+				studyCourse,
+				specialization,
+				semester,
+				profilePictureUpload,
+				about,
 				submitButton,
 				deleteButton
 		);

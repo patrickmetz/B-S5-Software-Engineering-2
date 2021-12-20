@@ -32,14 +32,22 @@ public class ManageUserControl {
     @Autowired
     private UserRepository userRepository;
 
-    public int createUser(JobPortalUserDTO userDTO, String[] roles) throws DatabaseUserException {
-        JobPortalUser userEntity = null;
+    private void createFactory(JobPortalUserDTO userDTO)
+    {
+        if (factory != null)
+            return;
 
         if (userDTO instanceof StudentDTO) {
             factory = new StudentFactoryImpl();
         } else if (userDTO instanceof CompanyDTO) {
             factory = new CompanyFactoryImpl();
         }
+    }
+
+    public int createUser(JobPortalUserDTO userDTO, String[] roles) throws DatabaseUserException {
+        JobPortalUser userEntity = null;
+
+        createFactory(userDTO);
 
         userEntity = factory.create();
         factory.setupEntityByDto(userEntity, userDTO);
@@ -151,6 +159,8 @@ public class ManageUserControl {
     public void updateUser(int id, JobPortalUserDTO dto) {
         Optional<User> optional = this.userRepository.findById(id);
         JobPortalUser entity = null;
+
+        createFactory(dto);
 
         if (optional.isPresent()) {
             entity = (JobPortalUser) optional.get();
