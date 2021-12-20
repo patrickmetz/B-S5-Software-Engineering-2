@@ -116,7 +116,6 @@ public abstract class AccountViewBase<T extends JobPortalUserDTOImpl> extends Ve
 				e.printStackTrace();
 			}
 		});
-		// @todo do not erase profile picture if profile is updated without a new upload.
 
 		about = new TextArea("Tell us more about you!");
 
