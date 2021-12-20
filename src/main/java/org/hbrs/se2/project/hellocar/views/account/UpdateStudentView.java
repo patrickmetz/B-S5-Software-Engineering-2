@@ -117,8 +117,10 @@ public class UpdateStudentView extends UpdateViewBase<StudentDTOImpl>
 
 		Utils.configureRegistrationForm(formLayout, title, submitButton, deleteButton, about);
 
-		binder.readBean((StudentDTOImpl)userService.readUser(getCurrentUser().getId()));
+		var user = (StudentDTOImpl)userService.readUser(getCurrentUser().getId());
+		binder.readBean(user);
 		passwordConfirm.setValue(password.getValue());
+		profilePicture = user.getProfilePicture();
 
 		return formLayout;
 	}

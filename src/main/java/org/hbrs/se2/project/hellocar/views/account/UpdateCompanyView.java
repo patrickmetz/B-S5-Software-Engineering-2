@@ -101,8 +101,10 @@ public class UpdateCompanyView extends UpdateViewBase<CompanyDTOImpl>
 
 		Utils.configureRegistrationForm(formLayout, title, submitButton, deleteButton, about);
 
-		binder.readBean((CompanyDTOImpl)userService.readUser(getCurrentUser().getId()));
+		var user = (CompanyDTOImpl)userService.readUser(getCurrentUser().getId());
+		binder.readBean(user);
 		passwordConfirm.setValue(password.getValue());
+		profilePicture = user.getProfilePicture();
 
 		return formLayout;
 	}
