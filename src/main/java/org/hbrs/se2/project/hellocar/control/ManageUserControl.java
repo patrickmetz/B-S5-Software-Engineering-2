@@ -34,8 +34,7 @@ public class ManageUserControl {
 
     private void createFactory(JobPortalUserDTO userDTO)
     {
-        if (factory != null)
-            return;
+
 
         if (userDTO instanceof StudentDTO) {
             factory = new StudentFactoryImpl();

@@ -26,6 +26,11 @@ public class JobAdvertisementDTOBuilder {
         return this;
     }
 
+    public JobAdvertisementDTOBuilder buildId(int id) {
+        advertisement.setId(id);
+        return this;
+    }
+
     public JobAdvertisementDTOBuilder buildJobTitle(String jobTitle) {
         advertisement.setJobTitle(jobTitle);
         return this;

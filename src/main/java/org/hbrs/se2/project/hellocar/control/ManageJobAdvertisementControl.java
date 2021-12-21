@@ -50,6 +50,7 @@ public class ManageJobAdvertisementControl {
 
             JobAdvertisementDTOBuilder builder = new JobAdvertisementDTOBuilder();
 
+            builder.buildId(entity.getId());
             builder.buildJobTitle(entity.getJobTitle());
             builder.buildJobType(entity.getJobType());
             builder.buildDescription(entity.getDescription());

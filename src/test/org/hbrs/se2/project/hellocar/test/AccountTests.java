@@ -13,6 +13,7 @@ import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.StudentDTO;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,10 @@ public class AccountTests {
 
    @Autowired
     private ManageUserControl userService;
+
+
+
+
 
     private static final String[] STUDENT_ROLES
             = new String[]{Globals.Roles.USER, Globals.Roles.STUDENT};

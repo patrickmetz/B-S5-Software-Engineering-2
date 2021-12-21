@@ -37,21 +37,21 @@ class JobAdvertisementTest {
             = new String[]{Globals.Roles.USER, Globals.Roles.COMPANY};
 
     JobAdvertisementDTOBuilder builder;
-    int studentId;
+   // int studentId;
     int companyId;
 
     @BeforeEach
     void set() {
         builder = new JobAdvertisementDTOBuilder();
 
-        StudentDTOBuilder builderA = new StudentDTOBuilder();
+      //  StudentDTOBuilder builderA = new StudentDTOBuilder();
         CompanyDTOBuilder builderB = new CompanyDTOBuilder();
 
-        StudentDTOImpl dtoA = builderA.buildDefaultUser().done();
+      //  StudentDTOImpl dtoA = builderA.buildDefaultUser().done();
         CompanyDTOImpl dtoB = builderB.buildDefaultUser().done();
 
         try {
-            studentId = userService.createUser(dtoA, STUDENT_ROLES);
+            //studentId = userService.createUser(dtoA, STUDENT_ROLES);
             companyId = userService.createUser(dtoB, COMPANY_ROLES);
         } catch (DatabaseUserException e) {
             e.printStackTrace();
@@ -63,20 +63,15 @@ class JobAdvertisementTest {
     @AfterEach
     void reset() {
         builder = null;
-        userService.deleteUser(studentId);
+       // userService.deleteUser(studentId);
         userService.deleteUser(companyId);
 
     }
 
 
     @Test
-    void createJobAdvertisement() {   // auch für Studenten?
+    void createJobAdvertisement() {         // auch für Studenten?
         createAdvertisementTest(companyId);
-    }
-
-    @Test
-    void readJobAdvertisement() {
-        readAdvertisementTest(companyId);
     }
 
     @Test
@@ -132,20 +127,13 @@ class JobAdvertisementTest {
     }
 
     void createAdvertisementTest(int userId) {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().done();
-        int id = createAdvertisement(userId, dto);
-        JobAdvertisementDTO dtoB = advertisementService.readJobAdvertisement(id);
-        assertEquals(dtoB.getId(), id);
-        advertisementService.deleteJobAdvertisement(id);
-    }
-
-    void readAdvertisementTest(int userId) {
         JobAdvertisementDTOImpl dtoA = builder.buildDefaultUser().done();
         int id = createAdvertisement(userId, dtoA);
         JobAdvertisementDTO dtoB = advertisementService.readJobAdvertisement(id);
         assertEquals(dtoB.getId(), id);
         advertisementService.deleteJobAdvertisement(id);
     }
+
 
     private void updateJobAdvertisementTest(int userId) {
         JobAdvertisementDTOImpl dto = builder.buildDefaultUser().done();
