@@ -20,8 +20,6 @@ public class User {
     private String phone;
     private String userid;
     private List<Rolle> roles;
-
-    @OneToMany(mappedBy = "user")
     private Set<JobAdvertisement> advertisements;
 
     @Id
@@ -129,12 +127,11 @@ public class User {
     }
 
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "user_to_job_advertisement", catalog = "demouser",
-//            schema = "carlook",
-//            joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
-//            inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "id", nullable = false))
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_to_job_advertisement", catalog = "demouser",
+            schema = "carlook",
+            joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "id", nullable = false))
     public Set<JobAdvertisement> getAdvertisements() {
         return advertisements;
     }

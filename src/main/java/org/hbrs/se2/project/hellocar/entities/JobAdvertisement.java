@@ -3,7 +3,6 @@ package org.hbrs.se2.project.hellocar.entities;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -13,15 +12,12 @@ import java.util.Objects;
 public class JobAdvertisement {
 
     private int id;
-    private String jobTitle;
+    protected String jobTitle;
     private String jobType;
     private String description;
     private LocalDate begin;
     private String tags;
-
-    @ManyToOne
-    @JoinColumn(name="id", nullable = false)
-    private User user;
+    private List<User> users;
 
     @Id
     @GeneratedValue
@@ -84,6 +80,15 @@ public class JobAdvertisement {
         this.tags = tags;
     }
 
+    @ManyToMany(mappedBy = "advertisements", fetch = FetchType.EAGER )
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,13 +105,5 @@ public class JobAdvertisement {
     @Override
     public int hashCode() {
         return Objects.hash(id, jobTitle, jobType, description, begin, tags);
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }
