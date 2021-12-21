@@ -137,12 +137,6 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
                 city,
                 streetNumber,
                 dateOfBirth,
-                degree,
-                studyCourse,
-                specialization,
-                semester,
-                profilePictureUpload,
-                about,
                 submitButton
         );
 

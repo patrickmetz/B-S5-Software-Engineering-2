@@ -123,9 +123,9 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
                 zipCode,
                 city,
                 streetNumber,
-                website,
-                profilePictureUpload,
-                about,
+//                website,
+//                profilePictureUpload,
+//                about,
                 submitButton
         );
 
