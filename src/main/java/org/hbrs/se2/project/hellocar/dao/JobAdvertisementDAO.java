@@ -40,20 +40,16 @@ public class JobAdvertisementDAO {
         ResultSet set = null;
 
         try {
-            Statement statement = null;
-            try {
-                statement = JDBCConnection.getInstance().getStatement();
-            } catch (DatabaseLayerException e) {
-                e.printStackTrace();
+            Statement statement = JDBCConnection.getInstance().getStatement();
+
+            if (statement != null) {
+                set = statement.executeQuery(
+                        "SELECT * "
+                                + "FROM carlook.user_to_job_advertisment "
+                                + "WHERE carlook.user_to_rolle.userid = '" + userDTO.getId() + "'");
             }
 
-            set = statement.executeQuery(
-                    "SELECT * "
-                            + "FROM carlook.user_to_job_advertisment "
-                            + "WHERE carlook.user_to_rolle.userid = '" + userDTO.getId() + "'");
-
         } catch (SQLException ex) {
-
             throw new DatabaseLayerException("Fehler im SQL-Befehl! Bitte den Programmier benachrichtigen!");
         }
 
