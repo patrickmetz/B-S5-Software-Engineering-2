@@ -3,6 +3,7 @@ package org.hbrs.se2.project.hellocar.entities;
 import javax.persistence.*;
 // import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -139,7 +140,7 @@ public class User {
         return advertisements;
     }
 
-    public void setAdvertisements(Set<JobAdvertisement> advertisements) {
+    public void setAdvertisements(List<JobAdvertisement> advertisements) {
         this.advertisements = advertisements;
     }
 
