@@ -4,15 +4,17 @@ import java.time.LocalDate;
 
 public interface JobAdvertisementDTO {
 
-    public int getId();
+    int getJobAdvertisementId();
 
-    public String getJobTitle();
+    String getJobTitle();
 
-    public String getJobType();
+    String getJobType();
 
-    public String getDescription();
+    String getDescription();
 
-    public LocalDate getBegin();
+    LocalDate getBegin();
 
-    public String getTags();
+    String getTags();
+
+    int getId();
 }

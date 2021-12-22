@@ -6,19 +6,22 @@ import java.time.LocalDate;
 
 public class JobAdvertisementDTOImpl implements JobAdvertisementDTO {
 
-    private int id;
+    private int jobAdvertisementId;
     private String jobTitle;
     private String jobType;
     private String description;
     private LocalDate begin;
     private String tags;
 
+    //todo: is user id
+    private int id;
+
     @Override
-    public int getId() {
-        return this.id;
+    public int getJobAdvertisementId() {
+        return this.jobAdvertisementId;
     }
 
-    public void setId(int id) { this.id = id; }
+    public void setJobAdvertisementId(int jobAdvertisementId) { this.jobAdvertisementId = jobAdvertisementId; }
 
     @Override
     public String getJobTitle() { return jobTitle; }
@@ -44,4 +47,12 @@ public class JobAdvertisementDTOImpl implements JobAdvertisementDTO {
     public String getTags() { return tags; }
 
     public void setTags(String tags) { this.tags = tags; }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

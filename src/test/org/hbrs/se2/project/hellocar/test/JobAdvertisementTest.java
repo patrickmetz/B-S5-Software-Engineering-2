@@ -4,13 +4,10 @@ import org.hbrs.se2.project.hellocar.control.ManageJobAdvertisementControl;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.control.builders.CompanyDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.JobAdvertisementDTOBuilder;
-import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
-import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.JobAdvertisementDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,17 +34,17 @@ class JobAdvertisementTest {
             = new String[]{Globals.Roles.USER, Globals.Roles.COMPANY};
 
     JobAdvertisementDTOBuilder builder;
-   // int studentId;
+    // int studentId;
     int companyId;
 
     @BeforeEach
     void set() {
         builder = new JobAdvertisementDTOBuilder();
 
-      //  StudentDTOBuilder builderA = new StudentDTOBuilder();
+        //  StudentDTOBuilder builderA = new StudentDTOBuilder();
         CompanyDTOBuilder builderB = new CompanyDTOBuilder();
 
-      //  StudentDTOImpl dtoA = builderA.buildDefaultUser().done();
+        //  StudentDTOImpl dtoA = builderA.buildDefaultUser().done();
         CompanyDTOImpl dtoB = builderB.buildDefaultUser().done();
 
         try {
@@ -63,7 +60,7 @@ class JobAdvertisementTest {
     @AfterEach
     void reset() {
         builder = null;
-       // userService.deleteUser(studentId);
+        // userService.deleteUser(studentId);
         userService.deleteUser(companyId);
 
     }
@@ -130,7 +127,7 @@ class JobAdvertisementTest {
         JobAdvertisementDTOImpl dtoA = builder.buildDefaultUser().done();
         int id = createAdvertisement(userId, dtoA);
         JobAdvertisementDTO dtoB = advertisementService.readJobAdvertisement(id);
-        assertEquals(dtoB.getId(), id);
+        assertEquals(dtoB.getJobAdvertisementId(), id);
         advertisementService.deleteJobAdvertisement(id);
     }
 

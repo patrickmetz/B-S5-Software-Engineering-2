@@ -26,15 +26,10 @@ import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
-
 public class AccountTests {
 
-   @Autowired
+    @Autowired
     private ManageUserControl userService;
-
-
-
-
 
     private static final String[] STUDENT_ROLES
             = new String[]{Globals.Roles.USER, Globals.Roles.STUDENT};
@@ -46,9 +41,9 @@ public class AccountTests {
     @Test
     void emailsAreUnique() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto =  builder.buildDefaultUser().done();
+        StudentDTOImpl dto = builder.buildDefaultUser().done();
         // just to make sure that the email is being compared and not the picture
-        byte[] b= {10,2};
+        byte[] b = {10, 2};
         dto.setProfilePicture(b);
         valueIsUnique(dto);
     }
@@ -56,11 +51,11 @@ public class AccountTests {
     @Test
     void userIdsAreUnique() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto =  builder.buildDefaultUser().done();
+        StudentDTOImpl dto = builder.buildDefaultUser().done();
 
         // just to make sure that the username is being compared and not the email and picture
         dto.setEmail("changed@company.de");
-        byte[] b= {10,2};
+        byte[] b = {10, 2};
         dto.setProfilePicture(b);
 
         valueIsUnique(dto);
@@ -69,7 +64,7 @@ public class AccountTests {
     @Test
     void userPicturesAreUnique() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto =  builder.buildDefaultUser().done();
+        StudentDTOImpl dto = builder.buildDefaultUser().done();
         // just to make sure that the username is being compared and not the email and picture
         dto.setEmail("changed@company.de");
         valueIsUnique(dto);
@@ -78,10 +73,10 @@ public class AccountTests {
     @Test
     void companyWebsitesAreUnique() {
         CompanyDTOBuilder builder = new CompanyDTOBuilder();
-        CompanyDTOImpl dto =  builder.buildDefaultUser().done();
+        CompanyDTOImpl dto = builder.buildDefaultUser().done();
         // just to make sure that the username is being compared and not the email and picture
         dto.setEmail("changed@company.de");
-        byte[] b= {10,2};
+        byte[] b = {10, 2};
         dto.setProfilePicture(b);
 
         valueIsUnique(dto);
@@ -104,7 +99,7 @@ public class AccountTests {
     @Test
     void studentsAreUpdated() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto =  builder.buildDefaultUser().done();
+        StudentDTOImpl dto = builder.buildDefaultUser().done();
         entityIsUpdated(dto, builder, STUDENT_ROLES);
     }
 
@@ -132,7 +127,7 @@ public class AccountTests {
     @Test
     void firstNameCantBeNull() {
         StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto =  builder.buildDefaultUser().done();
+        StudentDTOImpl dto = builder.buildDefaultUser().done();
         dto.setFirstName(null);
         fieldCantHaveThisValue(dto, STUDENT_ROLES);
     }
@@ -188,7 +183,7 @@ public class AccountTests {
     void passwordCantBeShorterThanFourCharacters() {
         //todo @vincent: das kurze password wirft keine exception, bitte reparieren, ggf. mit ameur absprechen
         StudentDTOBuilder builder = new StudentDTOBuilder();
-        StudentDTOImpl dto =  builder.buildDefaultUser().done();
+        StudentDTOImpl dto = builder.buildDefaultUser().done();
 
         // length == 4
         dto.setPassword("abcd");
@@ -240,7 +235,7 @@ public class AccountTests {
         }
     }
 
-   void valueIsUnique(JobPortalUserDTO dto) {
+    void valueIsUnique(JobPortalUserDTO dto) {
         try {
             // save dto to db
             int id = userService.createUser(dto, STUDENT_ROLES);
@@ -272,7 +267,7 @@ public class AccountTests {
     void entityIsUpdated(JobPortalUserDTO dto, JobPortalUserDTOBuilder builder, String[] roles) {
         try {
             String update = "update";
-            Byte[] b = {10,11};
+            Byte[] b = {10, 11};
             int id = userService.createUser(dto, roles);
 
             if (builder instanceof CompanyDTOBuilder) {
@@ -281,10 +276,10 @@ public class AccountTests {
             }
 
             if (builder instanceof StudentDTOBuilder) {
-                ((StudentDTOBuilder)builder).buildSemester(((StudentDTO) dto).getSemester() + 1).
+                ((StudentDTOBuilder) builder).buildSemester(((StudentDTO) dto).getSemester() + 1).
                         buildStudyCourse(((StudentDTO) dto).getStudyCourse() + update).
-                        buildSpecialization(((StudentDTO)dto).getSpecialization() + update).
-                        buildDegree(((StudentDTO)dto).getDegree() + update);
+                        buildSpecialization(((StudentDTO) dto).getSpecialization() + update).
+                        buildDegree(((StudentDTO) dto).getDegree() + update);
             }
 
 
@@ -325,7 +320,7 @@ public class AccountTests {
                 assertEquals((((CompanyDTO) dto).getWebSite()), ((CompanyDTO) updated).getWebSite());
             }
 
-            if (updated instanceof StudentDTO){
+            if (updated instanceof StudentDTO) {
                 assertEquals((((StudentDTO) dto).getSemester()), ((StudentDTO) updated).getSemester());
                 assertEquals((((StudentDTO) dto).getStudyCourse()), ((StudentDTO) updated).getStudyCourse());
                 assertEquals((((StudentDTO) dto).getSpecialization()), ((StudentDTO) updated).getSpecialization());
@@ -337,7 +332,6 @@ public class AccountTests {
             e.printStackTrace();
         }
     }
-
 
 
     void entityIsDeleted(JobPortalUserDTO dtoA, String[] roles) {

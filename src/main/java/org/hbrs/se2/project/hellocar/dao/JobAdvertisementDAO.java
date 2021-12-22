@@ -1,12 +1,10 @@
 package org.hbrs.se2.project.hellocar.dao;
 
-import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.JobAdvertisementDTOImpl;
 import org.hbrs.se2.project.hellocar.services.db.JDBCConnection;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
-import org.hbrs.se2.project.hellocar.util.Globals;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -64,7 +62,7 @@ public class JobAdvertisementDAO {
 
                 // fetch id of job advertisement, i.e. the 2nd integer column
                 // of table "user_to_job_advertisement"
-                dto.setId(set.getInt(2));
+                dto.setJobAdvertisementId(set.getInt(2));
                 liste.add(dto);
             }
         } catch (SQLException ex) {

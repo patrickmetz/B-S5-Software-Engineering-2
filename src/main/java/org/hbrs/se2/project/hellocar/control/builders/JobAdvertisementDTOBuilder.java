@@ -27,7 +27,7 @@ public class JobAdvertisementDTOBuilder {
     }
 
     public JobAdvertisementDTOBuilder buildId(int id) {
-        advertisement.setId(id);
+        advertisement.setJobAdvertisementId(id);
         return this;
     }
 
