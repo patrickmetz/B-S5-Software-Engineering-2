@@ -5,10 +5,12 @@ import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.AbstractJobAdvertisementFactory;
 import org.hbrs.se2.project.hellocar.control.factories.JobAdvertisementFactoryImpl;
 import org.hbrs.se2.project.hellocar.dao.JobAdvertisementDAO;
-import org.hbrs.se2.project.hellocar.dao.RolleDAO;
 import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
 import org.hbrs.se2.project.hellocar.entities.JobAdvertisement;
+import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
+import org.hbrs.se2.project.hellocar.entities.User;
 import org.hbrs.se2.project.hellocar.repository.JobAdvertisementRepository;
+import org.hbrs.se2.project.hellocar.repository.UserRepository;
 import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +25,31 @@ public class ManageJobAdvertisementControl {
     @Autowired
     private JobAdvertisementRepository repository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public int createJobAdvertisement(JobAdvertisementDTO dto, int userId) throws DatabaseUserException {
         factory = new JobAdvertisementFactoryImpl();
 
         JobAdvertisement entity = factory.create();
         factory.setupEntityByDto(entity, dto);
+        entity.setUser(this.getUser(userId));
+
         this.repository.save(entity);
 
-        JobAdvertisementDAO dao = new JobAdvertisementDAO();
-        int advertisementId = entity.getId();
+        return entity.getJobAdvertismentId(); // new primary key
+    }
 
-        try {
-            dao.setJobAdvertisementToUser(userId, advertisementId);
-        } catch (DatabaseLayerException e) {
-            this.handleDbException(e);
+    private User getUser(int userId){
+        User user = null;
+
+        Optional<User> userOptional = this.userRepository.findById(userId);
+
+        if (userOptional.isPresent()) {
+            user = userOptional.get();
         }
 
-        return advertisementId; // new primary key
+        return user;
     }
 
     public JobAdvertisementDTO readJobAdvertisement(int id) {
@@ -50,7 +60,7 @@ public class ManageJobAdvertisementControl {
 
             JobAdvertisementDTOBuilder builder = new JobAdvertisementDTOBuilder();
 
-            builder.buildId(entity.getId());
+            builder.buildId(entity.getJobAdvertismentId());
             builder.buildJobTitle(entity.getJobTitle());
             builder.buildJobType(entity.getJobType());
             builder.buildDescription(entity.getDescription());

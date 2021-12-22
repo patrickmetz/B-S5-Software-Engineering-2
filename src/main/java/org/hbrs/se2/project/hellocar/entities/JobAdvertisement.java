@@ -2,32 +2,30 @@ package org.hbrs.se2.project.hellocar.entities;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
-import javax.persistence.*;
 import java.util.Objects;
 
 
 @Entity
 @Table( name ="job_advertisement" , schema = "carlook" )
 public class JobAdvertisement {
-
-    private int id;
-    protected String jobTitle;
+    private int jobAdvertismentId;
+    private String jobTitle;
     private String jobType;
     private String description;
     private LocalDate begin;
     private String tags;
-    private List<User> users;
+
+    private User user;
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
-    public int getId() {
-        return id;
+    @Column(name = "job_advertisement_id")
+    public int getJobAdvertismentId() {
+        return jobAdvertismentId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setJobAdvertismentId(int jobAdvertismentId) {
+        this.jobAdvertismentId = jobAdvertismentId;
     }
 
     @Basic
@@ -80,21 +78,12 @@ public class JobAdvertisement {
         this.tags = tags;
     }
 
-    @ManyToMany(mappedBy = "advertisements", fetch = FetchType.EAGER )
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         JobAdvertisement advertisement = (JobAdvertisement) o;
-        return id == advertisement.id &&
+        return jobAdvertismentId == advertisement.jobAdvertismentId &&
                 Objects.equals(jobTitle, advertisement.jobTitle) &&
                 Objects.equals(jobType, advertisement.jobType) &&
                 Objects.equals(description, advertisement.description) &&
@@ -104,6 +93,16 @@ public class JobAdvertisement {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, jobTitle, jobType, description, begin, tags);
+        return Objects.hash(jobAdvertismentId, jobTitle, jobType, description, begin, tags);
+    }
+
+    @ManyToOne
+    @JoinColumn(name="id", nullable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
