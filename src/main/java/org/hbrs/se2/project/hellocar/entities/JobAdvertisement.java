@@ -78,6 +78,16 @@ public class JobAdvertisement {
         this.tags = tags;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "id", nullable = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,15 +104,5 @@ public class JobAdvertisement {
     @Override
     public int hashCode() {
         return Objects.hash(jobAdvertismentId, jobTitle, jobType, description, begin, tags);
-    }
-
-    @ManyToOne
-    @JoinColumn(name="id", nullable = false)
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

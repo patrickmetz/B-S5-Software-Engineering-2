@@ -23,6 +23,7 @@ public class User {
     private List<Rolle> roles;
 
     private List<JobAdvertisement> advertisements = new ArrayList<>();
+    private List<JobApplication> applications = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -142,6 +143,15 @@ public class User {
 
     public void setAdvertisements(List<JobAdvertisement> advertisements) {
         this.advertisements = advertisements;
+    }
+
+    @OneToMany(mappedBy = "user")
+    public List<JobApplication> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<JobApplication> applications) {
+        this.applications = applications;
     }
 
     @Override
