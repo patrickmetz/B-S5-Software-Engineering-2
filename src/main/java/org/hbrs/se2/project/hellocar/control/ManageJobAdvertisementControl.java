@@ -5,6 +5,7 @@ import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.AbstractJobAdvertisementFactory;
 import org.hbrs.se2.project.hellocar.control.factories.JobAdvertisementFactoryImpl;
 import org.hbrs.se2.project.hellocar.dao.JobAdvertisementDAO;
+import org.hbrs.se2.project.hellocar.dtos.CarDTO;
 import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
 import org.hbrs.se2.project.hellocar.entities.JobAdvertisement;
 import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
@@ -16,6 +17,8 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -103,6 +106,24 @@ public class ManageJobAdvertisementControl {
             default:
                 throw new DatabaseUserException("A failure occured while...shit was done");
         }
+    }
+
+    public List<JobAdvertisementDTO> readAllJobAdvertisements() {
+        List<JobAdvertisement> jobAdvertisements = this.repository.getJobAdvertisements();
+        List<JobAdvertisementDTO> jobAdvertisementDTOS = new ArrayList<>();
+
+        jobAdvertisements.forEach(entity -> {
+            JobAdvertisementDTOBuilder builder = new JobAdvertisementDTOBuilder();
+            builder.buildId(entity.getJobAdvertismentId());
+            builder.buildJobTitle(entity.getJobTitle());
+            builder.buildJobType(entity.getJobType());
+            builder.buildDescription(entity.getDescription());
+            builder.buildBegin(entity.getBegin());
+            builder.buildTags(entity.getTags());
+            jobAdvertisementDTOS.add(builder.done());
+        });
+
+        return jobAdvertisementDTOS;
     }
 
 }
