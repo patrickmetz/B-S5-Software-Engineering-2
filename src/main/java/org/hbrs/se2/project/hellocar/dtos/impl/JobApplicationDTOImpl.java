@@ -4,8 +4,21 @@ import org.hbrs.se2.project.hellocar.dtos.JobApplicationDTO;
 
 public class JobApplicationDTOImpl implements JobApplicationDTO {
 
+    private int jobApplicationId;
     private String text;
     private byte[] resume;
+
+    //todo: is user id
+    private int id;
+
+    @Override
+    public int getJobApplicationId() {
+        return jobApplicationId;
+    }
+
+    public void setJobApplicationId(int jobApplicationId) {
+        this.jobApplicationId = jobApplicationId;
+    }
 
     @Override
     public String getText() { return text; }
@@ -17,4 +30,12 @@ public class JobApplicationDTOImpl implements JobApplicationDTO {
     public byte[] getResume() { return resume; }
 
     public void setResume(byte[] resume) { this.resume = resume; }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

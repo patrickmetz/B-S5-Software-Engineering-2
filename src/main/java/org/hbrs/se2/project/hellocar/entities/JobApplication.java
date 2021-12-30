@@ -11,20 +11,20 @@ import java.util.Objects;
 @Table( name ="job_application" , schema = "carlook" )
 public class JobApplication {
 
-    private int id;
+    private int jobApplicationId;
     private String text;
     private byte[] resume;
     private User user;
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
-    public int getId() {
-        return id;
+    @Column(name = "job_application_id")
+    public int getJobApplicationId() {
+        return jobApplicationId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setJobApplicationId(int jobApplicationId) {
+        this.jobApplicationId = jobApplicationId;
     }
 
     @Basic
@@ -62,13 +62,13 @@ public class JobApplication {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         JobApplication application = (JobApplication) o;
-        return id == application.id &&
+        return jobApplicationId == application.jobApplicationId &&
                 Objects.equals(text, application.text) &&
                 Objects.equals(resume, application.resume);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, text, resume);
+        return Objects.hash(jobApplicationId, text, resume);
     }
 }
