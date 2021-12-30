@@ -31,6 +31,7 @@ import org.hbrs.se2.project.hellocar.views.account.UpdateCompanyView;
 import org.hbrs.se2.project.hellocar.views.account.UpdateStudentView;
 import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementBaseView;
 import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementCreateView;
+import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementListView;
 
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
@@ -209,7 +210,10 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // und dem Tabs-Array hinzugefügt. In der Methode createTab wird ein (Key, Value)-Pair übergeben:
         // Key: der sichtbare String des Menu-Items
         // Value: Die UI-Component, die nach dem Klick auf das Menuitem angezeigt wird.
-        Tab[] tabs = new Tab[]{createTab("Show Cars", ShowCarsView.class)};
+        Tab[] tabs = new Tab[]{
+                createTab("Show Cars", ShowCarsView.class),
+                createTab("Show Jobs", JobAdvertisementListView.class)
+        };
 
         // Falls er Admin-Rechte hat, sollte der User auch Autos hinzufügen können
         // (Alternative: Verwendung der Methode 'isUserisAllowedToAccessThisFeature')

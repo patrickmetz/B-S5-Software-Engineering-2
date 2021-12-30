@@ -21,6 +21,7 @@ public class Globals {
         public static final String READONLY_COMPANY_VIEW = "viewcompany";
 
         public static final String CREATE_JOB_AD = "jobadvertisement";
+        public static final String JOB_AD_LIST = "jobs";
     }
 
     public static class Roles {
