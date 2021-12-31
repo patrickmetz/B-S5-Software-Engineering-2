@@ -4,16 +4,11 @@ import org.hbrs.se2.project.hellocar.control.builders.JobAdvertisementDTOBuilder
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
 import org.hbrs.se2.project.hellocar.control.factories.AbstractJobAdvertisementFactory;
 import org.hbrs.se2.project.hellocar.control.factories.JobAdvertisementFactoryImpl;
-import org.hbrs.se2.project.hellocar.dao.JobAdvertisementDAO;
-import org.hbrs.se2.project.hellocar.dtos.CarDTO;
 import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
 import org.hbrs.se2.project.hellocar.entities.JobAdvertisement;
-import org.hbrs.se2.project.hellocar.entities.JobPortalUser;
 import org.hbrs.se2.project.hellocar.entities.User;
 import org.hbrs.se2.project.hellocar.repository.JobAdvertisementRepository;
 import org.hbrs.se2.project.hellocar.repository.UserRepository;
-import org.hbrs.se2.project.hellocar.services.db.exceptions.DatabaseLayerException;
-import org.hbrs.se2.project.hellocar.util.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -89,23 +84,6 @@ public class ManageJobAdvertisementControl {
 
     public void deleteJobAdvertisement(int id) {
         repository.deleteById(id);
-    }
-
-    private void handleDbException(DatabaseLayerException e) throws DatabaseUserException {
-        // chain of responsibility pattern
-        String reason = e.getReason();
-
-        switch (reason) {
-            case Globals.Errors.NOUSERFOUND:
-                throw new DatabaseUserException("No User could be found! Please check your credentials!");
-            case (Globals.Errors.SQLERROR):
-                throw new DatabaseUserException("There were problems with the SQL code. Please contact the developer!");
-            case (Globals.Errors.DATABASE):
-                throw new DatabaseUserException("A failure occured while trying to connect to database with JDBC. " +
-                        "Please contact the admin");
-            default:
-                throw new DatabaseUserException("A failure occured while...shit was done");
-        }
     }
 
     public List<JobAdvertisementDTO> readAllJobAdvertisements() {
