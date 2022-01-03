@@ -5,6 +5,7 @@ import org.hbrs.se2.project.hellocar.dtos.impl.JobApplicationDTOImpl;
 public class JobApplicationDTOBuilder {
 
     private final JobApplicationDTOImpl application;
+    byte[] b = {1,1};
 
     public JobApplicationDTOBuilder() {
         this.application = new JobApplicationDTOImpl();
@@ -12,7 +13,7 @@ public class JobApplicationDTOBuilder {
 
     protected void addAllAttributes() {
         application.setText("Text");
-        application.setResume(null);
+        application.setResume(b);
     }
 
     public JobApplicationDTOBuilder buildDefaultUser() {
