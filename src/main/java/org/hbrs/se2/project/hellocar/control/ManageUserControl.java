@@ -27,19 +27,24 @@ import java.util.Optional;
 
 @Component
 public class ManageUserControl {
-    AbstractJobPortalUserFactory factory;
+    private AbstractJobPortalUserFactory factory;
 
     @Autowired
     private UserRepository userRepository;
 
-    public int createUser(JobPortalUserDTO userDTO, String[] roles) throws DatabaseUserException {
-        JobPortalUser userEntity = null;
-
+    private void createFactory(JobPortalUserDTO userDTO)
+    {
         if (userDTO instanceof StudentDTO) {
             factory = new StudentFactoryImpl();
         } else if (userDTO instanceof CompanyDTO) {
             factory = new CompanyFactoryImpl();
         }
+    }
+
+    public int createUser(JobPortalUserDTO userDTO, String[] roles) throws DatabaseUserException {
+        JobPortalUser userEntity = null;
+
+        createFactory(userDTO);
 
         userEntity = factory.create();
         factory.setupEntityByDto(userEntity, userDTO);
@@ -96,6 +101,10 @@ public class ManageUserControl {
                 ((StudentDTOBuilder) builder).buildSemester(
                         ((Student) user).getSemester()
                 );
+
+                ((StudentDTOBuilder) builder).buildDegree(
+                        ((Student) user).getDegree()
+                );
             }
 
             if (builder != null) {
@@ -148,6 +157,8 @@ public class ManageUserControl {
         Optional<User> optional = this.userRepository.findById(id);
         JobPortalUser entity = null;
 
+        createFactory(dto);
+
         if (optional.isPresent()) {
             entity = (JobPortalUser) optional.get();
 
@@ -178,6 +189,5 @@ public class ManageUserControl {
                 throw new DatabaseUserException("A failure occured while...shit was done");
         }
     }
-
 
 }

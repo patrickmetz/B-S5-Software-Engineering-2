@@ -24,7 +24,6 @@ public abstract class UpdateViewBase<T extends JobPortalUserDTOImpl> extends Acc
 	@Override
 	public void beforeEnter(BeforeEnterEvent event)
 	{
-		// @todo funktioniert nicht.
 		if (getCurrentUser() == null)
 			event.forwardTo(Globals.Pages.LOGIN_VIEW);
 	}

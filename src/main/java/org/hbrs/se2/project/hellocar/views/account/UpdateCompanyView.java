@@ -22,6 +22,7 @@ import org.hbrs.se2.project.hellocar.views.AppView;
 public class UpdateCompanyView extends UpdateViewBase<CompanyDTOImpl>
 {
 	private TextField companyName;
+	private TextField website;
 	private Button submitButton;
 
 	public UpdateCompanyView(ManageUserControl userControl)
@@ -41,6 +42,7 @@ public class UpdateCompanyView extends UpdateViewBase<CompanyDTOImpl>
 		title.setText("Update Account Details");
 
 		companyName = new TextField("Company Name");
+		website = new TextField("Homepage");
 	}
 
 	@Override
@@ -53,6 +55,7 @@ public class UpdateCompanyView extends UpdateViewBase<CompanyDTOImpl>
 			{
 				var companyDTO = new CompanyDTOImpl();
 				binder.writeBean(companyDTO);
+				companyDTO.setProfilePicture(this.profilePicture);
 
 				userService.updateUser(getCurrentUser().getId(), companyDTO);
 
@@ -89,16 +92,19 @@ public class UpdateCompanyView extends UpdateViewBase<CompanyDTOImpl>
 				zipCode,
 				city,
 				streetNumber,
-				submitButton,
+				website,
 				profilePictureUpload,
 				about,
+				submitButton,
 				deleteButton
 		);
 
 		Utils.configureRegistrationForm(formLayout, title, submitButton, deleteButton, about);
 
-		binder.readBean((CompanyDTOImpl)userService.readUser(getCurrentUser().getId()));
+		var user = (CompanyDTOImpl)userService.readUser(getCurrentUser().getId());
+		binder.readBean(user);
 		passwordConfirm.setValue(password.getValue());
+		profilePicture = user.getProfilePicture();
 
 		return formLayout;
 	}

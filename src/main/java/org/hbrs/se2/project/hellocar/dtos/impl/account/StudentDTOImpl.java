@@ -9,21 +9,13 @@ public class StudentDTOImpl extends JobPortalUserDTOImpl implements StudentDTO {
     private Integer semester;
     private String degree;
 
-    public void setStudyCourse(String studyCourse) {
-        this.studyCourse = studyCourse;
-    }
-
-    public void setSpecialization(String specialization) {
-        this.specialization = specialization;
-    }
-
-    public void setSemester(Integer semester) {
-        this.semester = semester;
-    }
-
-    public void setDegree(String degree){
+    public void setStudyCourse(String studyCourse) { this.studyCourse = studyCourse; }
+    public void setSpecialization(String specialization) { this.specialization = specialization; }
+    public void setSemester(Integer semester) { this.semester = semester; }
+    public void setDegree(String degree) {
         this.degree = degree;
     }
+
 
     @Override
     public String getStudyCourse() {
@@ -41,7 +33,9 @@ public class StudentDTOImpl extends JobPortalUserDTOImpl implements StudentDTO {
     }
 
     @Override
-    public String getDegree() { return degree; }
+    public String getDegree() {
+        return degree;
+    }
 
 }
 

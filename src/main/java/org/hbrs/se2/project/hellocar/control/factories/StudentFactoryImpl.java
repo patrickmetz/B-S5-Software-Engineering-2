@@ -30,5 +30,9 @@ public class StudentFactoryImpl extends AbstractJobPortalUserFactory {
         ((Student) entity).setSemester(
                 ((StudentDTO) dto).getSemester()
         );
+
+        ((Student) entity).setDegree(
+                ((StudentDTO) dto).getDegree()
+        );
     }
 }

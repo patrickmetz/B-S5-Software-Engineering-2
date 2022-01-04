@@ -1,0 +1,26 @@
+.job-advertisement {
+}
+
+.job-advertisement .job-form {
+    max-width: 1024px;
+    margin: 20px auto auto; /* centering horizontally */
+}
+
+.job-advertisement .job-form .create-button {
+    max-width: 250px;
+    left: calc(100% - 250px);
+}
+
+.job-advertisement-list-view {
+    display: block;
+    height: 100%;
+    margin: 0 auto;
+    max-width: 1024px;
+    padding: 0 var(--lumo-space-l);
+}
+
+
+
+
+
+

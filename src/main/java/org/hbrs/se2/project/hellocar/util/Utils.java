@@ -48,9 +48,12 @@ public class Utils {
             Button secondaryButton,
             TextArea about
     ) {
-        submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY); // @todo überschreibt was in den view klassen gesetzt wurde!?
+        if (submitButton != null)
+        {
+            submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY); // @todo überschreibt was in den view klassen gesetzt wurde!?
+            submitButton.addClassName("registerButton");
+        }
 
-        submitButton.addClassName("registerButton");
         formLayout.addClassName("registerForm");
         formLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
@@ -65,7 +68,7 @@ public class Utils {
             secondaryButton.addClassName("goBackButton");
             formLayout.setColspan(submitButton, 2);
             formLayout.setColspan(secondaryButton, 2);
-        } else {
+        } else if (submitButton != null) {
             formLayout.setColspan(submitButton, 2);
         }
     }

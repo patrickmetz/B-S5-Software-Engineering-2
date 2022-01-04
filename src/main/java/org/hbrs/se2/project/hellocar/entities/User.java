@@ -3,6 +3,7 @@ package org.hbrs.se2.project.hellocar.entities;
 import javax.persistence.*;
 // import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -20,7 +21,9 @@ public class User {
     private String phone;
     private String userid;
     private List<Rolle> roles;
-    private Set<JobAdvertisement> advertisements;
+
+    private List<JobAdvertisement> advertisements = new ArrayList<>();
+    private List<JobApplication> applications = new ArrayList<>();
 
     @Id
     @GeneratedValue
@@ -104,7 +107,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "userid", nullable = false, unique = true)
+    @Column(name = "userid", nullable = false, updatable = false, unique = true)
     public String getUserid() {
         return userid;
     }
@@ -127,17 +130,28 @@ public class User {
     }
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_to_job_advertisement", catalog = "demouser",
-            schema = "carlook",
-            joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "id", nullable = false))
-    public Set<JobAdvertisement> getAdvertisements() {
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "user_to_job_advertisement", catalog = "demouser",
+//            schema = "carlook",
+//            joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id", nullable = false),
+//            inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "id", nullable = false))
+
+    @OneToMany(mappedBy = "user")
+    public List<JobAdvertisement> getAdvertisements() {
         return advertisements;
     }
 
-    public void setAdvertisements(Set<JobAdvertisement> advertisements) {
+    public void setAdvertisements(List<JobAdvertisement> advertisements) {
         this.advertisements = advertisements;
+    }
+
+    @OneToMany(mappedBy = "user")
+    public List<JobApplication> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<JobApplication> applications) {
+        this.applications = applications;
     }
 
     @Override

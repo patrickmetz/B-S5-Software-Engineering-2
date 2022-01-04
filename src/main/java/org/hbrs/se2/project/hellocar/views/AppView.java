@@ -29,6 +29,9 @@ import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.account.UpdateCompanyView;
 import org.hbrs.se2.project.hellocar.views.account.UpdateStudentView;
+import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementBaseView;
+import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementCreateView;
+import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementListView;
 
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
@@ -75,7 +78,8 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
         UserDTO userDTO = this.getCurrentUser();
         if (userDTO == null) {
-            UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
+            // @todo prevents display of ReadOnly*View to guests, commented for now
+            //UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
             return false;
         }
         return true;
@@ -206,7 +210,10 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // und dem Tabs-Array hinzugefügt. In der Methode createTab wird ein (Key, Value)-Pair übergeben:
         // Key: der sichtbare String des Menu-Items
         // Value: Die UI-Component, die nach dem Klick auf das Menuitem angezeigt wird.
-        Tab[] tabs = new Tab[]{createTab("Show Cars", ShowCarsView.class)};
+        Tab[] tabs = new Tab[]{
+                createTab("Show Cars", ShowCarsView.class),
+                createTab("Show Jobs", JobAdvertisementListView.class)
+        };
 
         // Falls er Admin-Rechte hat, sollte der User auch Autos hinzufügen können
         // (Alternative: Verwendung der Methode 'isUserisAllowedToAccessThisFeature')
@@ -216,7 +223,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         }
 
         if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
-            tabs = Utils.append(tabs, createTab("Create Job Advertisement", EnterCarView.class));
+            tabs = Utils.append(tabs, createTab("Create Job Advertisement", JobAdvertisementCreateView.class));
         }
 
         // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
@@ -303,9 +310,10 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
      *
      */
     public void beforeEnter(BeforeEnterEvent beforeEnterEvent) {
-        if (getCurrentUser() == null) {
-            beforeEnterEvent.rerouteTo(Globals.Pages.LOGIN_VIEW);
-        }
+        // @todo prevents display of ReadOnly*View to guests, commented for now
+//        if (getCurrentUser() == null) {
+//            beforeEnterEvent.rerouteTo(Globals.Pages.LOGIN_VIEW);
+//        }
 
     }
 }

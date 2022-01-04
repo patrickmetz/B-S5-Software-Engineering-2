@@ -16,6 +16,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import org.apache.commons.compress.utils.IOUtils;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
@@ -30,7 +32,9 @@ import java.util.stream.Stream;
 
 @CssImport("./styles/views/registration/registration-view.css")
 @CssImport("./styles/views/logo/logo.css")
-public abstract class AccountViewBase<T extends JobPortalUserDTOImpl> extends VerticalLayout
+public abstract class AccountViewBase<T extends JobPortalUserDTOImpl>
+	extends VerticalLayout
+	implements AfterNavigationObserver
 {
 	protected Binder<T> binder;
 	protected ManageUserControl userService;
@@ -53,12 +57,15 @@ public abstract class AccountViewBase<T extends JobPortalUserDTOImpl> extends Ve
 
 	public AccountViewBase(Binder<T> customBinder, ManageUserControl userService)
 	{
-
 		addClassName("account-view");
 
 		binder = customBinder;
 		this.userService = userService;
+	}
 
+	@Override
+	public void afterNavigation(AfterNavigationEvent event)
+	{
 		setupView();
 
 		setupCommonElements();

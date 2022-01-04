@@ -2,36 +2,34 @@ package org.hbrs.se2.project.hellocar.entities;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
-import javax.persistence.*;
 import java.util.Objects;
 
 
 @Entity
 @Table( name ="job_advertisement" , schema = "carlook" )
 public class JobAdvertisement {
-
-    private int id;
-    protected String jobTitle;
+    private int jobAdvertismentId;
+    private String jobTitle;
     private String jobType;
     private String description;
     private LocalDate begin;
     private String tags;
-    private List<User> users;
+
+    private User user;
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
-    public int getId() {
-        return id;
+    @Column(name = "job_advertisement_id")
+    public int getJobAdvertismentId() {
+        return jobAdvertismentId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setJobAdvertismentId(int jobAdvertismentId) {
+        this.jobAdvertismentId = jobAdvertismentId;
     }
 
     @Basic
-    @Column(name = "job_title")
+    @Column(name = "job_title", nullable = false)
     public String getJobTitle() {
         return jobTitle;
     }
@@ -41,7 +39,7 @@ public class JobAdvertisement {
     }
 
     @Basic
-    @Column(name = "job_type")
+    @Column(name = "job_type", nullable = false)
     public String getJobType() {
         return jobType;
     }
@@ -51,7 +49,7 @@ public class JobAdvertisement {
     }
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     public String getDescription() {
         return description;
     }
@@ -61,7 +59,7 @@ public class JobAdvertisement {
     }
 
     @Basic
-    @Column(name = "begin_date")
+    @Column(name = "begin_date", nullable = false)
     public LocalDate getBegin() {
         return begin;
     }
@@ -71,7 +69,7 @@ public class JobAdvertisement {
     }
 
     @Basic
-    @Column(name = "tags")
+    @Column(name = "tags", nullable = false)
     public String getTags() {
         return tags;
     }
@@ -80,13 +78,14 @@ public class JobAdvertisement {
         this.tags = tags;
     }
 
-    @ManyToMany(mappedBy = "advertisements", fetch = FetchType.EAGER )
-    public List<User> getUsers() {
-        return users;
+    @ManyToOne
+    @JoinColumn(name = "id", nullable = false)
+    public User getUser() {
+        return user;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -94,7 +93,7 @@ public class JobAdvertisement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         JobAdvertisement advertisement = (JobAdvertisement) o;
-        return id == advertisement.id &&
+        return jobAdvertismentId == advertisement.jobAdvertismentId &&
                 Objects.equals(jobTitle, advertisement.jobTitle) &&
                 Objects.equals(jobType, advertisement.jobType) &&
                 Objects.equals(description, advertisement.description) &&
@@ -104,6 +103,6 @@ public class JobAdvertisement {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, jobTitle, jobType, description, begin, tags);
+        return Objects.hash(jobAdvertismentId, jobTitle, jobType, description, begin, tags);
     }
 }

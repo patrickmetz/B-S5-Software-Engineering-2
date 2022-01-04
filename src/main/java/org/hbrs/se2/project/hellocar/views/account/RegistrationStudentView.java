@@ -9,6 +9,7 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -32,6 +33,7 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
     private TextField studyCourse;
     private TextField specialization;
     private IntegerField semester;
+    private Select<String> degree;
 
     private Button submitButton;
 
@@ -77,6 +79,9 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
         studyCourse = new TextField("Study Course");
         specialization = new TextField("Specialization");
         semester = new IntegerField("Semester");
+        degree = new Select<>(Globals.Degrees.BACHELOR, Globals.Degrees.MASTER, Globals.Degrees.DOCTORAL_STUDENT);
+        degree.setLabel("Degree");
+
     }
 
     @Override
@@ -132,11 +137,6 @@ public class RegistrationStudentView extends RegistrationViewBase<StudentDTOImpl
                 city,
                 streetNumber,
                 dateOfBirth,
-                studyCourse,
-                specialization,
-                semester,
-                profilePictureUpload,
-                about,
                 submitButton
         );
 
