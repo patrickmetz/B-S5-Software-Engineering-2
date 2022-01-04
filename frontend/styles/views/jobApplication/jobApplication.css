@@ -1,0 +1,26 @@
+.job-application {
+}
+
+.job-application .job-form {
+    max-width: 1024px;
+    margin: 20px auto auto; /* centering horizontally */
+}
+
+.job-application .job-form .create-button {
+    max-width: 250px;
+    left: calc(100% - 250px);
+}
+
+.job-application-list-view {
+    display: block;
+    height: 100%;
+    margin: 0 auto;
+    max-width: 1024px;
+    padding: 0 var(--lumo-space-l);
+}
+
+
+
+
+
+

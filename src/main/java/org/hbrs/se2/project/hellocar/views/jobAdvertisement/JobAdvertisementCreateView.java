@@ -6,6 +6,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import org.hbrs.se2.project.hellocar.control.ManageJobAdvertisementControl;
@@ -19,6 +20,7 @@ import org.hbrs.se2.project.hellocar.views.account.LoginView;
 
 @Route(value = Globals.Pages.CREATE_JOB_AD, layout = AppView.class)
 @RouteAlias("createjob")
+@PageTitle("Create Job Advertisement")
 public class JobAdvertisementCreateView extends JobAdvertisementBaseView {
 
     protected Button createButton;

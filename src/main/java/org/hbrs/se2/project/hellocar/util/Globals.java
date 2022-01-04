@@ -22,6 +22,9 @@ public class Globals {
 
         public static final String CREATE_JOB_AD = "jobadvertisement";
         public static final String JOB_AD_LIST = "jobs";
+
+        public static final String JOB_APPLICATION_LIST = "jobapplications";
+
     }
 
     public static class Roles {

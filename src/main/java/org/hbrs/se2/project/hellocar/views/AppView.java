@@ -32,6 +32,7 @@ import org.hbrs.se2.project.hellocar.views.account.UpdateStudentView;
 import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementBaseView;
 import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementCreateView;
 import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementListView;
+import org.hbrs.se2.project.hellocar.views.jobApplication.JobApplicationListView;
 
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
@@ -224,6 +225,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
             tabs = Utils.append(tabs, createTab("Create Job Advertisement", JobAdvertisementCreateView.class));
+            tabs = Utils.append(tabs, createTab("Show Job Applications", JobApplicationListView.class));
         }
 
         // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!
