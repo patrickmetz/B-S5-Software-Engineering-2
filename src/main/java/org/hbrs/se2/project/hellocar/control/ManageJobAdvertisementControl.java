@@ -59,6 +59,7 @@ public class ManageJobAdvertisementControl {
             JobAdvertisementDTOBuilder builder = new JobAdvertisementDTOBuilder();
 
             builder.buildId(entity.getJobAdvertismentId());
+            builder.buildUser(entity.getUser());
             builder.buildJobTitle(entity.getJobTitle());
             builder.buildJobType(entity.getJobType());
             builder.buildDescription(entity.getDescription());
@@ -93,6 +94,7 @@ public class ManageJobAdvertisementControl {
         jobAdvertisements.forEach(entity -> {
             JobAdvertisementDTOBuilder builder = new JobAdvertisementDTOBuilder();
             builder.buildId(entity.getJobAdvertismentId());
+            builder.buildUser(entity.getUser());
             builder.buildJobTitle(entity.getJobTitle());
             builder.buildJobType(entity.getJobType());
             builder.buildDescription(entity.getDescription());

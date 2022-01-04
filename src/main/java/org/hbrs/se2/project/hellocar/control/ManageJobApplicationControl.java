@@ -46,6 +46,7 @@ public class ManageJobApplicationControl {
             JobApplicationDTOBuilder builder = new JobApplicationDTOBuilder();
 
             builder.buildId(entity.getJobApplicationId());
+            builder.buildUser(entity.getUser());
             builder.buildText(entity.getText());
             builder.buildResume(entity.getResume());
 
@@ -77,6 +78,7 @@ public class ManageJobApplicationControl {
         jobApplications.forEach(entity -> {
             JobApplicationDTOBuilder builder = new JobApplicationDTOBuilder();
             builder.buildId(entity.getJobApplicationId());
+            builder.buildUser(entity.getUser());
             builder.buildText(entity.getText());
             builder.buildResume(entity.getResume());
 

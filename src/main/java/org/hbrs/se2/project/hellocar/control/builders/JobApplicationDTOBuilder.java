@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.hellocar.control.builders;
 
 import org.hbrs.se2.project.hellocar.dtos.impl.JobApplicationDTOImpl;
+import org.hbrs.se2.project.hellocar.entities.User;
 
 public class JobApplicationDTOBuilder {
 
@@ -22,12 +23,7 @@ public class JobApplicationDTOBuilder {
     }
 
     public JobApplicationDTOBuilder buildId(int id) {
-        application.setId(id);
-        return this;
-    }
-
-    public JobApplicationDTOBuilder buildJobApplicationId(int jobApplicationId) {
-        application.setId(jobApplicationId);
+        application.setJobApplicationId(id);
         return this;
     }
 
@@ -38,6 +34,11 @@ public class JobApplicationDTOBuilder {
 
     public JobApplicationDTOBuilder buildResume(byte[] resume) {
         application.setResume(resume);
+        return this;
+    }
+
+    public JobApplicationDTOBuilder buildUser(User user) {
+        application.setId(user.getId());
         return this;
     }
 
