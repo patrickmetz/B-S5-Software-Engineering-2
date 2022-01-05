@@ -49,7 +49,7 @@ public class ManageJobApplicationControl {
             builder.buildUser(entity.getUser());
             builder.buildText(entity.getText());
             builder.buildResume(entity.getResume());
-            builder.buildJobApplicationId(entity.getJobAdvertisementId());
+            builder.buildJobAdvertisementId(entity.getJobAdvertisementId());
 
             return builder.done();
         }
@@ -82,7 +82,7 @@ public class ManageJobApplicationControl {
             builder.buildUser(entity.getUser());
             builder.buildText(entity.getText());
             builder.buildResume(entity.getResume());
-            builder.buildJobApplicationId(entity.getJobAdvertisementId());
+            builder.buildJobAdvertisementId(entity.getJobAdvertisementId());
 
             jobApplicationDTOS.add(builder.done());
         });

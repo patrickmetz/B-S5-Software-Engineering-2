@@ -9,5 +9,6 @@ public abstract class AbstractJobApplicationFactory {
     public void setupEntityByDto(JobApplication entity, JobApplicationDTO dto) {
         entity.setResume(dto.getResume());
         entity.setText(dto.getText());
+        entity.setJobAdvertisementId(dto.getJobAdvertisementId());
     }
 }

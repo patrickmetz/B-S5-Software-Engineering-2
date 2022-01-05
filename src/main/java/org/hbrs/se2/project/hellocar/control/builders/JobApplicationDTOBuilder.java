@@ -42,7 +42,7 @@ public class JobApplicationDTOBuilder {
         return this;
     }
 
-    public JobApplicationDTOBuilder buildJobApplicationId(int jobAdvertisementId) {
+    public JobApplicationDTOBuilder buildJobAdvertisementId(int jobAdvertisementId) {
         application.setJobAdvertisementId(jobAdvertisementId);
         return this;
     }

@@ -40,6 +40,7 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 	{
 		StudentDTOImpl user = (StudentDTOImpl) userService.readUser(id);
 		binder.readBean(user);
+		/* todo check if picture is not null */
 		profilePicture.setSrc("data:image/png;base64,"
 				+ Base64.encodeBase64String(user.getProfilePicture()));
 	}

@@ -25,6 +25,8 @@ public class Globals {
 
         public static final String JOB_APPLICATION_LIST = "jobapplications";
 
+        public static final String JOB_APPLICATION = "apply";
+
     }
 
     public static class Roles {

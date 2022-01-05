@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.hellocar.views.jobAdvertisement;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
@@ -26,6 +27,7 @@ import org.hbrs.se2.project.hellocar.services.search.JobAdvertisementSearchProxy
 import org.hbrs.se2.project.hellocar.services.search.impl.JobAdvertisementSearchImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.views.AppView;
+import org.hbrs.se2.project.hellocar.views.account.LoginView;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -111,7 +113,7 @@ public class JobAdvertisementListView extends Div {
                 .addComponentColumn(advertisement -> {
                     Button applyButton = new Button("Apply");
                     applyButton.addClickListener(e -> {
-                        advertisement.getJobAdvertisementId();
+                        UI.getCurrent().navigate("apply/" + advertisement.getJobAdvertisementId());
                     });
                     return applyButton;
                 })
