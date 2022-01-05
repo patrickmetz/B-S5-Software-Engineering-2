@@ -8,6 +8,7 @@ public class JobApplicationDTOImpl implements JobApplicationDTO {
     private String text;
     private byte[] resume;
     private int id;
+    private int jobAdvertisementId;
 
     @Override
     public int getJobApplicationId() {
@@ -35,5 +36,14 @@ public class JobApplicationDTOImpl implements JobApplicationDTO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public int getJobAdvertisementId() {
+        return jobAdvertisementId;
+    }
+
+    public void setJobAdvertisementId(int jobAdvertisementId) {
+        this.jobAdvertisementId = jobAdvertisementId;
     }
 }

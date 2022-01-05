@@ -7,4 +7,5 @@ public interface JobAdvertisementSearch {
     void setJobTitle(String jobTitle);
     void setJobType(String jobType);
     void setTags(String tags);
+    void setCompany(String company);
 }

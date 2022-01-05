@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.hellocar.services.search;
 
 import com.vaadin.flow.data.provider.ListDataProvider;
+import org.hbrs.se2.project.hellocar.control.ManageJobAdvertisementControl;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
 import org.hbrs.se2.project.hellocar.dtos.JobApplicationDTO;
@@ -14,10 +15,11 @@ public class JobApplicationSearchProxy implements JobApplicationSearch {
 
     public JobApplicationSearchProxy(
             ListDataProvider<JobApplicationDTO> data,
-            ManageUserControl manageUserControl
+            ManageUserControl manageUserControl,
+            ManageJobAdvertisementControl manageJobAdvertisementControl
     ) {
         this.data = data;
-        this.applicationSearch = new JobApplicationSearchImpl(data, manageUserControl);
+        this.applicationSearch = new JobApplicationSearchImpl(data, manageUserControl, manageJobAdvertisementControl);
     }
 
     public void setApplicantFirstName(String applicantFirstName) {
@@ -26,6 +28,10 @@ public class JobApplicationSearchProxy implements JobApplicationSearch {
 
     public void setApplicantLastName(String applicantLastName) {
         this.applicationSearch.setApplicantLastName(applicantLastName);
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.applicationSearch.setJobTitle(jobTitle);
     }
 
 }

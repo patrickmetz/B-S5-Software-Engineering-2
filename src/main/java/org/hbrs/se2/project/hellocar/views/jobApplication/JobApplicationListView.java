@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.hellocar.views.jobApplication;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -32,8 +33,10 @@ import org.hbrs.se2.project.hellocar.services.search.impl.JobAdvertisementSearch
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.views.AppView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Route(value = Globals.Pages.JOB_APPLICATION_LIST, layout = AppView.class)
 @RouteAlias("applicationlist")
@@ -44,18 +47,37 @@ public class JobApplicationListView extends Div {
     private List<JobApplicationDTO> jobApplicationList;
     private ManageUserControl manageUserControl;
     private ManageJobApplicationControl manageJobApplicationControl;
+    private ManageJobAdvertisementControl manageJobAdvertisementControl;
 
     public JobApplicationListView(
             ManageJobApplicationControl manageJobApplicationControl,
-            ManageUserControl manageUserControl) {
+            ManageUserControl manageUserControl,
+            ManageJobAdvertisementControl manageJobAdvertisementControl) {
         this.manageJobApplicationControl = manageJobApplicationControl;
         this.manageUserControl = manageUserControl;
-        this.jobApplicationList = manageJobApplicationControl.readAllJobApplications();
+        this.manageJobAdvertisementControl = manageJobAdvertisementControl;
+        this.jobApplicationList = filterApplicationsForUser(manageJobApplicationControl.readAllJobApplications());
 
         addClassName("job-application-list-view");
 
         add(this.createTitle());
         add(this.createGridTable());
+    }
+
+    private List<JobApplicationDTO> filterApplicationsForUser(List<JobApplicationDTO> applications) {
+        JobPortalUserDTO user = this.getCurrentUser();
+        if(user == null) return new ArrayList<>();
+        return applications
+                .stream()
+                .filter(a ->  {
+                    JobAdvertisementDTO advertisement = manageJobAdvertisementControl.readJobAdvertisement(a.getJobAdvertisementId());
+                    return advertisement.getId() == user.getId();
+                })
+                .collect(Collectors.toList());
+    }
+
+    private JobPortalUserDTO getCurrentUser() {
+        return (JobPortalUserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
     }
 
     private Component createGridTable() {
@@ -70,6 +92,15 @@ public class JobApplicationListView extends Div {
                 .setWidth("65px")
                 .setFlexGrow(0)
                 .setHeader("ID")
+                .setSortable(true);
+
+        Grid.Column<JobApplicationDTO> advertisementTitleColumn = grid
+                .addColumn((application) -> {
+                    JobAdvertisementDTO advertisement = this.manageJobAdvertisementControl.readJobAdvertisement(application.getJobAdvertisementId());
+                    return advertisement.getJobTitle();
+                })
+                .setAutoWidth(true)
+                .setHeader("Job Title")
                 .setSortable(true);
 
         Grid.Column<JobApplicationDTO> applicantFirstNameColumn = grid
@@ -120,9 +151,13 @@ public class JobApplicationListView extends Div {
         grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
         grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 
-        JobApplicationSearchProxy jobApplicationSearchProxy = new JobApplicationSearchProxy(dataProvider, manageUserControl);
+        JobApplicationSearchProxy jobApplicationSearchProxy = new JobApplicationSearchProxy(
+                dataProvider,
+                manageUserControl,
+                manageJobAdvertisementControl);
 
         // Set filters
+        filterRow.getCell(advertisementTitleColumn).setComponent(createFilterInput(jobApplicationSearchProxy::setJobTitle));
         filterRow.getCell(applicantFirstNameColumn).setComponent(createFilterInput(jobApplicationSearchProxy::setApplicantFirstName));
         filterRow.getCell(applicantLastNameColumn).setComponent(createFilterInput(jobApplicationSearchProxy::setApplicantLastName));
 

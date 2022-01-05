@@ -17,7 +17,10 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import org.hbrs.se2.project.hellocar.control.ManageJobAdvertisementControl;
+import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.services.search.JobAdvertisementSearch;
 import org.hbrs.se2.project.hellocar.services.search.JobAdvertisementSearchProxy;
 import org.hbrs.se2.project.hellocar.services.search.impl.JobAdvertisementSearchImpl;
@@ -34,8 +37,13 @@ import java.util.function.Consumer;
 public class JobAdvertisementListView extends Div {
 
     private List<JobAdvertisementDTO> jobAdvertisementList;
+    private ManageUserControl manageUserControl;
 
-    public JobAdvertisementListView(ManageJobAdvertisementControl jobAdvertisementControl ) {
+    public JobAdvertisementListView(
+            ManageJobAdvertisementControl jobAdvertisementControl,
+            ManageUserControl manageUserControl
+    ) {
+        this.manageUserControl = manageUserControl;
         jobAdvertisementList = jobAdvertisementControl.readAllJobAdvertisements();
 
         addClassName("job-advertisement-list-view");
@@ -65,6 +73,25 @@ public class JobAdvertisementListView extends Div {
                 .setHeader("Title")
                 .setSortable(true);
 
+        Grid.Column<JobAdvertisementDTO> companyColumn = grid
+                .addColumn((advertisement) -> {
+                    JobPortalUserDTO user = manageUserControl.readUser(advertisement.getId());
+                    if(user != null) {
+                        if(user instanceof CompanyDTO) {
+                            CompanyDTO company = (CompanyDTO) user;
+                            return company.getCompanyName();
+                        } else {
+                            return user.getFirstName() + " " + user.getLastName();
+                        }
+                    } else {
+                        return "";
+                    }
+                })
+                .setAutoWidth(true)
+                .setFlexGrow(0)
+                .setHeader("Company")
+                .setSortable(true);
+
         Grid.Column<JobAdvertisementDTO> beginDateColumn = grid
                 .addColumn(new LocalDateRenderer<>(JobAdvertisementDTO::getBegin, "yyyy-MM-dd"))
                 .setComparator(JobAdvertisementDTO::getBegin)
@@ -81,10 +108,10 @@ public class JobAdvertisementListView extends Div {
                 .setHeader("Tags");
 
         Grid.Column<JobAdvertisementDTO> applyColumn = grid
-                .addComponentColumn(person -> {
+                .addComponentColumn(advertisement -> {
                     Button applyButton = new Button("Apply");
                     applyButton.addClickListener(e -> {
-
+                        advertisement.getJobAdvertisementId();
                     });
                     return applyButton;
                 })
@@ -96,10 +123,11 @@ public class JobAdvertisementListView extends Div {
         grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
         grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 
-        JobAdvertisementSearchProxy jobAdvertisementSearch = new JobAdvertisementSearchProxy(dataProvider);
+        JobAdvertisementSearchProxy jobAdvertisementSearch = new JobAdvertisementSearchProxy(dataProvider, manageUserControl);
 
         // Set filters
         filterRow.getCell(jobTitleColumn).setComponent(createFilterInput(jobAdvertisementSearch::setJobTitle));
+        filterRow.getCell(companyColumn).setComponent(createFilterInput(jobAdvertisementSearch::setCompany));
         filterRow.getCell(jobTypeColumn).setComponent(createFilterInput(jobAdvertisementSearch::setJobType));
         filterRow.getCell(tagsColumn).setComponent(createFilterInput(jobAdvertisementSearch::setTags));
 
