@@ -66,6 +66,8 @@ public abstract class AccountViewBase<T extends JobPortalUserDTOImpl>
 	@Override
 	public void afterNavigation(AfterNavigationEvent event)
 	{
+		removeAll();
+
 		setupView();
 
 		setupCommonElements();
