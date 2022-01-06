@@ -14,11 +14,15 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.*;
 import org.apache.commons.compress.utils.IOUtils;
+import org.hbrs.se2.project.hellocar.control.ManageJobAdvertisementControl;
 import org.hbrs.se2.project.hellocar.control.ManageJobApplicationControl;
+import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
+import org.hbrs.se2.project.hellocar.dtos.impl.JobAdvertisementDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.JobApplicationDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
+import org.hbrs.se2.project.hellocar.util.JobApplication.JobApplicationValidation;
 import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.AppView;
 import org.hbrs.se2.project.hellocar.views.account.LoginView;
@@ -28,9 +32,10 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 @Route(value = Globals.Pages.JOB_APPLICATION, layout = AppView.class)
-public class JobApplication extends VerticalLayout implements HasUrlParameter<Integer> {
+public class JobApplication extends VerticalLayout implements HasUrlParameter<Integer>, AfterNavigationObserver {
     Binder<JobApplicationDTOImpl> binder;
     protected ManageJobApplicationControl manageJobApplicationService;
+    protected ManageJobAdvertisementControl manageJobAdvertisementService;
 
     private int jobAdvertisementId;
 
@@ -47,18 +52,22 @@ public class JobApplication extends VerticalLayout implements HasUrlParameter<In
         this.jobAdvertisementId = jobId;
     }
 
-    public JobApplication(ManageJobApplicationControl manageJobApplicationService) {
+    public JobApplication(
+            ManageJobApplicationControl manageJobApplicationService,
+            ManageJobAdvertisementControl manageJobAdvertisementService
+    ) {
         this.binder = new Binder<>(JobApplicationDTOImpl.class);
 
         this.manageJobApplicationService = manageJobApplicationService;
+        this.manageJobAdvertisementService = manageJobAdvertisementService;
 
-        this.title = new H3("Apply to Job"); /* todo add job title */
+
         this.text = new TextArea("Message");
         MemoryBuffer buffer = new MemoryBuffer();
         uploadResume = new Upload(buffer);
         Button uploadButton = new Button("Upload Resume");
         uploadButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        uploadResume.setDropAllowed(false);
+        uploadResume.setUploadButton(uploadButton);
         uploadResume.setAcceptedFileTypes(".pdf");
         uploadResume.addSucceededListener(event -> {
             InputStream inputStream = buffer.getInputStream();
@@ -69,12 +78,6 @@ public class JobApplication extends VerticalLayout implements HasUrlParameter<In
             }
         });
         this.submitButton = new Button("Send Application");
-
-        FormLayout form = setupForm();
-        add(form);
-
-        setupSubmitButton();
-        binder.bindInstanceFields(this);
     }
 
     protected FormLayout setupForm() {
@@ -93,13 +96,11 @@ public class JobApplication extends VerticalLayout implements HasUrlParameter<In
         submitButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         submitButton.addClickListener((event) -> {
             try {
-                // put form values into student dto
                 JobApplicationDTOImpl jobApplicationDTO = new JobApplicationDTOImpl();
                 binder.writeBean(jobApplicationDTO);
                 jobApplicationDTO.setResume(resume);
                 jobApplicationDTO.setJobAdvertisementId(jobAdvertisementId);
 
-                // put student user and its roles into db
                 manageJobApplicationService.createJobApplication(
                         jobApplicationDTO,
                         this.getCurrentUser().getId()
@@ -122,5 +123,29 @@ public class JobApplication extends VerticalLayout implements HasUrlParameter<In
 
     protected UserDTO getCurrentUser() {
         return (UserDTO) UI.getCurrent().getSession().getAttribute(Globals.CURRENT_USER);
+    }
+
+    private void setupValidation() {
+        binder.forField(text)
+                .withValidator(
+                        JobApplicationValidation::notEmptyFieldValidator,
+                        JobApplicationValidation.MESSAGE_IS_MISSING_ERROR
+                )
+                .bind(JobApplicationDTOImpl::getText, JobApplicationDTOImpl::setText);
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {
+        JobAdvertisementDTOImpl jobAd =
+                (JobAdvertisementDTOImpl) this.manageJobAdvertisementService.readJobAdvertisement(this.jobAdvertisementId);
+        this.title = new H3("Apply to Job: " + jobAd.getJobTitle());
+        FormLayout form = setupForm();
+        add(form);
+
+        setupSubmitButton();
+        setupValidation();
+        Utils.configureApplicationForm(form, title, text, uploadResume, submitButton);
+        binder.bindInstanceFields(this);
+        setHorizontalComponentAlignment(Alignment.CENTER, form);
     }
 }

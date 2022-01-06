@@ -136,4 +136,24 @@ public class Utils {
         return valid;
     }
 
+    public static void configureApplicationForm(
+            FormLayout formLayout,
+            H3 title,
+            TextArea text,
+            Upload upload,
+            Button sumbitButton
+    ) {
+        formLayout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
+                new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP)
+        );
+        formLayout.setColspan(title, 2);
+        formLayout.setColspan(text, 2);
+        formLayout.setColspan(upload, 2);
+        formLayout.setColspan(sumbitButton, 2);
+        text.setHeight("500px");
+        formLayout.setMaxWidth("600px");
+        upload.setDropAllowed(false);
+    }
+
 }
