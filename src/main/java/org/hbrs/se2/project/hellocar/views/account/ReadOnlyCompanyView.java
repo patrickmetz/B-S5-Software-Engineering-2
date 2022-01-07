@@ -20,6 +20,7 @@ public class ReadOnlyCompanyView extends ReadOnlyViewBase<CompanyDTOImpl> implem
 {
 	private TextField companyName;
 	private TextField website;
+	private int id;
 
 	public ReadOnlyCompanyView(ManageUserControl userControl)
 	{
@@ -29,10 +30,7 @@ public class ReadOnlyCompanyView extends ReadOnlyViewBase<CompanyDTOImpl> implem
 	@Override
 	public void setParameter(BeforeEvent beforeEvent, Integer id)
 	{
-		CompanyDTOImpl user = (CompanyDTOImpl)userService.readUser(id);
-		binder.readBean(user);
-		profilePicture.setSrc("data:image/png;base64,"
-				+ Base64.encodeBase64String(user.getProfilePicture()));
+		this.id = id;
 	}
 
 	@Override
@@ -57,7 +55,10 @@ public class ReadOnlyCompanyView extends ReadOnlyViewBase<CompanyDTOImpl> implem
 	@Override
 	protected void setupSubmitButtons()
 	{
-		// no buttons
+		CompanyDTOImpl user = (CompanyDTOImpl)userService.readUser(id);
+		binder.readBean(user);
+		profilePicture.setSrc("data:image/png;base64,"
+				+ Base64.encodeBase64String(user.getProfilePicture()));
 	}
 
 	@Override

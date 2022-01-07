@@ -121,6 +121,18 @@ public class JobAdvertisementListView extends Div {
                 .setFlexGrow(0)
                 .setHeader("Actions");
 
+        Grid.Column<JobAdvertisementDTO> viewColumn = grid
+                .addComponentColumn(advertisement -> {
+                    Button viewButton = new Button("View");
+                    viewButton.addClickListener(e -> {
+                        UI.getCurrent().navigate(Globals.Pages.VIEW_JOB_AD + "/" + advertisement.getJobAdvertisementId());
+                    });
+                    return viewButton;
+                })
+                .setWidth("120px")
+                .setFlexGrow(0)
+                .setHeader("Other actions");
+
         HeaderRow filterRow = grid.appendHeaderRow();
         grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
         grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);

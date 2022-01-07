@@ -29,6 +29,7 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 	private TextField specialization;
 	private IntegerField semester;
 	private Select<String> degree;
+	private int id;
 
 	public ReadOnlyStudentView(ManageUserControl userControl)
 	{
@@ -38,11 +39,7 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 	@Override
 	public void setParameter(BeforeEvent beforeEvent, Integer id)
 	{
-		StudentDTOImpl user = (StudentDTOImpl) userService.readUser(id);
-		binder.readBean(user);
-		/* todo check if picture is not null */
-		profilePicture.setSrc("data:image/png;base64,"
-				+ Base64.encodeBase64String(user.getProfilePicture()));
+		this.id = id;
 	}
 
 	@Override
@@ -74,7 +71,11 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 	@Override
 	protected void setupSubmitButtons()
 	{
-		// no buttons
+		StudentDTOImpl user = (StudentDTOImpl) userService.readUser(id);
+		binder.readBean(user);
+		/* todo check if picture is not null */
+		profilePicture.setSrc("data:image/png;base64,"
+				+ Base64.encodeBase64String(user.getProfilePicture()));
 	}
 
 	@Override

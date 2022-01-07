@@ -6,6 +6,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
@@ -28,14 +29,22 @@ public class JobAdvertisementCreateView extends JobAdvertisementBaseView {
     public JobAdvertisementCreateView(ManageJobAdvertisementControl jobAdService) {
         super(jobAdService);
         binder.bindInstanceFields(this);
+    }
+
+    @Override
+    protected void assembleView()
+    {
+        setupValidation();
+        setRequiredIndicatorVisible(jobTitle, jobType, description, begin, tags);
+
         createButton = setupCreateButton();
         FormLayout form = setupForm();
         add(form);
     }
 
     @Override
-    protected FormLayout setupForm() {
-
+    protected FormLayout setupForm()
+    {
         FormLayout formLayout = new FormLayout();
         formLayout.add(pageTitle, jobTitle, jobType, description, begin, tags, createButton);
         formLayout.addClassName("job-form");
@@ -48,7 +57,6 @@ public class JobAdvertisementCreateView extends JobAdvertisementBaseView {
         formLayout.setColspan(pageTitle, 2);
         formLayout.setColspan(createButton, 2);
         formLayout.setColspan(description, 2);
-
 
         return formLayout;
     }
