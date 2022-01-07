@@ -55,6 +55,8 @@ public abstract class AccountViewBase<T extends JobPortalUserDTOImpl>
 	protected Upload profilePictureUpload;
 	protected TextArea about;
 
+	private boolean rendered = false;
+
 	public AccountViewBase(Binder<T> customBinder, ManageUserControl userService)
 	{
 		addClassName("account-view");
@@ -66,7 +68,8 @@ public abstract class AccountViewBase<T extends JobPortalUserDTOImpl>
 	@Override
 	public void afterNavigation(AfterNavigationEvent event)
 	{
-		removeAll();
+		if (rendered)
+			return;
 
 		setupView();
 
@@ -86,6 +89,8 @@ public abstract class AccountViewBase<T extends JobPortalUserDTOImpl>
 
 		setupCommonValidation();
 		setupCustomValidation();
+
+		rendered = true;
 	}
 
 	private void setupCommonElements()
