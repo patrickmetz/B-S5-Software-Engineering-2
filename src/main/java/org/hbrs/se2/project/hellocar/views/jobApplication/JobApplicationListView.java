@@ -125,7 +125,7 @@ public class JobApplicationListView extends Div {
                 .addComponentColumn(application -> {
                     Button viewButton = new Button("View");
                     viewButton.addClickListener(e -> {
-
+                        UI.getCurrent().navigate(Globals.Pages.VIEW_JOB_APP + "/" + application.getJobApplicationId());
                     });
                     return viewButton;
                 })

@@ -16,13 +16,15 @@ import org.hbrs.se2.project.hellocar.util.Utils;
 import org.hbrs.se2.project.hellocar.views.AppView;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.hbrs.se2.project.hellocar.util.ConfirmationDialog;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 
 import javax.validation.Valid;
 
 @Route(value = Globals.Pages.UPDATE_JOB_AD, layout = AppView.class)
 @PageTitle("Update Job Advertisement")
 public class JobAdvertisementUpdateView extends JobAdvertisementBaseView
-	implements HasUrlParameter<Integer>
+	implements HasUrlParameter<Integer>, BeforeEnterObserver
 {
 	protected Button updateButton;
 	protected Button deleteButton;
@@ -31,6 +33,13 @@ public class JobAdvertisementUpdateView extends JobAdvertisementBaseView
 
 	public JobAdvertisementUpdateView(ManageJobAdvertisementControl jobAdService) {
 		super(jobAdService);
+	}
+
+	@Override
+	public void beforeEnter(BeforeEnterEvent event)
+	{
+		// @todo abort if current user isn't a company or doesn't own the ad
+		// setParameter might not have been called yet.
 	}
 
 	@Override

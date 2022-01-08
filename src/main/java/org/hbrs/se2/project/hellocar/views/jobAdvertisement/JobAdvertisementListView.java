@@ -133,6 +133,7 @@ public class JobAdvertisementListView extends Div {
                 .setFlexGrow(0)
                 .setHeader("Other actions");
 
+        // @todo only display this if the current user is a company and owns the ad
         Grid.Column<JobAdvertisementDTO> updateColumn = grid
                 .addComponentColumn(advertisement -> {
                     Button updateButton = new Button("Update");
