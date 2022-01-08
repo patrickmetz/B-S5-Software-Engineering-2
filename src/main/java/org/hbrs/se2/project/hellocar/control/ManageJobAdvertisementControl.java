@@ -78,7 +78,8 @@ public class ManageJobAdvertisementControl {
 
         if (optional.isPresent()) {
             entity = optional.get();
-            factory.setupEntityByDto(entity, dto);
+            (factory = factory == null ? new JobAdvertisementFactoryImpl() : factory)
+                .setupEntityByDto(entity, dto);
             repository.save(entity);
         }
     }
