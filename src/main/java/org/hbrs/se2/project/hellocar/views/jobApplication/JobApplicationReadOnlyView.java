@@ -1,16 +1,20 @@
 package org.hbrs.se2.project.hellocar.views.jobApplication;
 
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.*;
+import com.vaadin.flow.server.StreamResource;
 import org.hbrs.se2.project.hellocar.control.ManageJobApplicationControl;
 import org.hbrs.se2.project.hellocar.dtos.JobApplicationDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.JobApplicationDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.views.AppView;
+
+import java.io.ByteArrayInputStream;
 
 @Route(value = Globals.Pages.VIEW_JOB_APP, layout = AppView.class)
 @PageTitle("Job Application")
@@ -23,6 +27,7 @@ public class JobApplicationReadOnlyView extends VerticalLayout
 	private int id;
 
 	private TextArea text;
+	private Anchor resumeDownload;
 
 	public JobApplicationReadOnlyView(ManageJobApplicationControl jobAppService)
 	{
@@ -48,14 +53,20 @@ public class JobApplicationReadOnlyView extends VerticalLayout
 		text.setClassName("job-application-text");
 		text.setReadOnly(true);
 
-		// @todo Download for resume!?
+		resumeDownload = new Anchor();
+		resumeDownload.setText("Download resume");
 
 		binder.bindInstanceFields(this);
 		var dto = (JobApplicationDTOImpl)jobAppService.readJobApplication(id);
 		binder.readBean(dto);
+		if (dto.getResume().length > 0)
+			resumeDownload.setHref(new StreamResource(
+				"resume.pdf",
+				() -> new ByteArrayInputStream(dto.getResume()))
+			);
 
 		var form = new FormLayout();
-		form.add(text);
+		form.add(text, resumeDownload);
 		add(form);
 
 		rendered = true;
