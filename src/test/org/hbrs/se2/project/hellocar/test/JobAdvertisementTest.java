@@ -68,18 +68,49 @@ class JobAdvertisementTest {
 
     @Test
     void createJobAdvertisement() {         // auch für Studenten?
-        createAdvertisementTest(companyId);
+        JobAdvertisementDTOImpl dtoA = builder.buildDefaultUser().done();
+        int id = createAdvertisement(companyId, dtoA);
+        JobAdvertisementDTO dtoB = advertisementService.readJobAdvertisement(id);
+        assertEquals(dtoB.getJobAdvertisementId(), id);
+        advertisementService.deleteJobAdvertisement(id);
     }
 
     @Test
     void updateJobAdvertisement() {
-        updateJobAdvertisementTest(companyId);
+        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().done();
+        int id = createAdvertisement(companyId, dto);
+
+        String update = "update";
+
+        dto = builder.
+                buildJobType(dto.getJobType() + update).
+                buildJobTitle(dto.getJobTitle() + update).
+                buildBegin(dto.getBegin().plusDays(1)).
+                buildTags(dto.getTags() + update).
+                buildDescription(dto.getDescription() + update).
+                done();
+
+        advertisementService.updateJobAdvertisement(dto, id);
+
+        JobAdvertisementDTO updated = advertisementService.readJobAdvertisement(id);
+
+        assertEquals(dto.getJobType(), updated.getJobType());
+        assertEquals(dto.getJobTitle(), updated.getJobTitle());
+        assertEquals(dto.getBegin(), updated.getBegin());
+        assertEquals(dto.getTags(), updated.getTags());
+        assertEquals(dto.getDescription(), updated.getDescription());
+
+        advertisementService.deleteJobAdvertisement(id);
+
     }
 
 
     @Test
     void deleteJobAdvertisement() {
-        deleteJobAdvertisementTest(companyId);
+        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().done();
+        int id = createAdvertisement(companyId, dto);
+        advertisementService.deleteJobAdvertisement(id);
+        assertNull(advertisementService.readJobAdvertisement(id));
 
     }
 
@@ -123,49 +154,6 @@ class JobAdvertisementTest {
         return null;
     }
 
-    void createAdvertisementTest(int userId) {
-        JobAdvertisementDTOImpl dtoA = builder.buildDefaultUser().done();
-        int id = createAdvertisement(userId, dtoA);
-        JobAdvertisementDTO dtoB = advertisementService.readJobAdvertisement(id);
-        assertEquals(dtoB.getJobAdvertisementId(), id);
-        advertisementService.deleteJobAdvertisement(id);
-    }
-
-
-    private void updateJobAdvertisementTest(int userId) {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().done();
-        int id = createAdvertisement(userId, dto);
-
-        String update = "update";
-
-        dto = builder.
-                buildJobType(dto.getJobType() + update).
-                buildJobTitle(dto.getJobTitle() + update).
-                buildBegin(dto.getBegin().plusDays(1)).
-                buildTags(dto.getTags() + update).
-                buildDescription(dto.getDescription() + update).
-                done();
-
-        advertisementService.updateJobAdvertisement(dto, id);
-
-        JobAdvertisementDTO updated = advertisementService.readJobAdvertisement(id);
-
-        assertEquals(dto.getJobType(), updated.getJobType());
-        assertEquals(dto.getJobTitle(), updated.getJobTitle());
-        assertEquals(dto.getBegin(), updated.getBegin());
-        assertEquals(dto.getTags(), updated.getTags());
-        assertEquals(dto.getDescription(), updated.getDescription());
-
-        advertisementService.deleteJobAdvertisement(id);
-
-    }
-
-    void deleteJobAdvertisementTest(int userId) {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().done();
-        int id = createAdvertisement(userId, dto);
-        advertisementService.deleteJobAdvertisement(id);
-        assertNull(advertisementService.readJobAdvertisement(id));
-    }
 
     void fieldCantHaveThisValue(int userId, JobAdvertisementDTOImpl dto) {
         assertThrows(Exception.class, () -> {
