@@ -67,7 +67,7 @@ class JobAdvertisementTest {
 
     @Test
     void createJobAdvertisement() {         // auch für Studenten?
-        JobAdvertisementDTOImpl dtoA = builder.buildDefaultUser().done();
+        JobAdvertisementDTOImpl dtoA = builder.buildDefaultAdvertisement().done();
         int id = createAdvertisement(companyId, dtoA);
         JobAdvertisementDTO dtoB = advertisementService.readJobAdvertisement(id);
         assertEquals(dtoB.getJobAdvertisementId(), id);
@@ -76,7 +76,7 @@ class JobAdvertisementTest {
 
     @Test
     void updateJobAdvertisement() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().done();
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().done();
         int id = createAdvertisement(companyId, dto);
 
         String update = "update";
@@ -106,7 +106,7 @@ class JobAdvertisementTest {
 
     @Test
     void deleteJobAdvertisement() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().done();
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().done();
         int id = createAdvertisement(companyId, dto);
         advertisementService.deleteJobAdvertisement(id);
         assertNull(advertisementService.readJobAdvertisement(id));
@@ -115,31 +115,31 @@ class JobAdvertisementTest {
 
     @Test
     void jobTitleCantBeNull() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().buildJobTitle(null).done();
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().buildJobTitle(null).done();
         fieldCantHaveThisValue(companyId, dto);
     }
 
     @Test
     void jobTypeCantBeNull() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().buildJobType(null).done();
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().buildJobType(null).done();
         fieldCantHaveThisValue(companyId, dto);
     }
 
     @Test
     void beginCantBeNull() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().buildBegin(null).done();
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().buildBegin(null).done();
         fieldCantHaveThisValue(companyId, dto);
     }
 
     @Test
     void tagsCantBeNull() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().buildTags(null).done();
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().buildTags(null).done();
         fieldCantHaveThisValue(companyId, dto);
     }
 
     @Test
     void descriptionCantBeNull() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().buildDescription(null).done();
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().buildDescription(null).done();
         fieldCantHaveThisValue(companyId, dto);
     }
 

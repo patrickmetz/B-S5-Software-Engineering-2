@@ -22,7 +22,7 @@ public class JobAdvertisementDTOBuilder {
         advertisement.setTags("Tags");
     }
 
-    public JobAdvertisementDTOBuilder buildDefaultUser() {
+    public JobAdvertisementDTOBuilder buildDefaultAdvertisement() {
         addAllAttributes();
         return this;
     }

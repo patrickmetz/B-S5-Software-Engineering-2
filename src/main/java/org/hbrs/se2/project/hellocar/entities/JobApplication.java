@@ -29,7 +29,7 @@ public class JobApplication {
     }
 
     @Basic
-    @Column(name = "text")
+    @Column(name = "text" , nullable = false)
     public String getText() {
         return text;
     }
