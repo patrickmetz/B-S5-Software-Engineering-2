@@ -38,7 +38,7 @@ class JobAdvertisementTest {
     int companyId;
 
     @BeforeEach
-    void set() {
+    void setUp() {
         builder = new JobAdvertisementDTOBuilder();
 
         //  StudentDTOBuilder builderA = new StudentDTOBuilder();
@@ -58,11 +58,10 @@ class JobAdvertisementTest {
     }
 
     @AfterEach
-    void reset() {
+    void tearDown() {
         builder = null;
         // userService.deleteUser(studentId);
         userService.deleteUser(companyId);
-
     }
 
 
