@@ -17,5 +17,6 @@ public abstract class AbstractJobPortalUserFactory extends AbstractUserFactory {
         entity.setZipCode(dto.getZipCode());
         entity.setProfilePicture(dto.getProfilePicture());
         entity.setAbout(dto.getAbout());
+        entity.setUserid(dto.getUserid());
     }
 }

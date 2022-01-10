@@ -1,19 +1,12 @@
 package org.hbrs.se2.project.hellocar.test;
 
-import org.hbrs.se2.project.hellocar.control.ManageJobAdvertisementControl;
 import org.hbrs.se2.project.hellocar.control.ManageJobApplicationControl;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
-import org.hbrs.se2.project.hellocar.control.builders.CompanyDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.JobApplicationDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.builders.StudentDTOBuilder;
-import org.hbrs.se2.project.hellocar.control.builders.JobAdvertisementDTOBuilder;
-import org.hbrs.se2.project.hellocar.control.builders.JobApplicationDTOBuilder;
 import org.hbrs.se2.project.hellocar.control.exception.DatabaseUserException;
-import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
 import org.hbrs.se2.project.hellocar.dtos.JobApplicationDTO;
-import org.hbrs.se2.project.hellocar.dtos.impl.JobAdvertisementDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.JobApplicationDTOImpl;
-import org.hbrs.se2.project.hellocar.dtos.impl.account.CompanyDTOImpl;
 import org.hbrs.se2.project.hellocar.dtos.impl.account.StudentDTOImpl;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.junit.jupiter.api.AfterEach;
@@ -46,8 +39,6 @@ class JobApplicationTest {
         builder = new JobApplicationDTOBuilder();
 
         StudentDTOBuilder builder = new StudentDTOBuilder();
-
-
         StudentDTOImpl dto = builder.buildDefaultUser().done();
 
         try {
@@ -56,29 +47,27 @@ class JobApplicationTest {
         } catch (DatabaseUserException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @AfterEach
     void reset() {
         builder = null;
         userService.deleteUser(studentId);
-
     }
 
     @Test
     void createJobApplication() {
-        JobApplicationDTOImpl dtoA = builder.buildDefaultUser().done();
-        int id = createApplication(studentId, dtoA);
-        JobApplicationDTO dtoB = applicationService.readJobApplication(id);
-        assertEquals(dtoB.getId(), id);
-        applicationService.deleteJobApplication(id);
+        JobApplicationDTOImpl dtoA = builder.buildDefaultApplication().done();
+        int applicationId = createApplication(studentId, dtoA);
+
+        JobApplicationDTO dtoB = applicationService.readJobApplication(applicationId);
+        assertEquals(dtoB.getJobApplicationId(), applicationId);
+        applicationService.deleteJobApplication(applicationId);
     }
 
     @Test
     void updateJobApplication() {
-        JobApplicationDTOImpl dto = builder.buildDefaultUser().done();
+        JobApplicationDTOImpl dto = builder.buildDefaultApplication().done();
         int id = createApplication(studentId, dto);
 
         dto = builder.buildText(dto.getText() + "update").done();
@@ -94,28 +83,24 @@ class JobApplicationTest {
 
     @Test
     void deleteJobApplication(){
-        JobApplicationDTOImpl dto = builder.buildDefaultUser().done();
+        JobApplicationDTOImpl dto = builder.buildDefaultApplication().done();
         int id = createApplication(studentId, dto);
         applicationService.deleteJobApplication(id);
         assertNull(applicationService.readJobApplication(id));
     }
 
     @Test
-    void testCantBeNull(){
-        JobApplicationDTOImpl dto = builder.buildDefaultUser().buildText(null).done();
-        fieldCantHaveThisValue(studentId, dto);
-    }
+    void textCantBeNull(){
+        JobApplicationDTOImpl dto = builder.buildDefaultApplication().buildText(null).done();
 
-    Integer createApplication(int studentId, JobApplicationDTO dto) {
-
-        return applicationService.createJobApplication(dto, studentId);
-    }
-
-    void fieldCantHaveThisValue(int studentId, JobApplicationDTOImpl dto) {
         assertThrows(Exception.class, () -> {
             int id = createApplication(studentId, dto);
             applicationService.deleteJobApplication(id);
         });
+    }
+
+    Integer createApplication(int studentId, JobApplicationDTO dto) {
+        return applicationService.createJobApplication(dto, studentId);
     }
 
 

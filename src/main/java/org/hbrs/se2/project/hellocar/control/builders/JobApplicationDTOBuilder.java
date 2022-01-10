@@ -17,7 +17,7 @@ public class JobApplicationDTOBuilder {
         application.setResume(b);
     }
 
-    public JobApplicationDTOBuilder buildDefaultUser() {
+    public JobApplicationDTOBuilder buildDefaultApplication() {
         addAllAttributes();
         return this;
     }
