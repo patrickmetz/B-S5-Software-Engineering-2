@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
@@ -11,6 +12,7 @@ import org.hbrs.se2.project.hellocar.dtos.impl.account.JobPortalUserDTOImpl;
 import org.hbrs.se2.project.hellocar.util.ConfirmationDialog;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
+import org.hbrs.se2.project.hellocar.util.account.AccountValidation;
 
 public abstract class UpdateViewBase<T extends JobPortalUserDTOImpl> extends AccountViewBase<T> implements BeforeEnterObserver
 {
@@ -58,5 +60,26 @@ public abstract class UpdateViewBase<T extends JobPortalUserDTOImpl> extends Acc
 				Utils.displayNotification(false, "Unknown error: " + e);
 			}
 		});
+	}
+
+	@Override
+	protected void setupCustomRequiredIndicators()
+	{
+		// no custom setup needed
+	}
+
+	@Override
+	protected void setupCustomValidation()
+	{
+		binder.forField(userid)
+				.withValidator(
+						AccountValidation::usernameValidator,
+						AccountValidation.USERNAME_ERROR_MESSAGE
+				)
+				.bind(JobPortalUserDTOImpl::getUserid, JobPortalUserDTOImpl::setUserid);
+
+		binder.forField(email)
+				.withValidator(new EmailValidator(AccountValidation.EMAIL_ERROR_MESSAGE))
+				.bind(JobPortalUserDTOImpl::getEmail, JobPortalUserDTOImpl::setEmail);
 	}
 }

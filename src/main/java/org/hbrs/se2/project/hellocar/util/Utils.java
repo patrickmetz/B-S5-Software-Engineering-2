@@ -15,6 +15,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.data.binder.ValidationException;
 
 import java.util.Arrays;
 
@@ -154,6 +155,22 @@ public class Utils {
         text.setHeight("500px");
         formLayout.setMaxWidth("600px");
         upload.setDropAllowed(false);
+    }
+
+    public static void handleButtonException(Exception ex)
+    {
+        try
+        {
+            throw ex;
+        }
+        catch (ValidationException e)
+        {
+            Utils.displayNotification(false, "Please fill in the required fields");
+        }
+        catch (Exception e)
+        {
+            Utils.displayNotification(false, "Unknown error: " + e);
+        }
     }
 
 }

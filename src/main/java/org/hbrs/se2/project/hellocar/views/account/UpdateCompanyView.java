@@ -61,13 +61,9 @@ public class UpdateCompanyView extends UpdateViewBase<CompanyDTOImpl>
 
 				Utils.displayNotification(true, "Update succeeded");
 			}
-			catch (ValidationException e)
-			{
-				Utils.displayNotification(false, "Please fill in the required fields");
-			}
 			catch (Exception e)
 			{
-				Utils.displayNotification(false, "Unknown error: " + e);
+				Utils.handleButtonException(e);
 			}
 		});
 
@@ -107,26 +103,5 @@ public class UpdateCompanyView extends UpdateViewBase<CompanyDTOImpl>
 		profilePicture = user.getProfilePicture();
 
 		return formLayout;
-	}
-
-	@Override
-	protected void setupCustomRequiredIndicators()
-	{
-		// no custom setup needed
-	}
-
-	@Override
-	protected void setupCustomValidation()
-	{
-		binder.forField(userid)
-				.withValidator(
-						AccountValidation::usernameValidator,
-						AccountValidation.USERNAME_ERROR_MESSAGE
-				)
-				.bind(JobPortalUserDTOImpl::getUserid, JobPortalUserDTOImpl::setUserid);
-
-		binder.forField(email)
-				.withValidator(new EmailValidator(AccountValidation.EMAIL_ERROR_MESSAGE))
-				.bind(JobPortalUserDTOImpl::getEmail, JobPortalUserDTOImpl::setEmail);
 	}
 }
