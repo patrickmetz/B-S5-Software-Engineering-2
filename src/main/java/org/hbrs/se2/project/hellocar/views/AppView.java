@@ -27,6 +27,7 @@ import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
+import org.hbrs.se2.project.hellocar.views.account.LoginView;
 import org.hbrs.se2.project.hellocar.views.account.UpdateCompanyView;
 import org.hbrs.se2.project.hellocar.views.account.UpdateStudentView;
 import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementBaseView;
@@ -145,7 +146,9 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private void logoutUser() {
         UI ui = this.getUI().get();
         ui.getSession().close();
-        ui.navigate(Globals.Pages.MAIN_VIEW);
+        ui.getPage().setLocation("/");
+
+        UI.getCurrent().navigate(LoginView.class);
     }
 
     /**
