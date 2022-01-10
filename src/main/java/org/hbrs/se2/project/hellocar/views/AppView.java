@@ -78,12 +78,9 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private boolean checkIfUserIsLoggedIn() {
         // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
         UserDTO userDTO = this.getCurrentUser();
-        if (userDTO == null) {
-            // @todo prevents display of ReadOnly*View to guests, commented for now
-            //UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
-            return false;
-        }
-        return true;
+        // @todo prevents display of ReadOnly*View to guests, commented for now
+        //UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
+        return userDTO != null;
     }
 
     /**
@@ -212,7 +209,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Key: der sichtbare String des Menu-Items
         // Value: Die UI-Component, die nach dem Klick auf das Menuitem angezeigt wird.
         Tab[] tabs = new Tab[]{
-                createTab("Show Cars", ShowCarsView.class),
+                //createTab("Show Cars", ShowCarsView.class),
                 createTab("Show Jobs", JobAdvertisementListView.class)
         };
 
@@ -220,7 +217,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // (Alternative: Verwendung der Methode 'isUserisAllowedToAccessThisFeature')
         if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.ADMIN)) {
             System.out.println("User is Admin!");
-            tabs = Utils.append(tabs, createTab("Enter Car", EnterCarView.class));
+            //tabs = Utils.append(tabs, createTab("Enter Car", EnterCarView.class));
         }
 
         if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
