@@ -176,7 +176,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         Image image = new Image("images/logo.png", "HelloCar logo");
         image.getElement().getStyle().set("cursor", "pointer");
-        image.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.SHOW_CARS));
+        image.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.JOB_AD_LIST));
 
         logoLayout.add(image);
 

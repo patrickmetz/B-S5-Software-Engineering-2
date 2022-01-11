@@ -41,7 +41,7 @@ public class RegistrationCompanyView extends RegistrationViewBase<CompanyDTOImpl
     public void beforeEnter(BeforeEnterEvent event)
     {
         if (getCurrentUser() != null)
-            event.forwardTo(Globals.Pages.SHOW_CARS);
+            event.forwardTo(Globals.Pages.JOB_AD_LIST);
     }
 
     @Override

@@ -90,7 +90,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         if(getCurrentUser() != null) {
-            event.forwardTo(Globals.Pages.SHOW_CARS);
+            event.forwardTo(Globals.Pages.JOB_AD_LIST);
             return;
         }
     }
@@ -118,7 +118,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver  {
         // Navigation zur Startseite, hier auf die Teil-Komponente Show-Cars.
         // Die anzuzeigende Teil-Komponente kann man noch individualisieren, je nach Rolle,
         // die ein Benutzer besitzt
-        UI.getCurrent().navigate(Globals.Pages.SHOW_CARS);
+        UI.getCurrent().navigate(Globals.Pages.JOB_AD_LIST);
 
     }
 }
