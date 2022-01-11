@@ -38,7 +38,7 @@ class JobAdvertisementTest {
     int companyId;
 
     @BeforeEach
-    void set() {
+    void setUp() {
         builder = new JobAdvertisementDTOBuilder();
 
         //  StudentDTOBuilder builderA = new StudentDTOBuilder();
@@ -58,83 +58,26 @@ class JobAdvertisementTest {
     }
 
     @AfterEach
-    void reset() {
+    void tearDown() {
         builder = null;
         // userService.deleteUser(studentId);
         userService.deleteUser(companyId);
-
     }
 
 
     @Test
     void createJobAdvertisement() {         // auch für Studenten?
-        createAdvertisementTest(companyId);
-    }
-
-    @Test
-    void updateJobAdvertisement() {
-        updateJobAdvertisementTest(companyId);
-    }
-
-
-    @Test
-    void deleteJobAdvertisement() {
-        deleteJobAdvertisementTest(companyId);
-
-    }
-
-    @Test
-    void jobTitleCantBeNull() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().buildJobTitle(null).done();
-        fieldCantHaveThisValue(companyId, dto);
-    }
-
-    @Test
-    void jobTypeCantBeNull() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().buildJobType(null).done();
-        fieldCantHaveThisValue(companyId, dto);
-    }
-
-    @Test
-    void beginCantBeNull() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().buildBegin(null).done();
-        fieldCantHaveThisValue(companyId, dto);
-    }
-
-    @Test
-    void tagsCantBeNull() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().buildTags(null).done();
-        fieldCantHaveThisValue(companyId, dto);
-    }
-
-    @Test
-    void descriptionCantBeNull() {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().buildDescription(null).done();
-        fieldCantHaveThisValue(companyId, dto);
-    }
-
-
-    Integer createAdvertisement(int userId, JobAdvertisementDTOImpl dto) {
-        try {
-            return advertisementService.createJobAdvertisement(dto, userId);
-        } catch (DatabaseUserException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    void createAdvertisementTest(int userId) {
-        JobAdvertisementDTOImpl dtoA = builder.buildDefaultUser().done();
-        int id = createAdvertisement(userId, dtoA);
+        JobAdvertisementDTOImpl dtoA = builder.buildDefaultAdvertisement().done();
+        int id = createAdvertisement(companyId, dtoA);
         JobAdvertisementDTO dtoB = advertisementService.readJobAdvertisement(id);
         assertEquals(dtoB.getJobAdvertisementId(), id);
         advertisementService.deleteJobAdvertisement(id);
     }
 
-
-    private void updateJobAdvertisementTest(int userId) {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().done();
-        int id = createAdvertisement(userId, dto);
+    @Test
+    void updateJobAdvertisement() {
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().done();
+        int id = createAdvertisement(companyId, dto);
 
         String update = "update";
 
@@ -160,12 +103,56 @@ class JobAdvertisementTest {
 
     }
 
-    void deleteJobAdvertisementTest(int userId) {
-        JobAdvertisementDTOImpl dto = builder.buildDefaultUser().done();
-        int id = createAdvertisement(userId, dto);
+
+    @Test
+    void deleteJobAdvertisement() {
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().done();
+        int id = createAdvertisement(companyId, dto);
         advertisementService.deleteJobAdvertisement(id);
         assertNull(advertisementService.readJobAdvertisement(id));
+
     }
+
+    @Test
+    void jobTitleCantBeNull() {
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().buildJobTitle(null).done();
+        fieldCantHaveThisValue(companyId, dto);
+    }
+
+    @Test
+    void jobTypeCantBeNull() {
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().buildJobType(null).done();
+        fieldCantHaveThisValue(companyId, dto);
+    }
+
+    @Test
+    void beginCantBeNull() {
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().buildBegin(null).done();
+        fieldCantHaveThisValue(companyId, dto);
+    }
+
+    @Test
+    void tagsCantBeNull() {
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().buildTags(null).done();
+        fieldCantHaveThisValue(companyId, dto);
+    }
+
+    @Test
+    void descriptionCantBeNull() {
+        JobAdvertisementDTOImpl dto = builder.buildDefaultAdvertisement().buildDescription(null).done();
+        fieldCantHaveThisValue(companyId, dto);
+    }
+
+
+    Integer createAdvertisement(int userId, JobAdvertisementDTOImpl dto) {
+        try {
+            return advertisementService.createJobAdvertisement(dto, userId);
+        } catch (DatabaseUserException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     void fieldCantHaveThisValue(int userId, JobAdvertisementDTOImpl dto) {
         assertThrows(Exception.class, () -> {

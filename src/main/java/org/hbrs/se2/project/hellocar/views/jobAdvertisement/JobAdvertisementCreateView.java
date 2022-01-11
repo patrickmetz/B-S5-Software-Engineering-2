@@ -6,6 +6,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import org.hbrs.se2.project.hellocar.control.ManageJobAdvertisementControl;
@@ -19,6 +21,7 @@ import org.hbrs.se2.project.hellocar.views.account.LoginView;
 
 @Route(value = Globals.Pages.CREATE_JOB_AD, layout = AppView.class)
 @RouteAlias("createjob")
+@PageTitle("Create Job Advertisement")
 public class JobAdvertisementCreateView extends JobAdvertisementBaseView {
 
     protected Button createButton;
@@ -26,14 +29,22 @@ public class JobAdvertisementCreateView extends JobAdvertisementBaseView {
     public JobAdvertisementCreateView(ManageJobAdvertisementControl jobAdService) {
         super(jobAdService);
         binder.bindInstanceFields(this);
+    }
+
+    @Override
+    protected void assembleView()
+    {
+        setupValidation();
+        setRequiredIndicatorVisible(jobTitle, jobType, description, begin, tags);
+
         createButton = setupCreateButton();
         FormLayout form = setupForm();
         add(form);
     }
 
     @Override
-    protected FormLayout setupForm() {
-
+    protected FormLayout setupForm()
+    {
         FormLayout formLayout = new FormLayout();
         formLayout.add(pageTitle, jobTitle, jobType, description, begin, tags, createButton);
         formLayout.addClassName("job-form");
@@ -46,7 +57,6 @@ public class JobAdvertisementCreateView extends JobAdvertisementBaseView {
         formLayout.setColspan(pageTitle, 2);
         formLayout.setColspan(createButton, 2);
         formLayout.setColspan(description, 2);
-
 
         return formLayout;
     }
@@ -66,8 +76,6 @@ public class JobAdvertisementCreateView extends JobAdvertisementBaseView {
                 );
 
                 Utils.displayNotification(true, "Job advertisement created successfully");
-                UI.getCurrent().navigate(ShowCarsView.class); /* todo replace with the advertisement view later */
-                binder.getFields().forEach(HasValue::clear);
 
             } catch (ValidationException e) {
                 Utils.displayNotification(false, "Please fill in the required fields");

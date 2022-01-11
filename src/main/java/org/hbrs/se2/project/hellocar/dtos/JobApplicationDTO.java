@@ -10,4 +10,5 @@ public interface JobApplicationDTO {
 
     int getId();
 
+    int getJobAdvertisementId();
 }

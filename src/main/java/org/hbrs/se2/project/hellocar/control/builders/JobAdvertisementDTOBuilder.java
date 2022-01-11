@@ -1,6 +1,7 @@
 package org.hbrs.se2.project.hellocar.control.builders;
 
 import org.hbrs.se2.project.hellocar.dtos.impl.JobAdvertisementDTOImpl;
+import org.hbrs.se2.project.hellocar.entities.User;
 
 import java.time.LocalDate;
 
@@ -21,7 +22,7 @@ public class JobAdvertisementDTOBuilder {
         advertisement.setTags("Tags");
     }
 
-    public JobAdvertisementDTOBuilder buildDefaultUser() {
+    public JobAdvertisementDTOBuilder buildDefaultAdvertisement() {
         addAllAttributes();
         return this;
     }
@@ -54,6 +55,11 @@ public class JobAdvertisementDTOBuilder {
 
     public JobAdvertisementDTOBuilder buildTags(String tags) {
         advertisement.setTags(tags);
+        return this;
+    }
+
+    public JobAdvertisementDTOBuilder buildUser(User user) {
+        advertisement.setId(user.getId());
         return this;
     }
 

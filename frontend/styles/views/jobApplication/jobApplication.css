@@ -1,17 +1,17 @@
-.job-advertisement {
+.job-application {
 }
 
-.job-advertisement .job-form {
+.job-application .job-form {
     max-width: 1024px;
     margin: 20px auto auto; /* centering horizontally */
 }
 
-.job-advertisement .job-form .create-button {
+.job-application .job-form .create-button {
     max-width: 250px;
     left: calc(100% - 250px);
 }
 
-.job-advertisement-list-view {
+.job-application-list-view {
     display: block;
     height: 100%;
     margin: 0 auto;
@@ -19,14 +19,16 @@
     padding: 0 var(--lumo-space-l);
 }
 
-.job-advertisement-list-view .link {
+.job-application-list-view .link {
     text-decoration: underline;
     cursor: pointer;
 }
 
-.job-advertisement-list-view .link:hover {
+.job-application-list-view .link:hover {
     color: white;
 }
+
+
 
 
 

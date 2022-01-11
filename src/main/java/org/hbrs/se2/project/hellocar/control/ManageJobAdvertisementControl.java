@@ -59,6 +59,7 @@ public class ManageJobAdvertisementControl {
             JobAdvertisementDTOBuilder builder = new JobAdvertisementDTOBuilder();
 
             builder.buildId(entity.getJobAdvertismentId());
+            builder.buildUser(entity.getUser());
             builder.buildJobTitle(entity.getJobTitle());
             builder.buildJobType(entity.getJobType());
             builder.buildDescription(entity.getDescription());
@@ -77,7 +78,8 @@ public class ManageJobAdvertisementControl {
 
         if (optional.isPresent()) {
             entity = optional.get();
-            factory.setupEntityByDto(entity, dto);
+            (factory = factory == null ? new JobAdvertisementFactoryImpl() : factory)
+                .setupEntityByDto(entity, dto);
             repository.save(entity);
         }
     }
@@ -93,6 +95,7 @@ public class ManageJobAdvertisementControl {
         jobAdvertisements.forEach(entity -> {
             JobAdvertisementDTOBuilder builder = new JobAdvertisementDTOBuilder();
             builder.buildId(entity.getJobAdvertismentId());
+            builder.buildUser(entity.getUser());
             builder.buildJobTitle(entity.getJobTitle());
             builder.buildJobType(entity.getJobType());
             builder.buildDescription(entity.getDescription());

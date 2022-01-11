@@ -10,6 +10,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
 import org.hbrs.se2.project.hellocar.control.ManageJobAdvertisementControl;
 import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.dtos.impl.JobAdvertisementDTOImpl;
@@ -19,10 +21,11 @@ import org.hbrs.se2.project.hellocar.util.jobAdvertisement.JobAdvertisementValid
 import java.util.stream.Stream;
 
 @CssImport("./styles/views/jobAdvertisement/jobAdvertisement.css")
-public abstract class JobAdvertisementBaseView extends VerticalLayout {
-
+public abstract class JobAdvertisementBaseView extends VerticalLayout implements AfterNavigationObserver
+{
     protected Binder<JobAdvertisementDTOImpl> binder;
     protected ManageJobAdvertisementControl jobAdService;
+    protected boolean rendered = false;
 
     protected H3 pageTitle;
 
@@ -35,9 +38,18 @@ public abstract class JobAdvertisementBaseView extends VerticalLayout {
     public JobAdvertisementBaseView(ManageJobAdvertisementControl jobAdService) {
         this.jobAdService = jobAdService;
         binder = new Binder<>(JobAdvertisementDTOImpl.class);
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent afterNavigationEvent)
+    {
+        if (rendered)
+            return;
+
         setupElements();
-        setupValidation();
-        setRequiredIndicatorVisible(jobTitle, jobType, description, begin, tags);
+        assembleView();
+
+        rendered = true;
     }
 
     protected void setupElements() {
@@ -64,6 +76,8 @@ public abstract class JobAdvertisementBaseView extends VerticalLayout {
     }
 
     protected abstract FormLayout setupForm();
+
+    protected abstract void assembleView();
 
     protected void setupValidation() {
         binder.forField(jobTitle)

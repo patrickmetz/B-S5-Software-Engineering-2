@@ -48,6 +48,7 @@ public class JobAdvertisementDTOImpl implements JobAdvertisementDTO {
 
     public void setTags(String tags) { this.tags = tags; }
 
+    @Override
     public int getId() {
         return id;
     }

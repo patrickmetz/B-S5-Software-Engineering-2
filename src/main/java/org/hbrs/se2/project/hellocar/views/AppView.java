@@ -27,11 +27,13 @@ import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.util.Globals;
 import org.hbrs.se2.project.hellocar.util.Utils;
+import org.hbrs.se2.project.hellocar.views.account.LoginView;
 import org.hbrs.se2.project.hellocar.views.account.UpdateCompanyView;
 import org.hbrs.se2.project.hellocar.views.account.UpdateStudentView;
 import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementBaseView;
 import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementCreateView;
 import org.hbrs.se2.project.hellocar.views.jobAdvertisement.JobAdvertisementListView;
+import org.hbrs.se2.project.hellocar.views.jobApplication.JobApplicationListView;
 
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
@@ -77,12 +79,9 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private boolean checkIfUserIsLoggedIn() {
         // Falls der Benutzer nicht eingeloggt ist, dann wird er auf die Startseite gelenkt
         UserDTO userDTO = this.getCurrentUser();
-        if (userDTO == null) {
-            // @todo prevents display of ReadOnly*View to guests, commented for now
-            //UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
-            return false;
-        }
-        return true;
+        // @todo prevents display of ReadOnly*View to guests, commented for now
+        //UI.getCurrent().navigate(Globals.Pages.LOGIN_VIEW);
+        return userDTO != null;
     }
 
     /**
@@ -147,7 +146,9 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
     private void logoutUser() {
         UI ui = this.getUI().get();
         ui.getSession().close();
-        ui.navigate(Globals.Pages.MAIN_VIEW);
+        ui.getPage().setLocation("/");
+
+        UI.getCurrent().navigate(LoginView.class);
     }
 
     /**
@@ -175,7 +176,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
 
         Image image = new Image("images/logo.png", "HelloCar logo");
         image.getElement().getStyle().set("cursor", "pointer");
-        image.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.SHOW_CARS));
+        image.addClickListener(e -> UI.getCurrent().navigate(Globals.Pages.JOB_AD_LIST));
 
         logoLayout.add(image);
 
@@ -211,7 +212,7 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // Key: der sichtbare String des Menu-Items
         // Value: Die UI-Component, die nach dem Klick auf das Menuitem angezeigt wird.
         Tab[] tabs = new Tab[]{
-                createTab("Show Cars", ShowCarsView.class),
+                //createTab("Show Cars", ShowCarsView.class),
                 createTab("Show Jobs", JobAdvertisementListView.class)
         };
 
@@ -219,11 +220,12 @@ public class AppView extends AppLayout implements BeforeEnterObserver {
         // (Alternative: Verwendung der Methode 'isUserisAllowedToAccessThisFeature')
         if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.ADMIN)) {
             System.out.println("User is Admin!");
-            tabs = Utils.append(tabs, createTab("Enter Car", EnterCarView.class));
+            //tabs = Utils.append(tabs, createTab("Enter Car", EnterCarView.class));
         }
 
         if (this.authorizationControl.isUserInRole(this.getCurrentUser(), Globals.Roles.COMPANY)) {
             tabs = Utils.append(tabs, createTab("Create Job Advertisement", JobAdvertisementCreateView.class));
+            tabs = Utils.append(tabs, createTab("Show Job Applications", JobApplicationListView.class));
         }
 
         // ToDo für die Teams: Weitere Tabs aus ihrem Projekt hier einfügen!

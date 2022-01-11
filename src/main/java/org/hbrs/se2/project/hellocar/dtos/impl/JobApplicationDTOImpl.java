@@ -7,9 +7,8 @@ public class JobApplicationDTOImpl implements JobApplicationDTO {
     private int jobApplicationId;
     private String text;
     private byte[] resume;
-
-    //todo: is user id
     private int id;
+    private int jobAdvertisementId;
 
     @Override
     public int getJobApplicationId() {
@@ -23,7 +22,6 @@ public class JobApplicationDTOImpl implements JobApplicationDTO {
     @Override
     public String getText() { return text; }
 
-
     public void setText(String text) { this.text = text; }
 
     @Override
@@ -31,11 +29,21 @@ public class JobApplicationDTOImpl implements JobApplicationDTO {
 
     public void setResume(byte[] resume) { this.resume = resume; }
 
+    @Override
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public int getJobAdvertisementId() {
+        return jobAdvertisementId;
+    }
+
+    public void setJobAdvertisementId(int jobAdvertisementId) {
+        this.jobAdvertisementId = jobAdvertisementId;
     }
 }

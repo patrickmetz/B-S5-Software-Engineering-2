@@ -15,6 +15,7 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.data.binder.ValidationException;
 
 import java.util.Arrays;
 
@@ -134,6 +135,42 @@ public class Utils {
         }
 
         return valid;
+    }
+
+    public static void configureApplicationForm(
+            FormLayout formLayout,
+            H3 title,
+            TextArea text,
+            Upload upload,
+            Button sumbitButton
+    ) {
+        formLayout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("0", 1, FormLayout.ResponsiveStep.LabelsPosition.TOP),
+                new FormLayout.ResponsiveStep("490px", 2, FormLayout.ResponsiveStep.LabelsPosition.TOP)
+        );
+        formLayout.setColspan(title, 2);
+        formLayout.setColspan(text, 2);
+        formLayout.setColspan(upload, 2);
+        formLayout.setColspan(sumbitButton, 2);
+        text.setHeight("500px");
+        formLayout.setMaxWidth("600px");
+        upload.setDropAllowed(false);
+    }
+
+    public static void handleButtonException(Exception ex)
+    {
+        try
+        {
+            throw ex;
+        }
+        catch (ValidationException e)
+        {
+            Utils.displayNotification(false, "Please fill in the required fields");
+        }
+        catch (Exception e)
+        {
+            Utils.displayNotification(false, "Unknown error: " + e);
+        }
     }
 
 }

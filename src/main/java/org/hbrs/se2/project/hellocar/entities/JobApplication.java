@@ -15,6 +15,7 @@ public class JobApplication {
     private String text;
     private byte[] resume;
     private User user;
+    private int jobAdvertisementId;
 
     @Id
     @GeneratedValue
@@ -28,7 +29,7 @@ public class JobApplication {
     }
 
     @Basic
-    @Column(name = "text")
+    @Column(name = "text" , nullable = false)
     public String getText() {
         return text;
     }
@@ -45,6 +46,16 @@ public class JobApplication {
 
     public void setResume(byte[] resume) {
         this.resume = resume;
+    }
+
+    @Basic
+    @Column(name = "job_advertisement_id")
+    public int getJobAdvertisementId() {
+        return jobAdvertisementId;
+    }
+
+    public void setJobAdvertisementId(int jobAdvertisementId) {
+        this.jobAdvertisementId = jobAdvertisementId;
     }
 
     @ManyToOne

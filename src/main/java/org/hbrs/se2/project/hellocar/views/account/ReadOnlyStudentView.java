@@ -25,10 +25,13 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 {
 	private TextField role;
 	private DatePicker dateOfBirth;
+	private TextField firstName;
+	private TextField lastName;
 	private TextField studyCourse;
 	private TextField specialization;
 	private IntegerField semester;
 	private Select<String> degree;
+	private int id;
 
 	public ReadOnlyStudentView(ManageUserControl userControl)
 	{
@@ -38,10 +41,7 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 	@Override
 	public void setParameter(BeforeEvent beforeEvent, Integer id)
 	{
-		StudentDTOImpl user = (StudentDTOImpl) userService.readUser(id);
-		binder.readBean(user);
-		profilePicture.setSrc("data:image/png;base64,"
-				+ Base64.encodeBase64String(user.getProfilePicture()));
+		this.id = id;
 	}
 
 	@Override
@@ -56,6 +56,15 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 		super.setupCustomElements();
 
 		title.setText("Student details");
+
+		studyCourse = new TextField("Study Course");
+		studyCourse.setReadOnly(true);
+
+		firstName = new TextField("First Name");
+		firstName.setReadOnly(true);
+
+		lastName = new TextField("Last Name");
+		lastName.setReadOnly(true);
 
 		dateOfBirth = new DatePicker("Date Of Birth");
 		dateOfBirth.setReadOnly(true);
@@ -73,7 +82,11 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 	@Override
 	protected void setupSubmitButtons()
 	{
-		// no buttons
+		StudentDTOImpl user = (StudentDTOImpl) userService.readUser(id);
+		binder.readBean(user);
+		/* todo check if picture is not null */
+		profilePicture.setSrc("data:image/png;base64,"
+				+ Base64.encodeBase64String(user.getProfilePicture()));
 	}
 
 	@Override
@@ -82,6 +95,8 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 		FormLayout formLayout = new FormLayout();
 		formLayout.add(
 				title,
+				firstName,
+				lastName,
 				city,
 				studyCourse,
 				specialization,

@@ -107,7 +107,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "userid", nullable = false, updatable = false, unique = true)
+    @Column(name = "userid", nullable = false, updatable = true, unique = true)
     public String getUserid() {
         return userid;
     }
