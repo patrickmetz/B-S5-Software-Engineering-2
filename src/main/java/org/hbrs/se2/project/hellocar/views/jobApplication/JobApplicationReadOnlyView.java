@@ -58,8 +58,11 @@ public class JobApplicationReadOnlyView extends VerticalLayout
 
 		binder.bindInstanceFields(this);
 		var dto = (JobApplicationDTOImpl)jobAppService.readJobApplication(id);
+		if (dto == null)
+			throw new NullPointerException("JobApplicationDTO was null.");
+
 		binder.readBean(dto);
-		if (dto.getResume().length > 0)
+		if (dto.getResume() != null && dto.getResume().length > 0)
 			resumeDownload.setHref(new StreamResource(
 				"resume.pdf",
 				() -> new ByteArrayInputStream(dto.getResume()))
