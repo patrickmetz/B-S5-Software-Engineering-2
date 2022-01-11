@@ -25,6 +25,8 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 {
 	private TextField role;
 	private DatePicker dateOfBirth;
+	private TextField firstName;
+	private TextField lastName;
 	private TextField studyCourse;
 	private TextField specialization;
 	private IntegerField semester;
@@ -55,6 +57,15 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 
 		title.setText("Student details");
 
+		studyCourse = new TextField("Study Course");
+		studyCourse.setReadOnly(true);
+
+		firstName = new TextField("First Name");
+		firstName.setReadOnly(true);
+
+		lastName = new TextField("Last Name");
+		lastName.setReadOnly(true);
+
 		dateOfBirth = new DatePicker("Date Of Birth");
 		dateOfBirth.setReadOnly(true);
 		studyCourse = new TextField("Study Course");
@@ -84,6 +95,8 @@ public class ReadOnlyStudentView extends ReadOnlyViewBase<StudentDTOImpl> implem
 		FormLayout formLayout = new FormLayout();
 		formLayout.add(
 				title,
+				firstName,
+				lastName,
 				city,
 				studyCourse,
 				specialization,
