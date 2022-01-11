@@ -4,11 +4,12 @@ import org.hbrs.se2.project.hellocar.dtos.RolleDTO;
 import org.hbrs.se2.project.hellocar.dtos.UserDTO;
 import org.hbrs.se2.project.hellocar.entities.Rolle;
 import org.hbrs.se2.project.hellocar.util.Globals;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
-// @Component
+@Component
 public class AuthorizationControl {
 
     /**

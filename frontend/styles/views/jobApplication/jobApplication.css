@@ -15,9 +15,20 @@
     display: block;
     height: 100%;
     margin: 0 auto;
-    max-width: 1024px;
+    max-width: 1200px;
     padding: 0 var(--lumo-space-l);
 }
+
+.job-application-list-view .link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.job-application-list-view .link:hover {
+    color: white;
+}
+
+
 
 
 

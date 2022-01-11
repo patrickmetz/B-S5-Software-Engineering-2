@@ -8,6 +8,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
@@ -25,6 +26,7 @@ import org.hbrs.se2.project.hellocar.control.ManageJobApplicationControl;
 import org.hbrs.se2.project.hellocar.control.ManageUserControl;
 import org.hbrs.se2.project.hellocar.dtos.JobAdvertisementDTO;
 import org.hbrs.se2.project.hellocar.dtos.JobApplicationDTO;
+import org.hbrs.se2.project.hellocar.dtos.account.CompanyDTO;
 import org.hbrs.se2.project.hellocar.dtos.account.JobPortalUserDTO;
 import org.hbrs.se2.project.hellocar.services.search.JobAdvertisementSearch;
 import org.hbrs.se2.project.hellocar.services.search.JobAdvertisementSearchProxy;
@@ -104,18 +106,40 @@ public class JobApplicationListView extends Div {
                 .setSortable(true);
 
         Grid.Column<JobApplicationDTO> applicantFirstNameColumn = grid
-                .addColumn((application) -> {
+                /*.addColumn((application) -> {
                     JobPortalUserDTO jobUser = this.manageUserControl.readUser(application.getId());
                     return jobUser.getFirstName();
+                })*/
+                .addComponentColumn((application) -> {
+                    Anchor anchor = new Anchor();
+                    anchor.addClassName("link");
+                    JobPortalUserDTO user = this.manageUserControl.readUser(application.getId());
+                    if(user != null) {
+                        anchor.setText(user.getFirstName());
+                        anchor.getElement().addEventListener("click",
+                                e -> UI.getCurrent().navigate(Globals.Pages.READONLY_STUDENT_VIEW + "/" + user.getId()));
+                    }
+                    return anchor;
                 })
                 .setAutoWidth(true)
                 .setHeader("Applicant First Name")
                 .setSortable(true);
 
         Grid.Column<JobApplicationDTO> applicantLastNameColumn = grid
-                .addColumn((application) -> {
+                /*.addColumn((application) -> {
                     JobPortalUserDTO jobUser = this.manageUserControl.readUser(application.getId());
                     return jobUser.getLastName();
+                })*/
+                .addComponentColumn((application) -> {
+                    Anchor anchor = new Anchor();
+                    anchor.addClassName("link");
+                    JobPortalUserDTO user = this.manageUserControl.readUser(application.getId());
+                    if(user != null) {
+                        anchor.setText(user.getLastName());
+                        anchor.getElement().addEventListener("click",
+                                e -> UI.getCurrent().navigate(Globals.Pages.READONLY_STUDENT_VIEW + "/" + user.getId()));
+                    }
+                    return anchor;
                 })
                 .setAutoWidth(true)
                 .setHeader("Applicant Last Name")
