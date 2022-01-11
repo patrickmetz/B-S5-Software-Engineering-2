@@ -76,8 +76,6 @@ public class JobAdvertisementCreateView extends JobAdvertisementBaseView {
                 );
 
                 Utils.displayNotification(true, "Job advertisement created successfully");
-                UI.getCurrent().navigate(ShowCarsView.class); /* todo replace with the advertisement view later */
-                binder.getFields().forEach(HasValue::clear);
 
             } catch (ValidationException e) {
                 Utils.displayNotification(false, "Please fill in the required fields");
