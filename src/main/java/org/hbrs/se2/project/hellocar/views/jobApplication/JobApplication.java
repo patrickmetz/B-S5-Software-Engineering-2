@@ -107,8 +107,6 @@ public class JobApplication extends VerticalLayout implements HasUrlParameter<In
                 );
 
                 Utils.displayNotification(true, "Application succeeded");
-                binder.getFields().forEach(HasValue::clear);
-
             } catch (ValidationException e) {
                 Utils.displayNotification(false, "Please fill in the required fields");
             } catch (Exception e) {
